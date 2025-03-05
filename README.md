@@ -9,6 +9,7 @@
 -   [Setup](#setup)
 -   [Status](#status)
 -   [Credits](#credits)
+-   [License](#license)
 
 ## About
 
@@ -30,3 +31,5 @@
 ## Status
 
 ## Credits
+
+## License
