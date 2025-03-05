@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -13,13 +14,21 @@ export default function Navbar() {
 
     return (
         <nav>
-            <ul className="fixed left-0 bottom-0 w-full h-12 flex">
+            <ul className="fixed left-0 bottom-0 w-full h-12 flex border-t-black border-[1px]">
                 <li className="w-1/4">
                     <Link
                         className="h-full w-full flex justify-center items-center cursor-pointe"
                         href="/search"
                     >
-                        <img className="h-4/5" src="/compass.svg" alt="" />
+                        {pathname === '/search' ? (
+                            <img
+                                className="h-3/5"
+                                src="/compass-fill.svg"
+                                alt=""
+                            />
+                        ) : (
+                            <img className="h-3/5" src="/compass.svg" alt="" />
+                        )}
                     </Link>
                 </li>
                 <li className="w-1/4 flex justify-center items-center cursor-pointer">
@@ -27,15 +36,35 @@ export default function Navbar() {
                         className="h-full w-full flex justify-center items-center cursor-pointe"
                         href="/start"
                     >
-                        <img className="h-4/5" src="/person-plus.svg" alt="" />
+                        {pathname === '/start' ? (
+                            <img
+                                className="h-3/5"
+                                src="/person-plus-fill.svg"
+                                alt=""
+                            />
+                        ) : (
+                            <img
+                                className="h-3/5"
+                                src="/person-plus.svg"
+                                alt=""
+                            />
+                        )}
                     </Link>
                 </li>
                 <li className="w-1/4 flex justify-center items-center cursor-pointer">
                     <Link
                         className="h-full w-full flex justify-center items-center cursor-pointe"
-                        href="/search"
+                        href="/event"
                     >
-                        <img className="h-4/5" src="/soccer.svg" alt="" />
+                        {pathname === '/event' ? (
+                            <img
+                                className="h-3/5"
+                                src="/football-blue.svg"
+                                alt=""
+                            />
+                        ) : (
+                            <img className="h-3/5" src="/football.svg" alt="" />
+                        )}
                     </Link>
                 </li>
                 <li className="w-1/4 flex justify-center items-center cursor-pointer">
@@ -43,7 +72,15 @@ export default function Navbar() {
                         className="h-full w-full flex justify-center items-center cursor-pointe"
                         href="/profile"
                     >
-                        <img className="h-4/5" src="/person.svg" alt="" />
+                        {pathname === '/profile' ? (
+                            <img
+                                className="h-3/5"
+                                src="/person-fill.svg"
+                                alt=""
+                            />
+                        ) : (
+                            <img className="h-3/5" src="/person.svg" alt="" />
+                        )}
                     </Link>
                 </li>
             </ul>
