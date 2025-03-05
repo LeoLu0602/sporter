@@ -1,11 +1,12 @@
 'use client';
 
-import { supabase } from '@/app/lib/utils';
+import { supabase } from '@/lib/utils';
 
 export default function ContinueWithGoogleBtn() {
     async function signIn() {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
+            options: { redirectTo: window.location.origin + '/search' },
         });
 
         if (error) {

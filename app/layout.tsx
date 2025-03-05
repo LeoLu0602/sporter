@@ -1,5 +1,6 @@
 import { Geist } from 'next/font/google';
 import './globals.css';
+import { Provider } from '@/context/Context';
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -27,7 +28,9 @@ export default function RootLayout({
             className={geistSans.className}
             suppressHydrationWarning
         >
-            <body className="bg-background text-foreground">{children}</body>
+            <body className="bg-background text-foreground">
+                <Provider>{children}</Provider>
+            </body>
         </html>
     );
 }
