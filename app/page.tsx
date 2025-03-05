@@ -1,12 +1,12 @@
-import Hero from '@/components/hero';
-import ConnectSupabaseSteps from '@/components/tutorial/connect-supabase-steps';
-import SignUpUserSteps from '@/components/tutorial/sign-up-user-steps';
-import { hasEnvVars } from '@/utils/supabase/check-env-vars';
+import ContinueWithGoogleBtn from '@/app/ContinueWithGoogleBtn';
 
-export default async function Home() {
+export default async function Welcome() {
     return (
         <>
-            <main className=""></main>
+            <main className="min-h-screen bg-sky-500 flex flex-col justify-center items-center">
+                <h1 className="text-6xl text-white font-bold mb-12">Sportify</h1>
+                <ContinueWithGoogleBtn />
+            </main>
         </>
     );
 }
