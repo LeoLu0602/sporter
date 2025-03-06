@@ -1,10 +1,70 @@
 'use client';
 
-import { useState } from 'react';
-import LevelBar from '@/components/LevelBar';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/utils';
+import { useEmail } from '@/context/Context';
+import LevelBarMulti from '@/components/LevelBarMulti';
 
 export default function New() {
+    const email = useEmail();
     const [sport, setSport] = useState<string | null>(null);
+    const [filter, setFilter] = useState<{
+        gender: 'male' | 'female' | 'prefer not to say';
+        birthday: string;
+        distance: number;
+        badmintonLevels: Set<number>;
+        basketballLevels: Set<number>;
+        soccerLevels: Set<number>;
+        tableTennisLevels: Set<number>;
+        tennisLevels: Set<number>;
+    }>({
+        gender: 'prefer not to say',
+        birthday: '',
+        distance: 500,
+        badmintonLevels: new Set([0]),
+        basketballLevels: new Set([0]),
+        soccerLevels: new Set([0]),
+        tableTennisLevels: new Set([0]),
+        tennisLevels: new Set([0]),
+    });
+
+    useEffect(() => {
+        async function setUp() {
+            const { data, error } = await supabase
+                .from('profile')
+                .select('*')
+                .eq('email', email);
+
+            if (error) {
+                alert('Error!');
+                console.error(error);
+
+                return;
+            }
+
+            if (data.length === 0) {
+                return;
+            }
+
+            setFilter({
+                gender:
+                    data[0].gender === 1
+                        ? 'male'
+                        : data[0].gender === 2
+                          ? 'female'
+                          : 'prefer not to say',
+                birthday: data[0].birthday,
+                distance: data[0].distance,
+                badmintonLevels: new Set([data[0].badminton_level]),
+                basketballLevels: new Set([data[0].basketball_level]),
+                soccerLevels: new Set([data[0].soccer_level]),
+                tableTennisLevels: new Set([data[0].table_tennis_level]),
+                tennisLevels: new Set([data[0].tennis_level]),
+            });
+        }
+
+        setUp();
+    }, [email]);
 
     function editTitle() {}
 
@@ -97,7 +157,7 @@ export default function New() {
                             </div>
 
                             <button
-                                className="border-black border-2 px-8"
+                                className="border-black border-2 px-8 bg-orange-500"
                                 onClick={() => {
                                     editTitle();
                                 }}
@@ -109,7 +169,123 @@ export default function New() {
                     <section className="flex flex-col items-center gap-4">
                         <section className="w-full">
                             <h2>選擇對手程度</h2>
-                            <LevelBar level={0} chooseLevel={(i) => {}} />
+                            {sport === 'soccer' && (
+                                <LevelBarMulti
+                                    levels={filter.soccerLevels}
+                                    chooseLevel={(i) => {
+                                        setFilter((oldVal) => {
+                                            const newSoccerLevels: Set<number> =
+                                                new Set(oldVal.soccerLevels);
+
+                                            if (newSoccerLevels.has(i)) {
+                                                newSoccerLevels.delete(i);
+                                            } else {
+                                                newSoccerLevels.add(i);
+                                            }
+
+                                            return {
+                                                ...oldVal,
+                                                soccerLevels: newSoccerLevels,
+                                            };
+                                        });
+                                    }}
+                                />
+                            )}
+                            {sport === 'basketball' && (
+                                <LevelBarMulti
+                                    levels={filter.basketballLevels}
+                                    chooseLevel={(i) => {
+                                        setFilter((oldVal) => {
+                                            const newBasketballLevels: Set<number> =
+                                                new Set(
+                                                    oldVal.basketballLevels
+                                                );
+
+                                            if (newBasketballLevels.has(i)) {
+                                                newBasketballLevels.delete(i);
+                                            } else {
+                                                newBasketballLevels.add(i);
+                                            }
+
+                                            return {
+                                                ...oldVal,
+                                                basketballLevels:
+                                                    newBasketballLevels,
+                                            };
+                                        });
+                                    }}
+                                />
+                            )}
+                            {sport === 'tennis' && (
+                                <LevelBarMulti
+                                    levels={filter.tennisLevels}
+                                    chooseLevel={(i) => {
+                                        setFilter((oldVal) => {
+                                            const newTennisLevels: Set<number> =
+                                                new Set(oldVal.tennisLevels);
+
+                                            if (newTennisLevels.has(i)) {
+                                                newTennisLevels.delete(i);
+                                            } else {
+                                                newTennisLevels.add(i);
+                                            }
+
+                                            return {
+                                                ...oldVal,
+                                                tennisLevels: newTennisLevels,
+                                            };
+                                        });
+                                    }}
+                                />
+                            )}
+                            {sport === 'table tennis' && (
+                                <LevelBarMulti
+                                    levels={filter.tableTennisLevels}
+                                    chooseLevel={(i) => {
+                                        setFilter((oldVal) => {
+                                            const newTableTennisLevels: Set<number> =
+                                                new Set(
+                                                    oldVal.tableTennisLevels
+                                                );
+
+                                            if (newTableTennisLevels.has(i)) {
+                                                newTableTennisLevels.delete(i);
+                                            } else {
+                                                newTableTennisLevels.add(i);
+                                            }
+
+                                            return {
+                                                ...oldVal,
+                                                tableTennisLevels:
+                                                    newTableTennisLevels,
+                                            };
+                                        });
+                                    }}
+                                />
+                            )}
+                            {sport === 'badminton' && (
+                                <LevelBarMulti
+                                    levels={filter.badmintonLevels}
+                                    chooseLevel={(i) => {
+                                        setFilter((oldVal) => {
+                                            const newBadmintonLevels: Set<number> =
+                                                new Set(oldVal.badmintonLevels);
+
+                                            if (newBadmintonLevels.has(i)) {
+                                                newBadmintonLevels.delete(i);
+                                            } else {
+                                                newBadmintonLevels.add(i);
+                                            }
+
+                                            return {
+                                                ...oldVal,
+                                                badmintonLevels:
+                                                    newBadmintonLevels,
+                                            };
+                                        });
+                                    }}
+                                />
+                            )}
                         </section>
                         <section className="w-full">
                             <h2>選擇對手性別</h2>
