@@ -11,11 +11,17 @@ export default function Profile() {
     const router = useRouter();
     const [info, setInfo] = useState<{
         name: string;
-        gender: 'male' | 'female';
-        birthday: Date;
+        gender: 'male' | 'female' | 'prefer not to say';
+        birthday: string;
         distance: number;
         intro: string;
-    } | null>(null);
+    }>({
+        name: '',
+        gender: 'prefer not to say',
+        birthday: '',
+        distance: 1000,
+        intro: '',
+    });
     const [option, setOption] = useState<'info' | 'level'>('info');
 
     async function signOut() {
@@ -29,7 +35,43 @@ export default function Profile() {
         }
     }
 
-    function handleInfoChange(e: ChangeEvent<HTMLInputElement>) {}
+    function handleInfoChange(
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) {
+        switch (e.target.name) {
+            case 'name':
+                setInfo((oldVal) => {
+                    return { ...oldVal, name: e.target.value };
+                });
+                break;
+            case 'gender':
+                setInfo((oldVal) => {
+                    return {
+                        ...oldVal,
+                        gender: e.target.value as 'male' | 'female',
+                    };
+                });
+                break;
+            case 'birthday':
+                setInfo((oldVal) => {
+                    return { ...oldVal, birthday: e.target.value };
+                });
+                break;
+            case 'distance':
+                setInfo((oldVal) => {
+                    return { ...oldVal, distance: Number(e.target.value) };
+                });
+                break;
+            case 'intro':
+                if (e.target.value.length <= 50) {
+                    setInfo((oldVal) => {
+                        return { ...oldVal, intro: e.target.value };
+                    });
+                }
+
+                break;
+        }
+    }
 
     async function save() {}
 
@@ -72,7 +114,7 @@ export default function Profile() {
                         <input
                             name="name"
                             type="text"
-                            value={info?.name ?? ''}
+                            value={info.name}
                             onChange={handleInfoChange}
                         />
                     </section>
@@ -81,41 +123,68 @@ export default function Profile() {
                         <section>
                             <input
                                 type="radio"
-                                id="male"
                                 name="gender"
                                 value="male"
+                                checked={info.gender === 'male'}
+                                onChange={handleInfoChange}
                             />
-                            <label className="mr-8 ml-2" htmlFor="male">
-                                男
-                            </label>
+                            <label className="mr-4 ml-2">男</label>
                         </section>
                         <section>
                             <input
                                 type="radio"
-                                id="female"
                                 name="gender"
                                 value="female"
+                                checked={info.gender === 'female'}
+                                onChange={handleInfoChange}
                             />
-                            <label className="ml-2" htmlFor="female">
-                                女
-                            </label>
+                            <label className="mr-4 ml-2">女</label>
+                        </section>
+                        <section>
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="prefer not to say"
+                                checked={info.gender === 'prefer not to say'}
+                                onChange={handleInfoChange}
+                            />
+                            <label className="ml-2">不透漏</label>
                         </section>
                     </section>
                     <section>
                         <label>生日: </label>
-                        <input type="date" />
+                        <input
+                            type="date"
+                            name="birthday"
+                            value={info.birthday}
+                            onChange={handleInfoChange}
+                        />
                     </section>
                     <section>
                         <label>距離偏好: </label>
-                        <span>1000 公尺</span>
+                        <span>{info.distance} 公尺</span>
                         <br />
                         <br />
-                        <input type="range" />
+                        <input
+                            className="w-full"
+                            type="range"
+                            name="distance"
+                            min="0"
+                            max="5000"
+                            step="100"
+                            value={info.distance}
+                            onChange={handleInfoChange}
+                        />
                     </section>
                     <section>
-                        <label>自介: </label>
+                        <label>自介 ({info.intro.length}/50) </label>
                         <br />
-                        <textarea className="border-2 border-black w-full h-20" />
+                        <textarea
+                            className="mt-2 border-2 border-black w-full h-20"
+                            name="intro"
+                            value={info.intro}
+                            onChange={handleInfoChange}
+                        />
                     </section>
                 </section>
                 <button
