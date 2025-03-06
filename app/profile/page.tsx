@@ -160,7 +160,7 @@ export default function Profile() {
 
     return (
         <>
-            <main className="p-4 min-h-screen bg-[#f2f4f7]">
+            <main className="p-4 min-h-screen">
                 <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl font-bold">
                     個人檔案
                 </h1>
