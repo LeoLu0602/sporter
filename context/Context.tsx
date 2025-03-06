@@ -36,6 +36,40 @@ export function Provider({ children }: { children: React.ReactNode }) {
             } = await supabase.auth.getUser();
 
             dispatch({ email: user?.email ?? null });
+
+            if (!user) {
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('profile')
+                .select('email')
+                .eq('email', user.email);
+
+            if (error) {
+                alert('Error!');
+                console.error(error);
+
+                return;
+            }
+
+            if (!data) {
+                return;
+            }
+
+            if (data.length === 0) {
+                const { error } = await supabase.from('profile').insert([
+                    {
+                        email: user.email,
+                        username: user.user_metadata.full_name,
+                    },
+                ]);
+
+                if (error) {
+                    alert('Error!');
+                    console.error(error);
+                }
+            }
         }
 
         setUp();
