@@ -16,7 +16,7 @@ export default function Profile() {
         distance: number;
         intro: string;
     } | null>(null);
-    const [tab, setTab] = useState<'info' | 'level'>('info');
+    const [option, setOption] = useState<'info' | 'level'>('info');
 
     async function signOut() {
         const { error } = await supabase.auth.signOut();
@@ -42,20 +42,20 @@ export default function Profile() {
                 <div className="flex w-full justify-around p-4">
                     <div
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black': tab === 'info',
+                            'border-b-2 border-b-black': option === 'info',
                         })}
                         onClick={() => {
-                            setTab('info');
+                            setOption('info');
                         }}
                     >
                         基本資料
                     </div>
                     <div
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black': tab === 'level',
+                            'border-b-2 border-b-black': option === 'level',
                         })}
                         onClick={() => {
-                            setTab('level');
+                            setOption('level');
                         }}
                     >
                         運動程度
@@ -63,7 +63,7 @@ export default function Profile() {
                 </div>
                 <section
                     className={clsx('flex flex-col gap-4', {
-                        hidden: tab !== 'info',
+                        hidden: option !== 'info',
                     })}
                 >
                     <section>Email: {email ?? ''}</section>
