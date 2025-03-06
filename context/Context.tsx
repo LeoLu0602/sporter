@@ -1,7 +1,7 @@
 'use client';
 
 import { supabase } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     createContext,
     Dispatch,
@@ -29,6 +29,7 @@ export function useEmailDispatch() {
 
 export function Provider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
+    const pathname = usePathname();
     const [auth, dispatch] = useReducer(emailReducer, null);
 
     useEffect(() => {
@@ -73,7 +74,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
                 }
             }
 
-            router.push('/profile');
+            if (pathname === '/') {
+                router.push('/profile');
+            }
         }
 
         setUp();
