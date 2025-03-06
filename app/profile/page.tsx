@@ -5,6 +5,8 @@ import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
+import Level from './Level';
+import LevelBar from './LevelBar';
 
 export default function Profile() {
     const email = useEmail();
@@ -15,11 +17,11 @@ export default function Profile() {
         birthday: string;
         distance: number;
         intro: string;
-        badmintonLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-        basketballLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-        soccerLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-        tableTennisLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-        tennisLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        badmintonLevel: number;
+        basketballLevel: number;
+        soccerLevel: number;
+        tableTennisLevel: number;
+        tennisLevel: number;
     }>({
         name: '',
         gender: 'prefer not to say',
@@ -32,7 +34,7 @@ export default function Profile() {
         tableTennisLevel: 0,
         tennisLevel: 0,
     });
-    const [option, setOption] = useState<'info' | 'level'>('info');
+    const [option, setOption] = useState<'info' | 'levels'>('info');
 
     useEffect(() => {
         async function setUp() {
@@ -162,8 +164,8 @@ export default function Profile() {
                 <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl">
                     個人檔案
                 </h1>
-                <div className="flex w-full justify-around p-4">
-                    <div
+                <section className="flex w-full justify-around p-4">
+                    <section
                         className={clsx('cursor-pointer', {
                             'border-b-2 border-b-black': option === 'info',
                         })}
@@ -172,27 +174,25 @@ export default function Profile() {
                         }}
                     >
                         基本資料
-                    </div>
-                    <div
+                    </section>
+                    <section
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black': option === 'level',
+                            'border-b-2 border-b-black': option === 'levels',
                         })}
                         onClick={() => {
-                            setOption('level');
+                            setOption('levels');
                         }}
                     >
                         運動程度
-                    </div>
-                </div>
+                    </section>
+                </section>
                 <section
-                    className={clsx('flex flex-col gap-4 mb-36', {
+                    className={clsx('flex flex-col gap-4 mb-40', {
                         hidden: option !== 'info',
                     })}
                 >
                     <section>Email: {email ?? ''}</section>
-                    <section>
-                        名稱: {info.name}
-                    </section>
+                    <section>名稱: {info.name}</section>
                     <section className="flex">
                         <section className="mr-4">性別:</section>
                         <section>
@@ -271,14 +271,80 @@ export default function Profile() {
                         />
                     </section>
                 </section>
+                <section
+                    className={clsx('flex flex-col gap-4 pt-4 mb-40', {
+                        hidden: option !== 'levels',
+                    })}
+                >
+                    <LevelBar
+                        sport="⚽"
+                        level={info.soccerLevel}
+                        chooseLevel={(i) => {
+                            setInfo((oldVal) => {
+                                return {
+                                    ...oldVal,
+                                    soccerLevel: i,
+                                };
+                            });
+                        }}
+                    />
+                    <LevelBar
+                        sport="🏀"
+                        level={info.basketballLevel}
+                        chooseLevel={(i) => {
+                            setInfo((oldVal) => {
+                                return {
+                                    ...oldVal,
+                                    basketballLevel: i,
+                                };
+                            });
+                        }}
+                    />
+                    <LevelBar
+                        sport="🎾"
+                        level={info.tennisLevel}
+                        chooseLevel={(i) => {
+                            setInfo((oldVal) => {
+                                return {
+                                    ...oldVal,
+                                    tennisLevel: i,
+                                };
+                            });
+                        }}
+                    />
+                    <LevelBar
+                        sport="🏓"
+                        level={info.tableTennisLevel}
+                        chooseLevel={(i) => {
+                            setInfo((oldVal) => {
+                                return {
+                                    ...oldVal,
+                                    tableTennisLevel: i,
+                                };
+                            });
+                        }}
+                    />
+                    <LevelBar
+                        sport="🏸"
+                        level={info.badmintonLevel}
+                        chooseLevel={(i) => {
+                            setInfo((oldVal) => {
+                                return {
+                                    ...oldVal,
+                                    badmintonLevel: i,
+                                };
+                            });
+                        }}
+                    />
+                </section>
                 <button
-                    className="fixed bottom-20 left-4 border-2 border-black px-8 py-2"
+                    className="fixed bottom-20 left-4 border-2 border-black px-8 py-2 bg-white z-20"
                     onClick={signOut}
                 >
                     登出
                 </button>
                 <button
-                    className="fixed bottom-20 right-4 border-2 border-black px-8 py-2"
+                    className="fixed bottom-20 right-4 border-2 border-black px-8 py-2 bg-white z-20"
                     onClick={save}
                 >
                     儲存
