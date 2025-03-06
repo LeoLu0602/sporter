@@ -54,7 +54,12 @@ export default function Profile() {
 
             setInfo({
                 name: data[0].username,
-                gender: data[0].gender,
+                gender:
+                    data[0].gender === 1
+                        ? 'male'
+                        : data[0].gender === 2
+                          ? 'female'
+                          : 'prefer not to say',
                 birthday: data[0].birthday,
                 distance: data[0].distance,
                 intro: data[0].intro,
