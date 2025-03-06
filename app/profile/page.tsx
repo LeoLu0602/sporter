@@ -158,7 +158,7 @@ export default function Profile() {
 
     return (
         <>
-            <main className="p-4 h-dvh">
+            <main className="p-4 min-h-screen">
                 <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl">
                     個人檔案
                 </h1>
@@ -185,7 +185,7 @@ export default function Profile() {
                     </div>
                 </div>
                 <section
-                    className={clsx('flex flex-col gap-4', {
+                    className={clsx('flex flex-col gap-4 mb-36', {
                         hidden: option !== 'info',
                     })}
                 >
