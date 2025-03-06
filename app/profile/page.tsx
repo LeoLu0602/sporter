@@ -123,7 +123,43 @@ export default function Profile() {
         }
     }
 
-    async function save() {}
+    async function save() {
+        if (!email) {
+            return;
+        }
+
+        const { error } = await supabase
+            .from('profile')
+            .update([
+                {
+                    username: info.name,
+                    gender:
+                        info.gender === 'male'
+                            ? 1
+                            : info.gender === 'female'
+                              ? 2
+                              : 3,
+                    birthday: info.birthday,
+                    distance: info.distance,
+                    intro: info.intro,
+                    badminton_level: info.badmintonLevel,
+                    basketball_level: info.basketballLevel,
+                    soccer_level: info.soccerLevel,
+                    table_tennis_level: info.tableTennisLevel,
+                    tennis_level: info.tennisLevel,
+                },
+            ])
+            .eq('email', email);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return;
+        }
+
+        alert('Saved!');
+    }
 
     return (
         <>
