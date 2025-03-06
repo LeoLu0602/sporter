@@ -207,7 +207,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <section
-                    className={clsx('flex flex-col gap-4 mb-40', {
+                    className={clsx('flex flex-col gap-4', {
                         hidden: option !== 'info',
                     })}
                 >
@@ -310,7 +310,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <section
-                    className={clsx('flex flex-col gap-4 pt-4 mb-40', {
+                    className={clsx('flex flex-col gap-4 pt-4', {
                         hidden: option !== 'levels',
                     })}
                 >
@@ -396,7 +396,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="fixed bottom-20 right-4 px-8 py-2 bg-emerald-600 text-white z-20 shadow-[4px_4px_6px_4px_rgba(0,_0,_0,_0.3)]"
+                    className="mt-4 px-8 py-2 bg-emerald-500 text-white font-bold"
                     onClick={save}
                 >
                     儲存
