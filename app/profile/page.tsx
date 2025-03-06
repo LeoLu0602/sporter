@@ -90,11 +90,22 @@ export default function Profile() {
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) {
         switch (e.target.name) {
+            case 'name':
+                setInfo((oldVal) => {
+                    return {
+                        ...oldVal,
+                        name: e.target.value,
+                    };
+                });
+                break;
             case 'gender':
                 setInfo((oldVal) => {
                     return {
                         ...oldVal,
-                        gender: e.target.value as 'male' | 'female',
+                        gender: e.target.value as
+                            | 'male'
+                            | 'female'
+                            | 'prefer not to say',
                     };
                 });
                 break;
@@ -226,8 +237,15 @@ export default function Profile() {
                         )}
                     </section>
                     <section>
-                        <span className="font-bold">名稱 (Google): </span>
-                        {info.name}
+                        <label className="font-bold w-full focus:outline-none">
+                            名稱:{' '}
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={info.name}
+                            onChange={handleInfoChange}
+                        />
                     </section>
                     <section className="flex">
                         <span className="mr-4 font-bold">性別:</span>
