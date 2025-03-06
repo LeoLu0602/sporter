@@ -414,7 +414,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="mt-4 px-8 py-2 bg-emerald-500 text-white font-bold"
+                    className="mt-4 mb-20 px-8 py-2 bg-emerald-500 text-white font-bold"
                     onClick={save}
                 >
                     儲存
