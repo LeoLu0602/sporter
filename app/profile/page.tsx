@@ -4,7 +4,7 @@ import { useEmail } from '@/context/Context';
 import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function Profile() {
     const email = useEmail();
@@ -15,14 +15,59 @@ export default function Profile() {
         birthday: string;
         distance: number;
         intro: string;
+        badmintonLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        basketballLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        soccerLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        tableTennisLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        tennisLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     }>({
         name: '',
         gender: 'prefer not to say',
         birthday: '',
         distance: 500,
         intro: '',
+        badmintonLevel: 0,
+        basketballLevel: 0,
+        soccerLevel: 0,
+        tableTennisLevel: 0,
+        tennisLevel: 0,
     });
     const [option, setOption] = useState<'info' | 'level'>('info');
+
+    useEffect(() => {
+        async function setUp() {
+            const { data, error } = await supabase
+                .from('profile')
+                .select('*')
+                .eq('email', email);
+
+            if (error) {
+                alert('Error!');
+                console.error(error);
+
+                return;
+            }
+
+            if (data.length === 0) {
+                return;
+            }
+
+            setInfo({
+                name: data[0].username,
+                gender: data[0].gender,
+                birthday: data[0].birthday,
+                distance: data[0].distance,
+                intro: data[0].intro,
+                badmintonLevel: data[0].badminton_level,
+                basketballLevel: data[0].basketball_level,
+                soccerLevel: data[0].soccer_level,
+                tableTennisLevel: data[0].table_tennis_level,
+                tennisLevel: data[0].tennis_level,
+            });
+        }
+
+        setUp();
+    }, [email]);
 
     async function signOut() {
         const { error } = await supabase.auth.signOut();
@@ -162,7 +207,16 @@ export default function Profile() {
                     </section>
                     <section>
                         <label>距離偏好: </label>
-                        <span>{info.distance} 公尺</span>
+                        <span>
+                            {info.distance >= 1000
+                                ? Math.floor(info.distance / 1000).toString() +
+                                  ',' +
+                                  (info.distance % 1000)
+                                      .toString()
+                                      .padStart(3, '0')
+                                : info.distance.toString()}{' '}
+                            公尺
+                        </span>
                         <br />
                         <br />
                         <input
@@ -172,7 +226,7 @@ export default function Profile() {
                             min="500"
                             max="10000"
                             step="100"
-                            value={info.distance}
+                            value={info.distance.toString()}
                             onChange={handleInfoChange}
                         />
                     </section>
