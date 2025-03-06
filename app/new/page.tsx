@@ -433,7 +433,7 @@ export default function New() {
                                 取消
                             </button>
                             <button
-                                className="px-8 py-2 bg-sky-500 font-bold text-white"
+                                className="px-8 py-2 bg-sky-500 font-bold text-white mb-20"
                                 onClick={() => {
                                     createNewEvent();
                                 }}
