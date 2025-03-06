@@ -34,7 +34,7 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ## Status
 
-Developing "揪運動".
+Developing "揪運動". Check out Sportify Wireframe.pdf for more details.
 
 ![Profile page](./demo/demo2.png)
 
