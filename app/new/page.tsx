@@ -78,7 +78,7 @@ export default function New() {
             {sport === null && (
                 <section className="flex flex-wrap justify-between gap-4 mt-4">
                     <button
-                        className="w-36 h-36 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
+                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
                             setSport('soccer');
                         }}
@@ -157,7 +157,7 @@ export default function New() {
                             </div>
 
                             <button
-                                className="border-black border-2 px-8 bg-orange-500"
+                                className="text-orange-500 font-bold"
                                 onClick={() => {
                                     editTitle();
                                 }}
@@ -304,7 +304,7 @@ export default function New() {
                         </section>
                         <section className="flex flex-col gap-2">
                             <button
-                                className="border-2 border-black px-8 py-2 bg-emerald-600 text-white"
+                                className="px-8 py-2 bg-emerald-500 font-bold text-white"
                                 onClick={() => {
                                     setSport(null);
                                 }}
@@ -312,7 +312,7 @@ export default function New() {
                                 取消
                             </button>
                             <button
-                                className="border-2 border-black px-8 py-2 bg-sky-600 text-white"
+                                className="px-8 py-2 bg-sky-500 font-bold text-white"
                                 onClick={() => {
                                     createNewEvent();
                                 }}
