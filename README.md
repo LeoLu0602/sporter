@@ -30,6 +30,10 @@
 
 ## Status
 
+Developing the profile page. See profile branch.
+
+![Profile page](./demo/demo1.png)
+
 ## Credits
 
 ## License
