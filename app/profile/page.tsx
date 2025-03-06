@@ -213,7 +213,17 @@ export default function Profile() {
                 >
                     <section>
                         <span className="font-bold">Email: </span>
-                        {email ?? ''}
+                        {email && (
+                            <>
+                                {email}
+                                <button
+                                    className="ml-2 text-rose-500 font-bold"
+                                    onClick={signOut}
+                                >
+                                    登出
+                                </button>
+                            </>
+                        )}
                     </section>
                     <section>
                         <span className="font-bold">名稱 (Google): </span>
@@ -385,12 +395,6 @@ export default function Profile() {
                         />
                     </section>
                 </section>
-                <button
-                    className="fixed bottom-20 left-4 px-8 py-2 bg-rose-600 text-white z-20 shadow-[4px_4px_6px_4px_rgba(0,_0,_0,_0.3)]"
-                    onClick={signOut}
-                >
-                    登出
-                </button>
                 <button
                     className="fixed bottom-20 right-4 px-8 py-2 bg-emerald-600 text-white z-20 shadow-[4px_4px_6px_4px_rgba(0,_0,_0,_0.3)]"
                     onClick={save}
