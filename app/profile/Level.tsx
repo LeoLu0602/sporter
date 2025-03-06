@@ -12,12 +12,10 @@ export default function LevelBar({
 }) {
     return (
         <button
-            className={clsx(
-                'border-black border-2 w-4 h-4 rounded-full bg-white',
-                {
-                    'bg-emerald-500': level === index,
-                }
-            )}
+            className={clsx('border-black border-2 w-4 h-4 rounded-full', {
+                'bg-emerald-500': level === index,
+                'bg-white': level !== index,
+            })}
             onClick={handleClick}
         />
     );
