@@ -14,7 +14,7 @@ export default function Navbar() {
 
     return (
         <nav>
-            <ul className="fixed left-0 bottom-0 w-full h-16 flex border-t-black border-[1px]">
+            <ul className="fixed left-0 bottom-0 w-full h-16 flex border-t-black border-t-[1px]">
                 <li className="w-1/4">
                     <Link
                         className="h-full w-full flex justify-center items-center cursor-pointe"
@@ -59,11 +59,11 @@ export default function Navbar() {
                         {pathname === '/event' ? (
                             <img
                                 className="h-3/5"
-                                src="/football-blue.svg"
+                                src="/football-fill.png"
                                 alt=""
                             />
                         ) : (
-                            <img className="h-3/5" src="/football.svg" alt="" />
+                            <img className="h-3/5" src="/football.png" alt="" />
                         )}
                     </Link>
                 </li>
