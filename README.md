@@ -30,7 +30,7 @@
 
 ## Status
 
-Developing the profile page. See profile branch.
+Developing the profile page - level.
 
 ![Profile page](./demo/demo1.png)
 
