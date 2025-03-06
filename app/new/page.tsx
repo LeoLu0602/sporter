@@ -41,6 +41,7 @@ export default function New() {
         tennisLevels: Set<number>;
         lat: number;
         lng: number;
+        location: string;
     }>({
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
@@ -49,6 +50,7 @@ export default function New() {
         tennisLevels: new Set([0]),
         lat: 0,
         lng: 0,
+        location: '',
     });
 
     useEffect(() => {
@@ -369,6 +371,15 @@ export default function New() {
                                 <input
                                     className="border-2 border-black focus:outline-none p-2"
                                     type="text"
+                                    value={eventInfo.location}
+                                    onChange={(e) => {
+                                        setEventInfo((oldVal) => {
+                                            return {
+                                                ...oldVal,
+                                                location: e.target.value,
+                                            };
+                                        });
+                                    }}
                                 />
                             </section>
                         </section>
