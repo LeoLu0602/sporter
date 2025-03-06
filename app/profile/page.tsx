@@ -160,14 +160,15 @@ export default function Profile() {
 
     return (
         <>
-            <main className="p-4 min-h-screen">
-                <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl">
+            <main className="p-4 min-h-screen bg-[#f2f4f7]">
+                <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl font-bold">
                     個人檔案
                 </h1>
                 <section className="flex w-full justify-around p-4">
                     <section
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black': option === 'info',
+                            'border-b-2 border-b-black font-bold':
+                                option === 'info',
                         })}
                         onClick={() => {
                             setOption('info');
@@ -177,7 +178,8 @@ export default function Profile() {
                     </section>
                     <section
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black': option === 'levels',
+                            'border-b-2 border-b-black font-bold':
+                                option === 'levels',
                         })}
                         onClick={() => {
                             setOption('levels');
@@ -191,10 +193,16 @@ export default function Profile() {
                         hidden: option !== 'info',
                     })}
                 >
-                    <section>Email: {email ?? ''}</section>
-                    <section>名稱: {info.name}</section>
+                    <section>
+                        <span className="font-bold">Email: </span>
+                        {email ?? ''}
+                    </section>
+                    <section>
+                        <span className="font-bold">名稱 (Google): </span>
+                        {info.name}
+                    </section>
                     <section className="flex">
-                        <section className="mr-4">性別:</section>
+                        <span className="mr-4 font-bold">性別:</span>
                         <section>
                             <input
                                 type="radio"
@@ -227,7 +235,7 @@ export default function Profile() {
                         </section>
                     </section>
                     <section>
-                        <label>生日: </label>
+                        <label className="font-bold">生日: </label>
                         <input
                             type="date"
                             name="birthday"
@@ -236,7 +244,7 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <label>距離偏好: </label>
+                        <label className="font-bold">距離偏好: </label>
                         <span>
                             {info.distance >= 1000
                                 ? Math.floor(info.distance / 1000).toString() +
@@ -261,10 +269,12 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <label>自介 ({info.intro.length}/50) </label>
+                        <label className="font-bold">
+                            自介 ({info.intro.length}/50){' '}
+                        </label>
                         <br />
                         <textarea
-                            className="mt-2 border-2 border-black w-full h-20 p-2"
+                            className="mt-2 border-2 border-black w-full h-20 p-2 focus:outline-none"
                             name="intro"
                             value={info.intro}
                             onChange={handleInfoChange}
@@ -338,13 +348,13 @@ export default function Profile() {
                     />
                 </section>
                 <button
-                    className="fixed bottom-20 left-4 border-2 border-black px-8 py-2 bg-white z-20"
+                    className="fixed bottom-20 left-4 px-8 py-2 bg-rose-600 text-white z-20 shadow-[4px_4px_6px_4px_rgba(0,_0,_0,_0.3)]"
                     onClick={signOut}
                 >
                     登出
                 </button>
                 <button
-                    className="fixed bottom-20 right-4 border-2 border-black px-8 py-2 bg-white z-20"
+                    className="fixed bottom-20 right-4 px-8 py-2 bg-emerald-600 text-white z-20 shadow-[4px_4px_6px_4px_rgba(0,_0,_0,_0.3)]"
                     onClick={save}
                 >
                     儲存
