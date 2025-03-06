@@ -190,7 +190,7 @@ export default function Profile() {
                     </div>
                 </div>
                 <section
-                    className={clsx('flex flex-col gap-4 mb-24', {
+                    className={clsx('flex flex-col gap-4 mb-36', {
                         hidden: option !== 'info',
                     })}
                 >
