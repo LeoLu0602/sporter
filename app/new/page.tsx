@@ -1,31 +1,54 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { supabase } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
+import { eventNames } from 'process';
 
 export default function New() {
     const email = useEmail();
     const [sport, setSport] = useState<string | null>(null);
-    const [filter, setFilter] = useState<{
+    const [coordinate, setCoordinate] = useState<string>('');
+    const [userInfo, setUserInfo] = useState<{
+        name: string;
         gender: 'male' | 'female' | 'prefer not to say';
         birthday: string;
         distance: number;
+        intro: string;
+        badmintonLevel: number;
+        basketballLevel: number;
+        soccerLevel: number;
+        tableTennisLevel: number;
+        tennisLevel: number;
+    }>({
+        name: '',
+        gender: 'prefer not to say',
+        birthday: '',
+        distance: 500,
+        intro: '',
+        badmintonLevel: 0,
+        basketballLevel: 0,
+        soccerLevel: 0,
+        tableTennisLevel: 0,
+        tennisLevel: 0,
+    });
+    const [eventInfo, setEventInfo] = useState<{
         badmintonLevels: Set<number>;
         basketballLevels: Set<number>;
         soccerLevels: Set<number>;
         tableTennisLevels: Set<number>;
         tennisLevels: Set<number>;
+        lat: number;
+        lng: number;
     }>({
-        gender: 'prefer not to say',
-        birthday: '',
-        distance: 500,
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
         soccerLevels: new Set([0]),
         tableTennisLevels: new Set([0]),
         tennisLevels: new Set([0]),
+        lat: 0,
+        lng: 0,
     });
 
     useEffect(() => {
@@ -46,7 +69,8 @@ export default function New() {
                 return;
             }
 
-            setFilter({
+            setUserInfo({
+                name: data[0].username,
                 gender:
                     data[0].gender === 1
                         ? 'male'
@@ -55,11 +79,23 @@ export default function New() {
                           : 'prefer not to say',
                 birthday: data[0].birthday,
                 distance: data[0].distance,
-                badmintonLevels: new Set([data[0].badminton_level]),
-                basketballLevels: new Set([data[0].basketball_level]),
-                soccerLevels: new Set([data[0].soccer_level]),
-                tableTennisLevels: new Set([data[0].table_tennis_level]),
-                tennisLevels: new Set([data[0].tennis_level]),
+                intro: data[0].intro,
+                badmintonLevel: data[0].badminton_level,
+                basketballLevel: data[0].basketball_level,
+                soccerLevel: data[0].soccer_level,
+                tableTennisLevel: data[0].table_tennis_level,
+                tennisLevel: data[0].tennis_level,
+            });
+
+            setEventInfo((oldVal) => {
+                return {
+                    ...oldVal,
+                    badmintonLevels: new Set([data[0].badminton_level]),
+                    basketballLevels: new Set([data[0].basketball_level]),
+                    soccerLevels: new Set([data[0].soccer_level]),
+                    tableTennisLevels: new Set([data[0].table_tennis_level]),
+                    tennisLevels: new Set([data[0].tennis_level]),
+                };
             });
         }
 
@@ -67,6 +103,29 @@ export default function New() {
     }, [email]);
 
     function editTitle() {}
+
+    function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
+        const coord: string = e.target.value;
+
+        setCoordinate(coord);
+
+        const [lat, lng] = coord
+            .replace(/[()]/g, '')
+            .split(', ')
+            .map(parseFloat);
+
+        if (Number.isNaN(lat) || Number.isNaN(lng)) {
+            return;
+        }
+
+        setEventInfo((oldVal) => {
+            return {
+                ...oldVal,
+                lat,
+                lng,
+            };
+        });
+    }
 
     async function createNewEvent() {}
 
@@ -86,7 +145,7 @@ export default function New() {
                         ⚽
                     </button>
                     <button
-                        className="w-36 h-36 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
+                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
                             setSport('basketball');
                         }}
@@ -94,7 +153,7 @@ export default function New() {
                         🏀
                     </button>
                     <button
-                        className="w-36 h-36 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
+                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
                             setSport('tennis');
                         }}
@@ -102,7 +161,7 @@ export default function New() {
                         🎾
                     </button>
                     <button
-                        className="w-36 h-36 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
+                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
                             setSport('table tennis');
                         }}
@@ -110,7 +169,7 @@ export default function New() {
                         🏓
                     </button>
                     <button
-                        className="w-36 h-36 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
+                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
                             setSport('badminton');
                         }}
@@ -168,12 +227,12 @@ export default function New() {
                     </section>
                     <section className="flex flex-col items-center gap-4">
                         <section className="w-full">
-                            <h2>選擇對手程度</h2>
+                            <h2 className="font-bold">選擇對手程度</h2>
                             {sport === 'soccer' && (
                                 <LevelBarMulti
-                                    levels={filter.soccerLevels}
+                                    levels={eventInfo.soccerLevels}
                                     chooseLevel={(i) => {
-                                        setFilter((oldVal) => {
+                                        setEventInfo((oldVal) => {
                                             const newSoccerLevels: Set<number> =
                                                 new Set(oldVal.soccerLevels);
 
@@ -193,9 +252,9 @@ export default function New() {
                             )}
                             {sport === 'basketball' && (
                                 <LevelBarMulti
-                                    levels={filter.basketballLevels}
+                                    levels={eventInfo.basketballLevels}
                                     chooseLevel={(i) => {
-                                        setFilter((oldVal) => {
+                                        setEventInfo((oldVal) => {
                                             const newBasketballLevels: Set<number> =
                                                 new Set(
                                                     oldVal.basketballLevels
@@ -218,9 +277,9 @@ export default function New() {
                             )}
                             {sport === 'tennis' && (
                                 <LevelBarMulti
-                                    levels={filter.tennisLevels}
+                                    levels={eventInfo.tennisLevels}
                                     chooseLevel={(i) => {
-                                        setFilter((oldVal) => {
+                                        setEventInfo((oldVal) => {
                                             const newTennisLevels: Set<number> =
                                                 new Set(oldVal.tennisLevels);
 
@@ -240,9 +299,9 @@ export default function New() {
                             )}
                             {sport === 'table tennis' && (
                                 <LevelBarMulti
-                                    levels={filter.tableTennisLevels}
+                                    levels={eventInfo.tableTennisLevels}
                                     chooseLevel={(i) => {
-                                        setFilter((oldVal) => {
+                                        setEventInfo((oldVal) => {
                                             const newTableTennisLevels: Set<number> =
                                                 new Set(
                                                     oldVal.tableTennisLevels
@@ -265,9 +324,9 @@ export default function New() {
                             )}
                             {sport === 'badminton' && (
                                 <LevelBarMulti
-                                    levels={filter.badmintonLevels}
+                                    levels={eventInfo.badmintonLevels}
                                     chooseLevel={(i) => {
-                                        setFilter((oldVal) => {
+                                        setEventInfo((oldVal) => {
                                             const newBadmintonLevels: Set<number> =
                                                 new Set(oldVal.badmintonLevels);
 
@@ -288,19 +347,41 @@ export default function New() {
                             )}
                         </section>
                         <section className="w-full">
-                            <h2>選擇對手性別</h2>
+                            <h2 className="font-bold">選擇對手性別</h2>
                         </section>
                         <section className="w-full">
-                            <h2>選擇對手年紀</h2>
+                            <h2 className="font-bold">選擇對手年紀</h2>
                         </section>
                         <section className="w-full">
-                            <h2>選擇地點</h2>
+                            <section className="flex flex-col gap-2 mb-2">
+                                <label className="font-bold">
+                                    輸入座標 (經度，緯度):{' '}
+                                </label>
+                                <input
+                                    className="border-2 border-black focus:outline-none p-2"
+                                    type="text"
+                                    value={coordinate}
+                                    onChange={handleCoordinateUpdate}
+                                />
+                            </section>
+                            <section className="flex flex-col gap-2">
+                                <label className="font-bold">地點名稱:</label>
+                                <input
+                                    className="border-2 border-black focus:outline-none p-2"
+                                    type="text"
+                                />
+                            </section>
                         </section>
                         <section className="w-full">
-                            <h2>需求人數: 1</h2>
+                            <h2>
+                                <b>需求人數: </b>1
+                            </h2>
                         </section>
                         <section className="w-full">
-                            <h2>選擇時間</h2>
+                            <h2 className="font-bold">選擇開始時間</h2>
+                        </section>
+                        <section className="w-full">
+                            <h2 className="font-bold">選擇時長</h2>
                         </section>
                         <section className="flex flex-col gap-2">
                             <button
