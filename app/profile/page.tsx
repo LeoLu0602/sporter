@@ -19,7 +19,7 @@ export default function Profile() {
         name: '',
         gender: 'prefer not to say',
         birthday: '',
-        distance: 1000,
+        distance: 500,
         intro: '',
     });
     const [option, setOption] = useState<'info' | 'level'>('info');
@@ -169,8 +169,8 @@ export default function Profile() {
                             className="w-full"
                             type="range"
                             name="distance"
-                            min="0"
-                            max="5000"
+                            min="500"
+                            max="10000"
                             step="100"
                             value={info.distance}
                             onChange={handleInfoChange}
