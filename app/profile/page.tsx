@@ -89,11 +89,6 @@ export default function Profile() {
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) {
         switch (e.target.name) {
-            case 'name':
-                setInfo((oldVal) => {
-                    return { ...oldVal, name: e.target.value };
-                });
-                break;
             case 'gender':
                 setInfo((oldVal) => {
                     return {
@@ -196,13 +191,7 @@ export default function Profile() {
                 >
                     <section>Email: {email ?? ''}</section>
                     <section>
-                        <label>名稱: </label>
-                        <input
-                            name="name"
-                            type="text"
-                            value={info.name}
-                            onChange={handleInfoChange}
-                        />
+                        名稱: {info.name}
                     </section>
                     <section className="flex">
                         <section className="mr-4">性別:</section>
