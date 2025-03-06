@@ -163,7 +163,7 @@ export default function Profile() {
 
     return (
         <>
-            <main className="p-4">
+            <main className="p-4 min-h-screen">
                 <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl">
                     個人檔案
                 </h1>
@@ -275,7 +275,7 @@ export default function Profile() {
                         <label>自介 ({info.intro.length}/50) </label>
                         <br />
                         <textarea
-                            className="mt-2 border-2 border-black w-full h-20"
+                            className="mt-2 border-2 border-black w-full h-20 p-2"
                             name="intro"
                             value={info.intro}
                             onChange={handleInfoChange}
@@ -283,13 +283,13 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="fixed bottom-20 left-4 border-2 border-black px-8 py-2"
+                    className="absolute bottom-20 left-4 border-2 border-black px-8 py-2"
                     onClick={signOut}
                 >
                     登出
                 </button>
                 <button
-                    className="fixed bottom-20 right-4 border-2 border-black px-8 py-2"
+                    className="absolute bottom-20 right-4 border-2 border-black px-8 py-2"
                     onClick={save}
                 >
                     儲存
