@@ -5,8 +5,7 @@ import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Level from './Level';
-import LevelBar from './LevelBar';
+import LevelBar from '@/components/LevelBar';
 
 export default function Profile() {
     const email = useEmail();
@@ -158,6 +157,25 @@ export default function Profile() {
         alert('Saved!');
     }
 
+    function explainLevel(level: number): string {
+        switch (level) {
+            case 0:
+                return '新手';
+            case 1:
+                return '休閒';
+            case 2:
+                return '中階';
+            case 3:
+                return '進階';
+            case 4:
+                return '半職業';
+            case 5:
+                return '職業';
+        }
+
+        return '';
+    }
+
     return (
         <>
             <main className="p-4 min-h-screen">
@@ -286,66 +304,86 @@ export default function Profile() {
                         hidden: option !== 'levels',
                     })}
                 >
-                    <LevelBar
-                        sport="⚽"
-                        level={info.soccerLevel}
-                        chooseLevel={(i) => {
-                            setInfo((oldVal) => {
-                                return {
-                                    ...oldVal,
-                                    soccerLevel: i,
-                                };
-                            });
-                        }}
-                    />
-                    <LevelBar
-                        sport="🏀"
-                        level={info.basketballLevel}
-                        chooseLevel={(i) => {
-                            setInfo((oldVal) => {
-                                return {
-                                    ...oldVal,
-                                    basketballLevel: i,
-                                };
-                            });
-                        }}
-                    />
-                    <LevelBar
-                        sport="🎾"
-                        level={info.tennisLevel}
-                        chooseLevel={(i) => {
-                            setInfo((oldVal) => {
-                                return {
-                                    ...oldVal,
-                                    tennisLevel: i,
-                                };
-                            });
-                        }}
-                    />
-                    <LevelBar
-                        sport="🏓"
-                        level={info.tableTennisLevel}
-                        chooseLevel={(i) => {
-                            setInfo((oldVal) => {
-                                return {
-                                    ...oldVal,
-                                    tableTennisLevel: i,
-                                };
-                            });
-                        }}
-                    />
-                    <LevelBar
-                        sport="🏸"
-                        level={info.badmintonLevel}
-                        chooseLevel={(i) => {
-                            setInfo((oldVal) => {
-                                return {
-                                    ...oldVal,
-                                    badmintonLevel: i,
-                                };
-                            });
-                        }}
-                    />
+                    <section>
+                        <h2 className="text-2xl">
+                            ⚽ {explainLevel(info.soccerLevel)}
+                        </h2>
+                        <LevelBar
+                            level={info.soccerLevel}
+                            chooseLevel={(i) => {
+                                setInfo((oldVal) => {
+                                    return {
+                                        ...oldVal,
+                                        soccerLevel: i,
+                                    };
+                                });
+                            }}
+                        />
+                    </section>
+                    <section>
+                        <h2 className="text-2xl">
+                            🏀 {explainLevel(info.basketballLevel)}
+                        </h2>
+                        <LevelBar
+                            level={info.basketballLevel}
+                            chooseLevel={(i) => {
+                                setInfo((oldVal) => {
+                                    return {
+                                        ...oldVal,
+                                        basketballLevel: i,
+                                    };
+                                });
+                            }}
+                        />
+                    </section>
+                    <section>
+                        <h2 className="text-2xl">
+                            🎾 {explainLevel(info.tennisLevel)}
+                        </h2>
+                        <LevelBar
+                            level={info.tennisLevel}
+                            chooseLevel={(i) => {
+                                setInfo((oldVal) => {
+                                    return {
+                                        ...oldVal,
+                                        tennisLevel: i,
+                                    };
+                                });
+                            }}
+                        />
+                    </section>
+                    <section>
+                        <h2 className="text-2xl">
+                            🏓 {explainLevel(info.tableTennisLevel)}
+                        </h2>
+                        <LevelBar
+                            level={info.tableTennisLevel}
+                            chooseLevel={(i) => {
+                                setInfo((oldVal) => {
+                                    return {
+                                        ...oldVal,
+                                        tableTennisLevel: i,
+                                    };
+                                });
+                            }}
+                        />
+                    </section>
+                    <section>
+                        <h2 className="text-2xl">
+                            🏸 {explainLevel(info.badmintonLevel)}
+                        </h2>
+                        <LevelBar
+                            level={info.badmintonLevel}
+                            chooseLevel={(i) => {
+                                setInfo((oldVal) => {
+                                    return {
+                                        ...oldVal,
+                                        badmintonLevel: i,
+                                    };
+                                });
+                            }}
+                        />
+                    </section>
                 </section>
                 <button
                     className="fixed bottom-20 left-4 px-8 py-2 bg-rose-600 text-white z-20 shadow-[4px_4px_6px_4px_rgba(0,_0,_0,_0.3)]"
