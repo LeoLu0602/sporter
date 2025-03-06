@@ -42,6 +42,7 @@ export default function New() {
         lat: number;
         lng: number;
         location: string;
+        participantNum: number;
     }>({
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
@@ -51,6 +52,7 @@ export default function New() {
         lat: 0,
         lng: 0,
         location: '',
+        participantNum: 1,
     });
 
     useEffect(() => {
@@ -127,6 +129,16 @@ export default function New() {
                 lng,
             };
         });
+    }
+
+    function incrementParticipantNum(amount: number) {
+        const newVal: number = eventInfo.participantNum + amount;
+
+        if (newVal >= 1 && newVal <= 99) {
+            setEventInfo((oldVal) => {
+                return { ...oldVal, participantNum: newVal };
+            });
+        }
     }
 
     async function createNewEvent() {}
@@ -383,10 +395,27 @@ export default function New() {
                                 />
                             </section>
                         </section>
-                        <section className="w-full">
-                            <h2>
-                                <b>需求人數: </b>1
-                            </h2>
+                        <section className="w-full flex items-center">
+                            <div className="mr-2">需求人數:</div>
+                            <button
+                                className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
+                                onClick={() => {
+                                    incrementParticipantNum(-1);
+                                }}
+                            >
+                                &#8722;
+                            </button>
+                            <div className="w-10 text-center">
+                                {eventInfo.participantNum}
+                            </div>
+                            <button
+                                className="bg-emerald-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
+                                onClick={() => {
+                                    incrementParticipantNum(1);
+                                }}
+                            >
+                                +
+                            </button>
                         </section>
                         <section className="w-full">
                             <h2 className="font-bold">選擇開始時間</h2>
