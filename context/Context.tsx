@@ -1,6 +1,7 @@
 'use client';
 
 import { supabase } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 import {
     createContext,
     Dispatch,
@@ -27,6 +28,7 @@ export function useEmailDispatch() {
 }
 
 export function Provider({ children }: { children: React.ReactNode }) {
+    const router = useRouter();
     const [auth, dispatch] = useReducer(emailReducer, null);
 
     useEffect(() => {
@@ -70,6 +72,8 @@ export function Provider({ children }: { children: React.ReactNode }) {
                     console.error(error);
                 }
             }
+
+            router.push('/profile');
         }
 
         setUp();
