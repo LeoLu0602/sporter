@@ -449,9 +449,9 @@ export default function New() {
                         </section>
                         <section className="w-full flex flex-col">
                             <label className="font-bold">選擇對手年紀:</label>
-                            <div className="flex items-center w-full my-4 relative h-2 bg-emerald-500 rounded-xl">
+                            <div className="flex items-center w-full my-4 relative h-1 bg-emerald-500 rounded-xl">
                                 <input
-                                    className="w-full h-0 absolute z-10 appearance-none"
+                                    className="w-full h-0 absolute appearance-none"
                                     type="range"
                                     name="ageMin"
                                     min={0}
@@ -477,7 +477,6 @@ export default function New() {
                                     <span className="text-sky-500 cursor-pointer">
                                         選擇熱門場地
                                     </span>
-                                    :{' '}
                                 </label>
                                 <input
                                     className="border-2 border-black focus:outline-none p-2"
