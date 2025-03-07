@@ -46,6 +46,8 @@ export default function New() {
         lng: number;
         location: string;
         participantNum: number;
+        date: string;
+        time: string;
         length: number;
     }>({
         title: '未命名',
@@ -61,6 +63,8 @@ export default function New() {
         lng: 0,
         location: '',
         participantNum: 1,
+        date: '',
+        time: '',
         length: 2,
     });
 
@@ -186,6 +190,16 @@ export default function New() {
 
                 setEventInfo((oldVal) => {
                     return { ...oldVal, ageMax: parseInt(e.target.value) };
+                });
+                break;
+            case 'date':
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, date: e.target.value };
+                });
+                break;
+            case 'time':
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, time: e.target.value };
                 });
                 break;
         }
@@ -549,8 +563,20 @@ export default function New() {
                             <label className="font-bold mr-2">
                                 選擇開始時間:
                             </label>
-                            <input className="mr-2" type="date" />
-                            <input type="time" />
+                            <input
+                                className="mr-2"
+                                type="date"
+                                name="date"
+                                value={eventInfo.date}
+                                onChange={handleEventInfoChange}
+                            />
+                            <input
+                                type="time"
+                                name="time"
+                                step={30 * 60}
+                                value={eventInfo.time}
+                                onChange={handleEventInfoChange}
+                            />
                         </section>
                         <section className="w-full">
                             <section className="w-full flex items-center">
