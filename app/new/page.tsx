@@ -159,7 +159,7 @@ export default function New() {
                 });
                 break;
             case 'ageMin':
-                if (parseInt(e.target.value) >= eventInfo.ageMax) {
+                if (parseInt(e.target.value) > eventInfo.ageMax) {
                     return;
                 }
 
@@ -168,7 +168,7 @@ export default function New() {
                 });
                 break;
             case 'ageMax':
-                if (eventInfo.ageMin >= parseInt(e.target.value)) {
+                if (eventInfo.ageMin > parseInt(e.target.value)) {
                     return;
                 }
 
