@@ -104,9 +104,14 @@ export default function New() {
                 tennisLevel: data[0].tennis_level,
             });
 
+            const age: number = calculateAge(data[0].birthday);
+
             setEventInfo((oldVal) => {
                 return {
                     ...oldVal,
+                    gender: data[0].gender,
+                    ageMin: Math.max(0, age - 5),
+                    ageMax: Math.min(100, age + 5),
                     badmintonLevels: new Set([data[0].badminton_level]),
                     basketballLevels: new Set([data[0].basketball_level]),
                     soccerLevels: new Set([data[0].soccer_level]),
@@ -118,6 +123,26 @@ export default function New() {
 
         setUp();
     }, [email]);
+
+    function incrementParticipantNum(amount: number) {
+        const newParticipantNum: number = eventInfo.participantNum + amount;
+
+        if (newParticipantNum >= 1 && newParticipantNum <= 99) {
+            setEventInfo((oldVal) => {
+                return { ...oldVal, participantNum: newParticipantNum };
+            });
+        }
+    }
+
+    function incrementLength(amount: number) {
+        const newLength: number = eventInfo.length + amount;
+
+        if (newLength >= 0.5 && newLength <= 24) {
+            setEventInfo((oldVal) => {
+                return { ...oldVal, length: newLength };
+            });
+        }
+    }
 
     function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
         const coord: string = e.target.value;
@@ -140,26 +165,6 @@ export default function New() {
                 lng,
             };
         });
-    }
-
-    function incrementParticipantNum(amount: number) {
-        const newParticipantNum: number = eventInfo.participantNum + amount;
-
-        if (newParticipantNum >= 1 && newParticipantNum <= 99) {
-            setEventInfo((oldVal) => {
-                return { ...oldVal, participantNum: newParticipantNum };
-            });
-        }
-    }
-
-    function incrementLength(amount: number) {
-        const newLength: number = eventInfo.length + amount;
-
-        if (newLength >= 0.5 && newLength <= 24) {
-            setEventInfo((oldVal) => {
-                return { ...oldVal, length: newLength };
-            });
-        }
     }
 
     function handleEventInfoChange(e: ChangeEvent<HTMLInputElement>) {
@@ -208,6 +213,25 @@ export default function New() {
                 });
                 break;
         }
+    }
+
+    function calculateAge(birthday: string): number {
+        const [by, bm, bd] = birthday.split('-').map((x) => parseInt(x));
+
+        if (Number.isNaN(by) || Number.isNaN(bm) || Number.isNaN(bd)) {
+            return 30;
+        }
+
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth() + 1; // Gets the month (0-based, so add 1).
+        const d = now.getDate();
+
+        if (m < bm || (m === bm && d < bd)) {
+            return y - by - 1;
+        }
+
+        return y - by;
     }
 
     async function createNewEvent() {}
@@ -572,7 +596,6 @@ export default function New() {
                             <input
                                 type="time"
                                 name="time"
-                                step={30 * 60}
                                 value={eventInfo.time}
                                 onChange={handleEventInfoChange}
                             />
