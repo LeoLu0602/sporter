@@ -4,7 +4,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { supabase } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
-import { eventNames } from 'process';
 
 export default function New() {
     const email = useEmail();
@@ -34,6 +33,7 @@ export default function New() {
         tennisLevel: 0,
     });
     const [eventInfo, setEventInfo] = useState<{
+        title: string;
         badmintonLevels: Set<number>;
         basketballLevels: Set<number>;
         soccerLevels: Set<number>;
@@ -44,6 +44,7 @@ export default function New() {
         location: string;
         participantNum: number;
     }>({
+        title: '未命名',
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
         soccerLevels: new Set([0]),
@@ -106,8 +107,6 @@ export default function New() {
         setUp();
     }, [email]);
 
-    function editTitle() {}
-
     function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
         const coord: string = e.target.value;
 
@@ -138,6 +137,16 @@ export default function New() {
             setEventInfo((oldVal) => {
                 return { ...oldVal, participantNum: newVal };
             });
+        }
+    }
+
+    function handleEventInfoChange(e: ChangeEvent<HTMLInputElement>) {
+        switch (e.target.name) {
+            case 'title':
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, title: e.target.value };
+                });
+                break;
         }
     }
 
@@ -200,7 +209,12 @@ export default function New() {
                                 {sport === 'soccer' && (
                                     <>
                                         <h2 className="text-2xl">⚽</h2>
-                                        <span className="text-2xl">足球</span>
+                                        <input
+                                            className="text-2xl w-60 focus:outline-none"
+                                            name="title"
+                                            value={eventInfo.title}
+                                            onChange={handleEventInfoChange}
+                                        />
                                     </>
                                 )}
                                 {sport === 'basketball' && (
@@ -228,15 +242,6 @@ export default function New() {
                                     </>
                                 )}
                             </div>
-
-                            <button
-                                className="text-orange-500 font-bold"
-                                onClick={() => {
-                                    editTitle();
-                                }}
-                            >
-                                編輯名稱
-                            </button>
                         </section>
                     </section>
                     <section className="flex flex-col items-center gap-4">
@@ -369,7 +374,11 @@ export default function New() {
                         <section className="w-full">
                             <section className="flex flex-col gap-2 mb-2">
                                 <label className="font-bold">
-                                    輸入座標 (經度，緯度):{' '}
+                                    輸入座標 (經度，緯度) or{' '}
+                                    <span className="text-sky-500 cursor-pointer">
+                                        選擇熱門場地
+                                    </span>
+                                    :{' '}
                                 </label>
                                 <input
                                     className="border-2 border-black focus:outline-none p-2"
@@ -396,7 +405,9 @@ export default function New() {
                             </section>
                         </section>
                         <section className="w-full flex items-center">
-                            <div className="mr-2">需求人數:</div>
+                            <div className="mr-2">
+                                <b>需求人數:</b>
+                            </div>
                             <button
                                 className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
