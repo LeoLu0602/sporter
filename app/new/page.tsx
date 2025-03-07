@@ -159,7 +159,7 @@ export default function New() {
                 });
                 break;
             case 'ageMin':
-                if (parseInt(e.target.value) >= eventInfo.ageMax - 5) {
+                if (parseInt(e.target.value) >= eventInfo.ageMax) {
                     return;
                 }
 
@@ -168,7 +168,7 @@ export default function New() {
                 });
                 break;
             case 'ageMax':
-                if (eventInfo.ageMin >= parseInt(e.target.value) - 5) {
+                if (eventInfo.ageMin >= parseInt(e.target.value)) {
                     return;
                 }
 
@@ -447,28 +447,35 @@ export default function New() {
                                 <label className="ml-2">不限</label>
                             </section>
                         </section>
-                        <section className="w-full flex flex-col">
-                            <label className="font-bold">選擇對手年紀:</label>
-                            <div className="flex items-center w-full my-4 relative h-1 bg-emerald-500 rounded-xl">
-                                <input
-                                    className="w-full h-0 appearance-none absolute z-10"
-                                    type="range"
-                                    name="ageMin"
-                                    min={0}
-                                    max={100}
-                                    value={eventInfo.ageMin}
-                                    onChange={handleEventInfoChange}
-                                />
-                                <input
-                                    className="w-full h-0 appearance-none absolute z-20"
-                                    type="range"
-                                    name="ageMax"
-                                    min={0}
-                                    max={100}
-                                    value={eventInfo.ageMax}
-                                    onChange={handleEventInfoChange}
-                                />
-                            </div>
+                        <section className="w-full flex flex-col gap-2">
+                            <label>
+                                <b>選擇最小對手年紀: </b>
+                                {eventInfo.ageMin}
+                            </label>
+                            <input
+                                className="w-full"
+                                type="range"
+                                name="ageMin"
+                                min={0}
+                                max={100}
+                                value={eventInfo.ageMin}
+                                onChange={handleEventInfoChange}
+                            />
+                        </section>
+                        <section className="w-full flex flex-col gap-2">
+                            <label>
+                                <b>選擇最大對手年紀: </b>
+                                {eventInfo.ageMax}
+                            </label>
+                            <input
+                                className="w-full"
+                                type="range"
+                                name="ageMax"
+                                min={0}
+                                max={100}
+                                value={eventInfo.ageMax}
+                                onChange={handleEventInfoChange}
+                            />
                         </section>
                         <section className="w-full">
                             <section className="flex flex-col gap-2 mb-2">
@@ -530,7 +537,7 @@ export default function New() {
                             <label className="font-bold mr-2">
                                 選擇開始時間:
                             </label>
-                            <input className='mr-2' type="date" />
+                            <input className="mr-2" type="date" />
                             <input type="time" />
                         </section>
                         <section className="w-full">
