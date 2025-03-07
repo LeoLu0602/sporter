@@ -49,8 +49,8 @@ export default function New() {
     }>({
         title: '未命名',
         gender: 3,
-        ageMin: 0,
-        ageMax: 100,
+        ageMin: 5,
+        ageMax: 95,
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
         soccerLevels: new Set([0]),
