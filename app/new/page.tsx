@@ -11,7 +11,7 @@ export default function New() {
     const [coordinate, setCoordinate] = useState<string>('');
     const [userInfo, setUserInfo] = useState<{
         name: string;
-        gender: 'male' | 'female' | 'prefer not to say';
+        gender: number; // 1: male, 2: female, 3: any
         birthday: string;
         distance: number;
         intro: string;
@@ -22,7 +22,7 @@ export default function New() {
         tennisLevel: number;
     }>({
         name: '',
-        gender: 'prefer not to say',
+        gender: 3,
         birthday: '',
         distance: 500,
         intro: '',
@@ -33,15 +33,12 @@ export default function New() {
         tennisLevel: 0,
     });
     const [eventInfo, setEventInfo] = useState<{
+        sport: string | null;
         title: string;
         gender: number; // 1: male, 2: female, 3: any
         ageMin: number;
         ageMax: number;
-        badmintonLevels: Set<number>;
-        basketballLevels: Set<number>;
-        soccerLevels: Set<number>;
-        tableTennisLevels: Set<number>;
-        tennisLevels: Set<number>;
+        levels: Set<number>;
         lat: number;
         lng: number;
         location: string;
@@ -50,15 +47,12 @@ export default function New() {
         time: string;
         length: number;
     }>({
+        sport: null,
         title: '未命名',
         gender: 3,
         ageMin: 5,
         ageMax: 95,
-        badmintonLevels: new Set([0]),
-        basketballLevels: new Set([0]),
-        soccerLevels: new Set([0]),
-        tableTennisLevels: new Set([0]),
-        tennisLevels: new Set([0]),
+        levels: new Set([1]),
         lat: 0,
         lng: 0,
         location: '',
@@ -88,12 +82,7 @@ export default function New() {
 
             setUserInfo({
                 name: data[0].username,
-                gender:
-                    data[0].gender === 1
-                        ? 'male'
-                        : data[0].gender === 2
-                          ? 'female'
-                          : 'prefer not to say',
+                gender: data[0].gender,
                 birthday: data[0].birthday,
                 distance: data[0].distance,
                 intro: data[0].intro,
@@ -103,26 +92,40 @@ export default function New() {
                 tableTennisLevel: data[0].table_tennis_level,
                 tennisLevel: data[0].tennis_level,
             });
-
-            const age: number = calculateAge(data[0].birthday);
-
-            setEventInfo((oldVal) => {
-                return {
-                    ...oldVal,
-                    gender: data[0].gender,
-                    ageMin: Math.max(0, age - 5),
-                    ageMax: Math.min(100, age + 5),
-                    badmintonLevels: new Set([data[0].badminton_level]),
-                    basketballLevels: new Set([data[0].basketball_level]),
-                    soccerLevels: new Set([data[0].soccer_level]),
-                    tableTennisLevels: new Set([data[0].table_tennis_level]),
-                    tennisLevels: new Set([data[0].tennis_level]),
-                };
-            });
         }
 
         setUp();
     }, [email]);
+
+    function selectSport(sport: string) {
+        const age: number = calculateAge(userInfo.birthday);
+
+        setSport(sport);
+        setEventInfo({
+            sport,
+            title: '未命名',
+            gender: userInfo.gender,
+            ageMin: Math.max(0, age - 5),
+            ageMax: Math.min(100, age + 5),
+            levels:
+                sport === 'soccer'
+                    ? new Set([userInfo.soccerLevel])
+                    : sport === 'basketball'
+                      ? new Set([userInfo.basketballLevel])
+                      : sport === 'tennis'
+                        ? new Set([userInfo.tennisLevel])
+                        : sport === 'table tennis'
+                          ? new Set([userInfo.tableTennisLevel])
+                          : new Set([userInfo.badmintonLevel]),
+            lat: 0,
+            lng: 0,
+            location: '',
+            participantNum: 1,
+            date: '',
+            time: '',
+            length: 2,
+        });
+    }
 
     function incrementParticipantNum(amount: number) {
         const newParticipantNum: number = eventInfo.participantNum + amount;
@@ -246,7 +249,7 @@ export default function New() {
                     <button
                         className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
-                            setSport('soccer');
+                            selectSport('soccer');
                         }}
                     >
                         ⚽
@@ -254,7 +257,7 @@ export default function New() {
                     <button
                         className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
-                            setSport('basketball');
+                            selectSport('basketball');
                         }}
                     >
                         🏀
@@ -262,7 +265,7 @@ export default function New() {
                     <button
                         className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
-                            setSport('tennis');
+                            selectSport('tennis');
                         }}
                     >
                         🎾
@@ -270,7 +273,7 @@ export default function New() {
                     <button
                         className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
-                            setSport('table tennis');
+                            selectSport('table tennis');
                         }}
                     >
                         🏓
@@ -278,7 +281,7 @@ export default function New() {
                     <button
                         className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
                         onClick={() => {
-                            setSport('badminton');
+                            selectSport('badminton');
                         }}
                     >
                         🏸
@@ -353,11 +356,11 @@ export default function New() {
                             <h2 className="font-bold">選擇對手程度</h2>
                             {sport === 'soccer' && (
                                 <LevelBarMulti
-                                    levels={eventInfo.soccerLevels}
+                                    levels={eventInfo.levels}
                                     chooseLevel={(i) => {
                                         setEventInfo((oldVal) => {
                                             const newSoccerLevels: Set<number> =
-                                                new Set(oldVal.soccerLevels);
+                                                new Set(oldVal.levels);
 
                                             if (newSoccerLevels.has(i)) {
                                                 newSoccerLevels.delete(i);
@@ -375,13 +378,11 @@ export default function New() {
                             )}
                             {sport === 'basketball' && (
                                 <LevelBarMulti
-                                    levels={eventInfo.basketballLevels}
+                                    levels={eventInfo.levels}
                                     chooseLevel={(i) => {
                                         setEventInfo((oldVal) => {
                                             const newBasketballLevels: Set<number> =
-                                                new Set(
-                                                    oldVal.basketballLevels
-                                                );
+                                                new Set(oldVal.levels);
 
                                             if (newBasketballLevels.has(i)) {
                                                 newBasketballLevels.delete(i);
@@ -400,11 +401,11 @@ export default function New() {
                             )}
                             {sport === 'tennis' && (
                                 <LevelBarMulti
-                                    levels={eventInfo.tennisLevels}
+                                    levels={eventInfo.levels}
                                     chooseLevel={(i) => {
                                         setEventInfo((oldVal) => {
                                             const newTennisLevels: Set<number> =
-                                                new Set(oldVal.tennisLevels);
+                                                new Set(oldVal.levels);
 
                                             if (newTennisLevels.has(i)) {
                                                 newTennisLevels.delete(i);
@@ -422,13 +423,11 @@ export default function New() {
                             )}
                             {sport === 'table tennis' && (
                                 <LevelBarMulti
-                                    levels={eventInfo.tableTennisLevels}
+                                    levels={eventInfo.levels}
                                     chooseLevel={(i) => {
                                         setEventInfo((oldVal) => {
                                             const newTableTennisLevels: Set<number> =
-                                                new Set(
-                                                    oldVal.tableTennisLevels
-                                                );
+                                                new Set(oldVal.levels);
 
                                             if (newTableTennisLevels.has(i)) {
                                                 newTableTennisLevels.delete(i);
@@ -447,11 +446,11 @@ export default function New() {
                             )}
                             {sport === 'badminton' && (
                                 <LevelBarMulti
-                                    levels={eventInfo.badmintonLevels}
+                                    levels={eventInfo.levels}
                                     chooseLevel={(i) => {
                                         setEventInfo((oldVal) => {
                                             const newBadmintonLevels: Set<number> =
-                                                new Set(oldVal.badmintonLevels);
+                                                new Set(oldVal.levels);
 
                                             if (newBadmintonLevels.has(i)) {
                                                 newBadmintonLevels.delete(i);
@@ -626,7 +625,7 @@ export default function New() {
                                 </button>
                             </section>
                         </section>
-                        <section className="flex flex-col gap-2 mt-8">
+                        <section className="flex flex-col gap-8 mt-8">
                             <button
                                 className="px-8 py-2 bg-emerald-500 font-bold text-white"
                                 onClick={() => {
