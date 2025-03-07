@@ -35,6 +35,8 @@ export default function New() {
     const [eventInfo, setEventInfo] = useState<{
         title: string;
         gender: number; // 1: male, 2: female, 3: any
+        ageMin: number;
+        ageMax: number;
         badmintonLevels: Set<number>;
         basketballLevels: Set<number>;
         soccerLevels: Set<number>;
@@ -47,6 +49,8 @@ export default function New() {
     }>({
         title: '未命名',
         gender: 3,
+        ageMin: 0,
+        ageMax: 100,
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
         soccerLevels: new Set([0]),
@@ -152,6 +156,24 @@ export default function New() {
             case 'gender':
                 setEventInfo((oldVal) => {
                     return { ...oldVal, gender: parseInt(e.target.value) };
+                });
+                break;
+            case 'ageMin':
+                if (parseInt(e.target.value) >= eventInfo.ageMax - 5) {
+                    return;
+                }
+
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, ageMin: parseInt(e.target.value) };
+                });
+                break;
+            case 'ageMax':
+                if (eventInfo.ageMin >= parseInt(e.target.value) - 5) {
+                    return;
+                }
+
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, ageMax: parseInt(e.target.value) };
                 });
                 break;
         }
@@ -425,8 +447,28 @@ export default function New() {
                                 <label className="ml-2">不限</label>
                             </section>
                         </section>
-                        <section className="w-full">
-                            <h2 className="font-bold">選擇對手年紀</h2>
+                        <section className="w-full flex flex-col">
+                            <label className="font-bold">選擇對手年紀:</label>
+                            <div className="flex items-center w-full my-4 relative h-2 bg-emerald-500 rounded-xl">
+                                <input
+                                    className="w-full h-0 absolute z-10"
+                                    type="range"
+                                    name="ageMin"
+                                    min={0}
+                                    max={100}
+                                    value={eventInfo.ageMin}
+                                    onChange={handleEventInfoChange}
+                                />
+                                <input
+                                    className="w-full h-0"
+                                    type="range"
+                                    name="ageMax"
+                                    min={0}
+                                    max={100}
+                                    value={eventInfo.ageMax}
+                                    onChange={handleEventInfoChange}
+                                />
+                            </div>
                         </section>
                         <section className="w-full">
                             <section className="flex flex-col gap-2 mb-2">
@@ -486,10 +528,10 @@ export default function New() {
                             </button>
                         </section>
                         <section className="w-full">
-                            <h2 className="font-bold">選擇開始時間</h2>
+                            <h2 className="font-bold">選擇開始時間:</h2>
                         </section>
                         <section className="w-full">
-                            <h2 className="font-bold">選擇時長</h2>
+                            <h2 className="font-bold">選擇時長:</h2>
                         </section>
                         <section className="flex flex-col gap-2">
                             <button
