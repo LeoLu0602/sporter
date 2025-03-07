@@ -97,6 +97,25 @@ export default function New() {
         setUp();
     }, [email]);
 
+    function calculateAge(birthday: string): number {
+        const [by, bm, bd] = birthday.split('-').map((x) => parseInt(x));
+
+        if (Number.isNaN(by) || Number.isNaN(bm) || Number.isNaN(bd)) {
+            return 30;
+        }
+
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth() + 1; // Gets the month (0-based, so add 1).
+        const d = now.getDate();
+
+        if (m < bm || (m === bm && d < bd)) {
+            return y - by - 1;
+        }
+
+        return y - by;
+    }
+
     function selectSport(sport: string) {
         const age: number = calculateAge(userInfo.birthday);
 
@@ -127,24 +146,21 @@ export default function New() {
         });
     }
 
-    function incrementParticipantNum(amount: number) {
-        const newParticipantNum: number = eventInfo.participantNum + amount;
+    function chooseLevel(i: number) {
+        setEventInfo((oldVal) => {
+            const newLevels: Set<number> = new Set(oldVal.levels);
 
-        if (newParticipantNum >= 1 && newParticipantNum <= 99) {
-            setEventInfo((oldVal) => {
-                return { ...oldVal, participantNum: newParticipantNum };
-            });
-        }
-    }
+            if (newLevels.has(i)) {
+                newLevels.delete(i);
+            } else {
+                newLevels.add(i);
+            }
 
-    function incrementLength(amount: number) {
-        const newLength: number = eventInfo.length + amount;
-
-        if (newLength >= 0.5 && newLength <= 24) {
-            setEventInfo((oldVal) => {
-                return { ...oldVal, length: newLength };
-            });
-        }
+            return {
+                ...oldVal,
+                levels: newLevels,
+            };
+        });
     }
 
     function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
@@ -168,6 +184,26 @@ export default function New() {
                 lng,
             };
         });
+    }
+
+    function incrementParticipantNum(amount: number) {
+        const newParticipantNum: number = eventInfo.participantNum + amount;
+
+        if (newParticipantNum >= 1 && newParticipantNum <= 99) {
+            setEventInfo((oldVal) => {
+                return { ...oldVal, participantNum: newParticipantNum };
+            });
+        }
+    }
+
+    function incrementLength(amount: number) {
+        const newLength: number = eventInfo.length + amount;
+
+        if (newLength >= 0.5 && newLength <= 24) {
+            setEventInfo((oldVal) => {
+                return { ...oldVal, length: newLength };
+            });
+        }
     }
 
     function handleEventInfoChange(e: ChangeEvent<HTMLInputElement>) {
@@ -216,25 +252,6 @@ export default function New() {
                 });
                 break;
         }
-    }
-
-    function calculateAge(birthday: string): number {
-        const [by, bm, bd] = birthday.split('-').map((x) => parseInt(x));
-
-        if (Number.isNaN(by) || Number.isNaN(bm) || Number.isNaN(bd)) {
-            return 30;
-        }
-
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = now.getMonth() + 1; // Gets the month (0-based, so add 1).
-        const d = now.getDate();
-
-        if (m < bm || (m === bm && d < bd)) {
-            return y - by - 1;
-        }
-
-        return y - by;
     }
 
     async function createNewEvent() {}
@@ -357,114 +374,31 @@ export default function New() {
                             {sport === 'soccer' && (
                                 <LevelBarMulti
                                     levels={eventInfo.levels}
-                                    chooseLevel={(i) => {
-                                        setEventInfo((oldVal) => {
-                                            const newSoccerLevels: Set<number> =
-                                                new Set(oldVal.levels);
-
-                                            if (newSoccerLevels.has(i)) {
-                                                newSoccerLevels.delete(i);
-                                            } else {
-                                                newSoccerLevels.add(i);
-                                            }
-
-                                            return {
-                                                ...oldVal,
-                                                soccerLevels: newSoccerLevels,
-                                            };
-                                        });
-                                    }}
+                                    chooseLevel={chooseLevel}
                                 />
                             )}
                             {sport === 'basketball' && (
                                 <LevelBarMulti
                                     levels={eventInfo.levels}
-                                    chooseLevel={(i) => {
-                                        setEventInfo((oldVal) => {
-                                            const newBasketballLevels: Set<number> =
-                                                new Set(oldVal.levels);
-
-                                            if (newBasketballLevels.has(i)) {
-                                                newBasketballLevels.delete(i);
-                                            } else {
-                                                newBasketballLevels.add(i);
-                                            }
-
-                                            return {
-                                                ...oldVal,
-                                                basketballLevels:
-                                                    newBasketballLevels,
-                                            };
-                                        });
-                                    }}
+                                    chooseLevel={chooseLevel}
                                 />
                             )}
                             {sport === 'tennis' && (
                                 <LevelBarMulti
                                     levels={eventInfo.levels}
-                                    chooseLevel={(i) => {
-                                        setEventInfo((oldVal) => {
-                                            const newTennisLevels: Set<number> =
-                                                new Set(oldVal.levels);
-
-                                            if (newTennisLevels.has(i)) {
-                                                newTennisLevels.delete(i);
-                                            } else {
-                                                newTennisLevels.add(i);
-                                            }
-
-                                            return {
-                                                ...oldVal,
-                                                tennisLevels: newTennisLevels,
-                                            };
-                                        });
-                                    }}
+                                    chooseLevel={chooseLevel}
                                 />
                             )}
                             {sport === 'table tennis' && (
                                 <LevelBarMulti
                                     levels={eventInfo.levels}
-                                    chooseLevel={(i) => {
-                                        setEventInfo((oldVal) => {
-                                            const newTableTennisLevels: Set<number> =
-                                                new Set(oldVal.levels);
-
-                                            if (newTableTennisLevels.has(i)) {
-                                                newTableTennisLevels.delete(i);
-                                            } else {
-                                                newTableTennisLevels.add(i);
-                                            }
-
-                                            return {
-                                                ...oldVal,
-                                                tableTennisLevels:
-                                                    newTableTennisLevels,
-                                            };
-                                        });
-                                    }}
+                                    chooseLevel={chooseLevel}
                                 />
                             )}
                             {sport === 'badminton' && (
                                 <LevelBarMulti
                                     levels={eventInfo.levels}
-                                    chooseLevel={(i) => {
-                                        setEventInfo((oldVal) => {
-                                            const newBadmintonLevels: Set<number> =
-                                                new Set(oldVal.levels);
-
-                                            if (newBadmintonLevels.has(i)) {
-                                                newBadmintonLevels.delete(i);
-                                            } else {
-                                                newBadmintonLevels.add(i);
-                                            }
-
-                                            return {
-                                                ...oldVal,
-                                                badmintonLevels:
-                                                    newBadmintonLevels,
-                                            };
-                                        });
-                                    }}
+                                    chooseLevel={chooseLevel}
                                 />
                             )}
                         </section>
