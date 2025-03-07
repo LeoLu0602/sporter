@@ -46,6 +46,7 @@ export default function New() {
         lng: number;
         location: string;
         participantNum: number;
+        length: number;
     }>({
         title: '未命名',
         gender: 3,
@@ -60,6 +61,7 @@ export default function New() {
         lng: 0,
         location: '',
         participantNum: 1,
+        length: 2,
     });
 
     useEffect(() => {
@@ -142,6 +144,16 @@ export default function New() {
         if (newParticipantNum >= 1 && newParticipantNum <= 99) {
             setEventInfo((oldVal) => {
                 return { ...oldVal, participantNum: newParticipantNum };
+            });
+        }
+    }
+
+    function incrementLength(amount: number) {
+        const newLength: number = eventInfo.length + amount;
+
+        if (newLength >= 0.5 && newLength <= 24) {
+            setEventInfo((oldVal) => {
+                return { ...oldVal, length: newLength };
             });
         }
     }
@@ -541,9 +553,32 @@ export default function New() {
                             <input type="time" />
                         </section>
                         <section className="w-full">
-                            <h2 className="font-bold">選擇時長:</h2>
+                            <section className="w-full flex items-center">
+                                <div className="mr-2">
+                                    <b>選擇時長:</b>
+                                </div>
+                                <button
+                                    className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
+                                    onClick={() => {
+                                        incrementLength(-0.5);
+                                    }}
+                                >
+                                    &#8722;
+                                </button>
+                                <div className="w-20 text-center">
+                                    {eventInfo.length} hr
+                                </div>
+                                <button
+                                    className="bg-emerald-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
+                                    onClick={() => {
+                                        incrementLength(0.5);
+                                    }}
+                                >
+                                    +
+                                </button>
+                            </section>
                         </section>
-                        <section className="flex flex-col gap-2">
+                        <section className="flex flex-col gap-2 mt-8">
                             <button
                                 className="px-8 py-2 bg-emerald-500 font-bold text-white"
                                 onClick={() => {
