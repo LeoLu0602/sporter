@@ -451,7 +451,7 @@ export default function New() {
                             <label className="font-bold">選擇對手年紀:</label>
                             <div className="flex items-center w-full my-4 relative h-1 bg-emerald-500 rounded-xl">
                                 <input
-                                    className="w-full h-0 absolute appearance-none pointer-events-none"
+                                    className="w-full h-0 appearance-none absolute z-10"
                                     type="range"
                                     name="ageMin"
                                     min={0}
@@ -460,7 +460,7 @@ export default function New() {
                                     onChange={handleEventInfoChange}
                                 />
                                 <input
-                                    className="w-full h-0 appearance-none pointer-events-none"
+                                    className="w-full h-0 appearance-none absolute z-20"
                                     type="range"
                                     name="ageMax"
                                     min={0}
