@@ -34,6 +34,7 @@ export default function New() {
     });
     const [eventInfo, setEventInfo] = useState<{
         title: string;
+        gender: number; // 1: male, 2: female, 3: any
         badmintonLevels: Set<number>;
         basketballLevels: Set<number>;
         soccerLevels: Set<number>;
@@ -45,6 +46,7 @@ export default function New() {
         participantNum: number;
     }>({
         title: '未命名',
+        gender: 3,
         badmintonLevels: new Set([0]),
         basketballLevels: new Set([0]),
         soccerLevels: new Set([0]),
@@ -145,6 +147,11 @@ export default function New() {
             case 'title':
                 setEventInfo((oldVal) => {
                     return { ...oldVal, title: e.target.value };
+                });
+                break;
+            case 'gender':
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, gender: parseInt(e.target.value) };
                 });
                 break;
         }
@@ -385,8 +392,38 @@ export default function New() {
                                 />
                             )}
                         </section>
-                        <section className="w-full">
-                            <h2 className="font-bold">選擇對手性別</h2>
+                        <section className="w-full flex gap-4">
+                            <h2 className="font-bold">選擇對手性別:</h2>
+                            <section>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="1"
+                                    checked={eventInfo.gender === 1}
+                                    onChange={handleEventInfoChange}
+                                />
+                                <label className="ml-2">男</label>
+                            </section>
+                            <section>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="2"
+                                    checked={eventInfo.gender === 2}
+                                    onChange={handleEventInfoChange}
+                                />
+                                <label className="ml-2">女</label>
+                            </section>
+                            <section>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="3"
+                                    checked={eventInfo.gender === 3}
+                                    onChange={handleEventInfoChange}
+                                />
+                                <label className="ml-2">不限</label>
+                            </section>
                         </section>
                         <section className="w-full">
                             <h2 className="font-bold">選擇對手年紀</h2>
