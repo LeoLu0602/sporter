@@ -220,25 +220,45 @@ export default function New() {
                                 {sport === 'basketball' && (
                                     <>
                                         <h2 className="text-2xl">🏀</h2>
-                                        <span className="text-2xl">籃球</span>
+                                        <input
+                                            className="text-2xl w-60 focus:outline-none"
+                                            name="title"
+                                            value={eventInfo.title}
+                                            onChange={handleEventInfoChange}
+                                        />
                                     </>
                                 )}
                                 {sport === 'tennis' && (
                                     <>
                                         <h2 className="text-2xl">🎾</h2>
-                                        <span className="text-2xl">網球</span>
+                                        <input
+                                            className="text-2xl w-60 focus:outline-none"
+                                            name="title"
+                                            value={eventInfo.title}
+                                            onChange={handleEventInfoChange}
+                                        />
                                     </>
                                 )}
                                 {sport === 'table tennis' && (
                                     <>
                                         <h2 className="text-2xl">🏓</h2>
-                                        <span className="text-2xl">桌球</span>
+                                        <input
+                                            className="text-2xl w-60 focus:outline-none"
+                                            name="title"
+                                            value={eventInfo.title}
+                                            onChange={handleEventInfoChange}
+                                        />
                                     </>
                                 )}
                                 {sport === 'badminton' && (
                                     <>
                                         <h2 className="text-2xl">🏸</h2>
-                                        <span className="text-2xl">羽球</span>
+                                        <input
+                                            className="text-2xl w-60 focus:outline-none"
+                                            name="title"
+                                            value={eventInfo.title}
+                                            onChange={handleEventInfoChange}
+                                        />
                                     </>
                                 )}
                             </div>
