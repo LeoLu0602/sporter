@@ -137,11 +137,11 @@ export default function New() {
     }
 
     function incrementParticipantNum(amount: number) {
-        const newVal: number = eventInfo.participantNum + amount;
+        const newParticipantNum: number = eventInfo.participantNum + amount;
 
-        if (newVal >= 1 && newVal <= 99) {
+        if (newParticipantNum >= 1 && newParticipantNum <= 99) {
             setEventInfo((oldVal) => {
-                return { ...oldVal, participantNum: newVal };
+                return { ...oldVal, participantNum: newParticipantNum };
             });
         }
     }
@@ -451,7 +451,7 @@ export default function New() {
                             <label className="font-bold">選擇對手年紀:</label>
                             <div className="flex items-center w-full my-4 relative h-1 bg-emerald-500 rounded-xl">
                                 <input
-                                    className="w-full h-0 absolute appearance-none"
+                                    className="w-full h-0 absolute appearance-none pointer-events-none"
                                     type="range"
                                     name="ageMin"
                                     min={0}
@@ -460,7 +460,7 @@ export default function New() {
                                     onChange={handleEventInfoChange}
                                 />
                                 <input
-                                    className="w-full h-0 appearance-none"
+                                    className="w-full h-0 appearance-none pointer-events-none"
                                     type="range"
                                     name="ageMax"
                                     min={0}
@@ -527,7 +527,11 @@ export default function New() {
                             </button>
                         </section>
                         <section className="w-full">
-                            <h2 className="font-bold">選擇開始時間:</h2>
+                            <label className="font-bold mr-2">
+                                選擇開始時間:
+                            </label>
+                            <input className='mr-2' type="date" />
+                            <input type="time" />
                         </section>
                         <section className="w-full">
                             <h2 className="font-bold">選擇時長:</h2>
