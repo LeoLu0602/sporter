@@ -192,6 +192,11 @@ export default function New() {
                     return { ...oldVal, ageMax: parseInt(e.target.value) };
                 });
                 break;
+            case 'location':
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, location: e.target.value };
+                });
+                return;
             case 'date':
                 setEventInfo((oldVal) => {
                     return { ...oldVal, date: e.target.value };
@@ -523,15 +528,9 @@ export default function New() {
                                 <input
                                     className="border-2 border-black focus:outline-none p-2"
                                     type="text"
+                                    name="location"
                                     value={eventInfo.location}
-                                    onChange={(e) => {
-                                        setEventInfo((oldVal) => {
-                                            return {
-                                                ...oldVal,
-                                                location: e.target.value,
-                                            };
-                                        });
-                                    }}
+                                    onChange={handleEventInfoChange}
                                 />
                             </section>
                         </section>
