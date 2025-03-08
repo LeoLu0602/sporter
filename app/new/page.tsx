@@ -42,7 +42,7 @@ export default function New() {
         lat: number;
         lng: number;
         location: string;
-        participantNum: number;
+        participantLimit: number;
         time: Date | null;
         length: number;
     }>({
@@ -55,7 +55,7 @@ export default function New() {
         lat: 0,
         lng: 0,
         location: '',
-        participantNum: 1,
+        participantLimit: 1,
         time: null,
         length: 2,
     });
@@ -156,7 +156,7 @@ export default function New() {
             lat: 0,
             lng: 0,
             location: '',
-            participantNum: 1,
+            participantLimit: 1,
             time: null,
             length: 2,
         });
@@ -202,12 +202,12 @@ export default function New() {
         });
     }
 
-    function incrementParticipantNum(amount: number) {
-        const newParticipantNum: number = eventInfo.participantNum + amount;
+    function incrementParticipantLimit(amount: number) {
+        const newParticipantLimit: number = eventInfo.participantLimit + amount;
 
-        if (newParticipantNum >= 1 && newParticipantNum <= 99) {
+        if (newParticipantLimit >= 1 && newParticipantLimit <= 99) {
             setEventInfo((oldVal) => {
-                return { ...oldVal, participantNum: newParticipantNum };
+                return { ...oldVal, participantLimit: newParticipantLimit };
             });
         }
     }
@@ -406,18 +406,18 @@ export default function New() {
                             <button
                                 className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
-                                    incrementParticipantNum(-1);
+                                    incrementParticipantLimit(-1);
                                 }}
                             >
                                 &#8722;
                             </button>
                             <div className="w-20 text-center">
-                                {eventInfo.participantNum}
+                                {eventInfo.participantLimit}
                             </div>
                             <button
                                 className="bg-emerald-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
-                                    incrementParticipantNum(1);
+                                    incrementParticipantLimit(1);
                                 }}
                             >
                                 +
@@ -479,7 +479,7 @@ export default function New() {
                             </button>
                         </section>
                         <button
-                            className="px-8 py-2 bg-emerald-500 font-bold text-white"
+                            className="px-8 py-2 bg-emerald-600 font-bold text-white"
                             onClick={() => {
                                 setSport(null);
                             }}
@@ -487,7 +487,7 @@ export default function New() {
                             取消
                         </button>
                         <button
-                            className="px-8 py-2 bg-sky-500 font-bold text-white mb-24"
+                            className="px-8 py-2 bg-sky-600 font-bold text-white mb-24"
                             onClick={() => {
                                 createNewEvent();
                             }}
