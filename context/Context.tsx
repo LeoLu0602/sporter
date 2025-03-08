@@ -45,7 +45,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
             }
 
             const { data, error } = await supabase
-                .from('profile')
+                .from('user')
                 .select('email')
                 .eq('email', user.email);
 
@@ -61,7 +61,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
             }
 
             if (data.length === 0) {
-                const { error } = await supabase.from('profile').insert([
+                const { error } = await supabase.from('user').insert([
                     {
                         email: user.email,
                         username: user.user_metadata.full_name,

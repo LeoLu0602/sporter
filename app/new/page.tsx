@@ -65,7 +65,7 @@ export default function New() {
     useEffect(() => {
         async function setUp() {
             const { data, error } = await supabase
-                .from('profile')
+                .from('user')
                 .select('*')
                 .eq('email', email);
 

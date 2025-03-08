@@ -11,9 +11,9 @@ export default function Profile() {
     const email = useEmail();
     const router = useRouter();
     const [info, setInfo] = useState<{
-        name: string;
-        gender: 'male' | 'female' | 'prefer not to say';
-        birthday: string;
+        username: string;
+        gender: number;
+        birthday: Date | null;
         distance: number;
         intro: string;
         badmintonLevel: number;
@@ -22,10 +22,10 @@ export default function Profile() {
         tableTennisLevel: number;
         tennisLevel: number;
     }>({
-        name: '',
-        gender: 'prefer not to say',
-        birthday: '',
-        distance: 500,
+        username: 'user',
+        gender: 3,
+        birthday: null,
+        distance: 1000,
         intro: '',
         badmintonLevel: 0,
         basketballLevel: 0,
@@ -38,7 +38,7 @@ export default function Profile() {
     useEffect(() => {
         async function setUp() {
             const { data, error } = await supabase
-                .from('profile')
+                .from('user')
                 .select('*')
                 .eq('email', email);
 
@@ -53,22 +53,34 @@ export default function Profile() {
                 return;
             }
 
+            const {
+                username,
+                gender,
+                birthday,
+                distance,
+                intro,
+                badminton_level,
+                basketball_level,
+                soccer_level,
+                table_tennis_level,
+                tennis_level,
+            } = data[0];
+
+            const [y, m, d] = birthday
+                .split('-')
+                .map((str: string) => parseInt(str));
+
             setInfo({
-                name: data[0].username,
-                gender:
-                    data[0].gender === 1
-                        ? 'male'
-                        : data[0].gender === 2
-                          ? 'female'
-                          : 'prefer not to say',
-                birthday: data[0].birthday,
-                distance: data[0].distance,
-                intro: data[0].intro,
-                badmintonLevel: data[0].badminton_level,
-                basketballLevel: data[0].basketball_level,
-                soccerLevel: data[0].soccer_level,
-                tableTennisLevel: data[0].table_tennis_level,
-                tennisLevel: data[0].tennis_level,
+                username,
+                gender,
+                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
+                distance,
+                intro,
+                badmintonLevel: badminton_level,
+                basketballLevel: basketball_level,
+                soccerLevel: soccer_level,
+                tableTennisLevel: table_tennis_level,
+                tennisLevel: tennis_level,
             });
         }
 
@@ -102,16 +114,18 @@ export default function Profile() {
                 setInfo((oldVal) => {
                     return {
                         ...oldVal,
-                        gender: e.target.value as
-                            | 'male'
-                            | 'female'
-                            | 'prefer not to say',
+                        gender: parseInt(e.target.value),
                     };
                 });
                 break;
             case 'birthday':
                 setInfo((oldVal) => {
-                    return { ...oldVal, birthday: e.target.value };
+                    const [y, m, d] = e.target.value
+                        .split('-')
+                        .map((str) => parseInt(str));
+
+                    // Month is zero-based, which is fucking stupid.
+                    return { ...oldVal, birthday: new Date(y, m - 1, d) };
                 });
                 break;
             case 'distance':
@@ -135,25 +149,33 @@ export default function Profile() {
             return;
         }
 
+        const {
+            username,
+            gender,
+            birthday,
+            distance,
+            intro,
+            badmintonLevel,
+            basketballLevel,
+            soccerLevel,
+            tableTennisLevel,
+            tennisLevel,
+        } = info;
+
         const { error } = await supabase
-            .from('profile')
+            .from('user')
             .update([
                 {
-                    username: info.name,
-                    gender:
-                        info.gender === 'male'
-                            ? 1
-                            : info.gender === 'female'
-                              ? 2
-                              : 3,
-                    birthday: info.birthday,
-                    distance: info.distance,
-                    intro: info.intro,
-                    badminton_level: info.badmintonLevel,
-                    basketball_level: info.basketballLevel,
-                    soccer_level: info.soccerLevel,
-                    table_tennis_level: info.tableTennisLevel,
-                    tennis_level: info.tennisLevel,
+                    username: username,
+                    gender: gender,
+                    birthday: birthday,
+                    distance: distance,
+                    intro: intro,
+                    badminton_level: badmintonLevel,
+                    basketball_level: basketballLevel,
+                    soccer_level: soccerLevel,
+                    table_tennis_level: tableTennisLevel,
+                    tennis_level: tennisLevel,
                 },
             ])
             .eq('email', email);
@@ -245,7 +267,7 @@ export default function Profile() {
                         <input
                             type="text"
                             name="name"
-                            value={info.name}
+                            value={info.username}
                             onChange={handleInfoChange}
                         />
                     </section>
@@ -256,7 +278,7 @@ export default function Profile() {
                                 type="radio"
                                 name="gender"
                                 value="male"
-                                checked={info.gender === 'male'}
+                                checked={info.gender === 1}
                                 onChange={handleInfoChange}
                             />
                             <label className="mr-4 ml-2">男</label>
@@ -266,7 +288,7 @@ export default function Profile() {
                                 type="radio"
                                 name="gender"
                                 value="female"
-                                checked={info.gender === 'female'}
+                                checked={info.gender === 2}
                                 onChange={handleInfoChange}
                             />
                             <label className="mr-4 ml-2">女</label>
@@ -276,7 +298,7 @@ export default function Profile() {
                                 type="radio"
                                 name="gender"
                                 value="prefer not to say"
-                                checked={info.gender === 'prefer not to say'}
+                                checked={info.gender === 3}
                                 onChange={handleInfoChange}
                             />
                             <label className="ml-2">不透漏</label>
@@ -287,7 +309,20 @@ export default function Profile() {
                         <input
                             type="date"
                             name="birthday"
-                            value={info.birthday}
+                            value={
+                                info.birthday
+                                    ? info.birthday.getFullYear().toString() +
+                                      '-' +
+                                      (info.birthday.getMonth() + 1)
+                                          .toString()
+                                          .padStart(2, '0') +
+                                      '-' +
+                                      info.birthday
+                                          .getDate()
+                                          .toString()
+                                          .padStart(2, '0')
+                                    : ''
+                            }
                             onChange={handleInfoChange}
                         />
                     </section>
