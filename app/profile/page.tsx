@@ -60,11 +60,11 @@ export default function Profile() {
                 birthday,
                 distance,
                 intro,
-                badminton_level,
-                basketball_level,
-                soccer_level,
-                table_tennis_level,
-                tennis_level,
+                badminton_level: badmintonLevel,
+                basketball_level: basketballLevel,
+                soccer_level: soccerLevel,
+                table_tennis_level: tableTennisLevel,
+                tennis_level: tennisLevel,
             } = data[0];
 
             const [y, m, d] = birthday
@@ -77,11 +77,11 @@ export default function Profile() {
                 birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
                 distance,
                 intro,
-                badmintonLevel: badminton_level,
-                basketballLevel: basketball_level,
-                soccerLevel: soccer_level,
-                tableTennisLevel: table_tennis_level,
-                tennisLevel: tennis_level,
+                badmintonLevel,
+                basketballLevel,
+                soccerLevel,
+                tableTennisLevel,
+                tennisLevel,
             });
         }
 

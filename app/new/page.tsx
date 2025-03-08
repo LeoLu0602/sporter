@@ -10,9 +10,9 @@ export default function New() {
     const [sport, setSport] = useState<string | null>(null);
     const [coordinate, setCoordinate] = useState<string>('');
     const [userInfo, setUserInfo] = useState<{
-        name: string;
+        username: string;
         gender: number; // 1: male, 2: female, 3: any
-        birthday: string;
+        birthday: Date | null;
         distance: number;
         intro: string;
         badmintonLevel: number;
@@ -21,10 +21,10 @@ export default function New() {
         tableTennisLevel: number;
         tennisLevel: number;
     }>({
-        name: '',
+        username: '',
         gender: 3,
-        birthday: '',
-        distance: 500,
+        birthday: null,
+        distance: 1000,
         intro: '',
         badmintonLevel: 0,
         basketballLevel: 0,
@@ -43,8 +43,7 @@ export default function New() {
         lng: number;
         location: string;
         participantNum: number;
-        date: string;
-        time: string;
+        time: Date | null;
         length: number;
     }>({
         sport: null,
@@ -57,8 +56,7 @@ export default function New() {
         lng: 0,
         location: '',
         participantNum: 1,
-        date: '',
-        time: '',
+        time: null,
         length: 2,
     });
 
@@ -80,29 +78,46 @@ export default function New() {
                 return;
             }
 
+            const {
+                username,
+                gender,
+                birthday,
+                distance,
+                intro,
+                badminton_level: badmintonLevel,
+                basketball_level: basketballLevel,
+                soccer_level: soccerLevel,
+                table_tennis_level: tableTennisLevel,
+                tennis_level: tennisLevel,
+            } = data[0];
+
+            const [y, m, d] = birthday
+                .split('-')
+                .map((str: string) => parseInt(str));
+
             setUserInfo({
-                name: data[0].username,
-                gender: data[0].gender,
-                birthday: data[0].birthday,
-                distance: data[0].distance,
-                intro: data[0].intro,
-                badmintonLevel: data[0].badminton_level,
-                basketballLevel: data[0].basketball_level,
-                soccerLevel: data[0].soccer_level,
-                tableTennisLevel: data[0].table_tennis_level,
-                tennisLevel: data[0].tennis_level,
+                username,
+                gender,
+                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
+                distance,
+                intro,
+                badmintonLevel,
+                basketballLevel,
+                soccerLevel,
+                tableTennisLevel,
+                tennisLevel,
             });
         }
 
         setUp();
     }, [email]);
 
-    function calculateAge(birthday: string): number {
-        const [by, bm, bd] = birthday.split('-').map((x) => parseInt(x));
-
-        if (Number.isNaN(by) || Number.isNaN(bm) || Number.isNaN(bd)) {
-            return 30;
-        }
+    function calculateAge(birthday: Date): number {
+        const [by, bm, bd] = [
+            birthday.getFullYear(),
+            birthday.getMonth() + 1, // Month is zero-based, which is fucking stupid.
+            birthday.getDate(),
+        ];
 
         const now = new Date();
         const y = now.getFullYear();
@@ -241,14 +256,9 @@ export default function New() {
                     return { ...oldVal, location: e.target.value };
                 });
                 return;
-            case 'date':
-                setEventInfo((oldVal) => {
-                    return { ...oldVal, date: e.target.value };
-                });
-                break;
             case 'time':
                 setEventInfo((oldVal) => {
-                    return { ...oldVal, time: e.target.value };
+                    return { ...oldVal, time: new Date(e.target.value) };
                 });
                 break;
         }
@@ -520,16 +530,31 @@ export default function New() {
                                 選擇開始時間:
                             </label>
                             <input
-                                className="mr-2"
-                                type="date"
-                                name="date"
-                                value={eventInfo.date}
-                                onChange={handleEventInfoChange}
-                            />
-                            <input
-                                type="time"
+                                type="datetime-local"
                                 name="time"
-                                value={eventInfo.time}
+                                value={
+                                    eventInfo.time
+                                        ? eventInfo.time
+                                              .getFullYear()
+                                              .toString() +
+                                          '-' +
+                                          (eventInfo.time.getMonth() + 1)
+                                              .toString()
+                                              .padStart(2, '0') +
+                                          '-' +
+                                          eventInfo.time.getDate() +
+                                          'T' +
+                                          eventInfo.time
+                                              .getHours()
+                                              .toString()
+                                              .padStart(2, '0') +
+                                          ':' +
+                                          eventInfo.time
+                                              .getMinutes()
+                                              .toString()
+                                              .padStart(2, '0')
+                                        : ''
+                                }
                                 onChange={handleEventInfoChange}
                             />
                         </section>
