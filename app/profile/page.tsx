@@ -228,17 +228,17 @@ export default function Profile() {
             </nav>
             <main className="px-4 text-lg">
                 <section
-                    className={clsx('flex flex-col gap-4', {
+                    className={clsx('flex flex-col gap-8', {
                         hidden: option !== 'info',
                     })}
                 >
                     <section>
-                        <span className="font-bold">Email: </span>
+                        <h2 className="font-bold inline mr-4">Email:</h2>
                         {email && (
                             <>
                                 {email}
                                 <button
-                                    className="ml-2 text-rose-500 font-bold"
+                                    className="ml-4 text-rose-500 font-bold"
                                     onClick={signOut}
                                 >
                                     登出
@@ -247,18 +247,19 @@ export default function Profile() {
                         )}
                     </section>
                     <section>
-                        <label className="font-bold w-full focus:outline-none">
-                            名稱:{' '}
+                        <label className="font-bold w-full focus:outline-none mr-4">
+                            名稱:
                         </label>
                         <input
+                            className="w-40"
                             type="text"
                             name="name"
                             value={info.username}
                             onChange={handleInfoChange}
                         />
                     </section>
-                    <section className="flex">
-                        <span className="mr-4 font-bold">性別:</span>
+                    <section className="flex gap-4">
+                        <h2 className="font-bold">性別:</h2>
                         <section>
                             <input
                                 type="radio"
@@ -267,7 +268,7 @@ export default function Profile() {
                                 checked={info.gender === 1}
                                 onChange={handleInfoChange}
                             />
-                            <label className="mr-4 ml-2">男</label>
+                            <label className="ml-4">男</label>
                         </section>
                         <section>
                             <input
@@ -277,7 +278,7 @@ export default function Profile() {
                                 checked={info.gender === 2}
                                 onChange={handleInfoChange}
                             />
-                            <label className="mr-4 ml-2">女</label>
+                            <label className="ml-4">女</label>
                         </section>
                         <section>
                             <input
@@ -287,11 +288,11 @@ export default function Profile() {
                                 checked={info.gender === 3}
                                 onChange={handleInfoChange}
                             />
-                            <label className="ml-2">不透漏</label>
+                            <label className="ml-4">不透漏</label>
                         </section>
                     </section>
                     <section>
-                        <label className="font-bold">生日: </label>
+                        <label className="font-bold mr-4">生日: </label>
                         <input
                             type="date"
                             name="birthday"
@@ -313,7 +314,7 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <label className="font-bold">距離偏好: </label>
+                        <label className="font-bold mr-4">距離偏好:</label>
                         <span>
                             {info.distance >= 1000
                                 ? Math.floor(info.distance / 1000).toString() +
@@ -324,10 +325,8 @@ export default function Profile() {
                                 : info.distance.toString()}{' '}
                             公尺
                         </span>
-                        <br />
-                        <br />
                         <input
-                            className="w-full"
+                            className="w-full mt-4"
                             type="range"
                             name="distance"
                             min="500"
@@ -343,7 +342,7 @@ export default function Profile() {
                         </label>
                         <br />
                         <textarea
-                            className="mt-2 border-2 border-black w-full h-20 p-2 focus:outline-none"
+                            className="mt-4 border-2 border-black w-full h-20 p-2 focus:outline-none"
                             name="intro"
                             value={info.intro}
                             onChange={handleInfoChange}
@@ -351,7 +350,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <section
-                    className={clsx('flex flex-col gap-4 pt-4', {
+                    className={clsx('flex flex-col gap-8', {
                         hidden: option !== 'levels',
                     })}
                 >
@@ -437,7 +436,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="mt-4 mb-20 px-8 py-2 bg-emerald-600 text-white font-bold"
+                    className="w-full mt-8 mb-24 py-2 bg-emerald-600 text-white font-bold"
                     onClick={save}
                 >
                     儲存
