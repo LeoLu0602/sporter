@@ -23,7 +23,7 @@ export default function Profile() {
         tableTennisLevel: number;
         tennisLevel: number;
     }>({
-        username: 'user',
+        username: '',
         gender: 3,
         birthday: null,
         distance: 1000,
@@ -263,7 +263,7 @@ export default function Profile() {
                             <input
                                 type="radio"
                                 name="gender"
-                                value="male"
+                                value="1"
                                 checked={info.gender === 1}
                                 onChange={handleInfoChange}
                             />
@@ -273,7 +273,7 @@ export default function Profile() {
                             <input
                                 type="radio"
                                 name="gender"
-                                value="female"
+                                value="2"
                                 checked={info.gender === 2}
                                 onChange={handleInfoChange}
                             />
@@ -283,7 +283,7 @@ export default function Profile() {
                             <input
                                 type="radio"
                                 name="gender"
-                                value="prefer not to say"
+                                value="3"
                                 checked={info.gender === 3}
                                 onChange={handleInfoChange}
                             />
@@ -437,7 +437,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="mt-4 mb-20 px-8 py-2 bg-emerald-500 text-white font-bold"
+                    className="mt-4 mb-20 px-8 py-2 bg-emerald-600 text-white font-bold"
                     onClick={save}
                 >
                     儲存
