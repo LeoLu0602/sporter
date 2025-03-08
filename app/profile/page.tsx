@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import LevelBar from '@/components/LevelBar';
-import { explainLevel } from '@/utils/utils';
+import { explainLevel } from '@/lib/utils';
 
 export default function Profile() {
     const email = useEmail();

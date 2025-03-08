@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, useEffect, useState } from 'react';
-import { supabase } from '@/lib/utils';
+import { supabase, getSportEmoji } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
 
@@ -132,7 +132,9 @@ export default function New() {
     }
 
     function selectSport(sport: string) {
-        const age: number = calculateAge(userInfo.birthday);
+        const age: number = userInfo.birthday
+            ? calculateAge(userInfo.birthday)
+            : 20;
 
         setSport(sport);
         setEventInfo({
@@ -155,8 +157,7 @@ export default function New() {
             lng: 0,
             location: '',
             participantNum: 1,
-            date: '',
-            time: '',
+            time: null,
             length: 2,
         });
     }
@@ -267,152 +268,53 @@ export default function New() {
     async function createNewEvent() {}
 
     return (
-        <main className="p-4 min-h-screen">
-            <h1 className="text-center pb-4 border-b-black border-b-2 text-2xl font-bold">
-                揪運動
-            </h1>
-            {sport === null && (
-                <section className="flex flex-wrap justify-between gap-4 mt-4">
-                    <button
-                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
-                        onClick={() => {
-                            selectSport('soccer');
-                        }}
-                    >
-                        ⚽
-                    </button>
-                    <button
-                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
-                        onClick={() => {
-                            selectSport('basketball');
-                        }}
-                    >
-                        🏀
-                    </button>
-                    <button
-                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
-                        onClick={() => {
-                            selectSport('tennis');
-                        }}
-                    >
-                        🎾
-                    </button>
-                    <button
-                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
-                        onClick={() => {
-                            selectSport('table tennis');
-                        }}
-                    >
-                        🏓
-                    </button>
-                    <button
-                        className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
-                        onClick={() => {
-                            selectSport('badminton');
-                        }}
-                    >
-                        🏸
-                    </button>
-                </section>
-            )}
-            {sport !== null && (
-                <>
-                    <section>
-                        <section className="flex h-16 justify-between items-center">
-                            <div className="flex gap-2">
-                                {sport === 'soccer' && (
-                                    <>
-                                        <h2 className="text-2xl">⚽</h2>
-                                        <input
-                                            className="text-2xl w-60 focus:outline-none"
-                                            name="title"
-                                            value={eventInfo.title}
-                                            onChange={handleEventInfoChange}
-                                        />
-                                    </>
-                                )}
-                                {sport === 'basketball' && (
-                                    <>
-                                        <h2 className="text-2xl">🏀</h2>
-                                        <input
-                                            className="text-2xl w-60 focus:outline-none"
-                                            name="title"
-                                            value={eventInfo.title}
-                                            onChange={handleEventInfoChange}
-                                        />
-                                    </>
-                                )}
-                                {sport === 'tennis' && (
-                                    <>
-                                        <h2 className="text-2xl">🎾</h2>
-                                        <input
-                                            className="text-2xl w-60 focus:outline-none"
-                                            name="title"
-                                            value={eventInfo.title}
-                                            onChange={handleEventInfoChange}
-                                        />
-                                    </>
-                                )}
-                                {sport === 'table tennis' && (
-                                    <>
-                                        <h2 className="text-2xl">🏓</h2>
-                                        <input
-                                            className="text-2xl w-60 focus:outline-none"
-                                            name="title"
-                                            value={eventInfo.title}
-                                            onChange={handleEventInfoChange}
-                                        />
-                                    </>
-                                )}
-                                {sport === 'badminton' && (
-                                    <>
-                                        <h2 className="text-2xl">🏸</h2>
-                                        <input
-                                            className="text-2xl w-60 focus:outline-none"
-                                            name="title"
-                                            value={eventInfo.title}
-                                            onChange={handleEventInfoChange}
-                                        />
-                                    </>
-                                )}
-                            </div>
-                        </section>
+        <>
+            <header>
+                <h1 className="text-center p-8 text-2xl font-bold">揪運動</h1>
+            </header>
+            <main className="px-4">
+                {sport === null && (
+                    <section className="flex flex-wrap justify-between gap-8">
+                        {[
+                            'soccer',
+                            'basketball',
+                            'tennis',
+                            'table tennis',
+                            'badminton',
+                        ].map((sport) => (
+                            <button
+                                className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-8xl"
+                                key={sport}
+                                onClick={() => {
+                                    selectSport(sport);
+                                }}
+                            >
+                                {getSportEmoji(sport)}
+                            </button>
+                        ))}
                     </section>
-                    <section className="flex flex-col items-center gap-4">
+                )}
+                {sport !== null && (
+                    <section className="flex flex-col gap-8 text-lg">
+                        <section>
+                            <h2 className="text-2xl inline mr-4">
+                                {getSportEmoji(sport)}
+                            </h2>
+                            <input
+                                className="text-2xl w-60 focus:outline-none"
+                                name="title"
+                                value={eventInfo.title}
+                                onChange={handleEventInfoChange}
+                            />
+                        </section>
                         <section className="w-full">
                             <h2 className="font-bold">選擇對手程度</h2>
-                            {sport === 'soccer' && (
-                                <LevelBarMulti
-                                    levels={eventInfo.levels}
-                                    chooseLevel={chooseLevel}
-                                />
-                            )}
-                            {sport === 'basketball' && (
-                                <LevelBarMulti
-                                    levels={eventInfo.levels}
-                                    chooseLevel={chooseLevel}
-                                />
-                            )}
-                            {sport === 'tennis' && (
-                                <LevelBarMulti
-                                    levels={eventInfo.levels}
-                                    chooseLevel={chooseLevel}
-                                />
-                            )}
-                            {sport === 'table tennis' && (
-                                <LevelBarMulti
-                                    levels={eventInfo.levels}
-                                    chooseLevel={chooseLevel}
-                                />
-                            )}
-                            {sport === 'badminton' && (
-                                <LevelBarMulti
-                                    levels={eventInfo.levels}
-                                    chooseLevel={chooseLevel}
-                                />
-                            )}
+                            <LevelBarMulti
+                                levels={eventInfo.levels}
+                                chooseLevel={chooseLevel}
+                            />
                         </section>
-                        <section className="w-full flex gap-4">
+                        <section className="flex gap-4">
                             <h2 className="font-bold">選擇對手性別:</h2>
                             <section>
                                 <input
@@ -445,13 +347,13 @@ export default function New() {
                                 <label className="ml-2">不限</label>
                             </section>
                         </section>
-                        <section className="w-full flex flex-col gap-2">
-                            <label>
+                        <section>
+                            <label className="block">
                                 <b>選擇最小對手年紀: </b>
                                 {eventInfo.ageMin}
                             </label>
                             <input
-                                className="w-full"
+                                className="w-full mt-8"
                                 type="range"
                                 name="ageMin"
                                 min={0}
@@ -460,13 +362,13 @@ export default function New() {
                                 onChange={handleEventInfoChange}
                             />
                         </section>
-                        <section className="w-full flex flex-col gap-2">
-                            <label>
+                        <section>
+                            <label className="block">
                                 <b>選擇最大對手年紀: </b>
                                 {eventInfo.ageMax}
                             </label>
                             <input
-                                className="w-full"
+                                className="w-full mt-8"
                                 type="range"
                                 name="ageMax"
                                 min={0}
@@ -475,36 +377,32 @@ export default function New() {
                                 onChange={handleEventInfoChange}
                             />
                         </section>
-                        <section className="w-full">
-                            <section className="flex flex-col gap-2 mb-2">
-                                <label className="font-bold">
-                                    輸入座標 (經度，緯度) or{' '}
-                                    <span className="text-sky-500 cursor-pointer">
-                                        選擇熱門場地
-                                    </span>
-                                </label>
-                                <input
-                                    className="border-2 border-black focus:outline-none p-2"
-                                    type="text"
-                                    value={coordinate}
-                                    onChange={handleCoordinateUpdate}
-                                />
-                            </section>
-                            <section className="flex flex-col gap-2">
-                                <label className="font-bold">地點名稱:</label>
-                                <input
-                                    className="border-2 border-black focus:outline-none p-2"
-                                    type="text"
-                                    name="location"
-                                    value={eventInfo.location}
-                                    onChange={handleEventInfoChange}
-                                />
-                            </section>
+                        <section>
+                            <label className="font-bold block">
+                                輸入座標 (經度，緯度) or{' '}
+                                <span className="text-sky-500 cursor-pointer">
+                                    選擇熱門場地
+                                </span>
+                            </label>
+                            <input
+                                className="border-2 border-black focus:outline-none p-2 mt-4 w-full"
+                                type="text"
+                                value={coordinate}
+                                onChange={handleCoordinateUpdate}
+                            />
                         </section>
-                        <section className="w-full flex items-center">
-                            <div className="mr-2">
-                                <b>需求人數:</b>
-                            </div>
+                        <section>
+                            <label className="font-bold block">地點名稱:</label>
+                            <input
+                                className="border-2 border-black focus:outline-none p-2 w-full mt-4"
+                                type="text"
+                                name="location"
+                                value={eventInfo.location}
+                                onChange={handleEventInfoChange}
+                            />
+                        </section>
+                        <section className="flex items-center gap-4">
+                            <h2 className="font-bold mr-4">需求人數:</h2>
                             <button
                                 className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
@@ -513,7 +411,7 @@ export default function New() {
                             >
                                 &#8722;
                             </button>
-                            <div className="w-10 text-center">
+                            <div className="w-20 text-center">
                                 {eventInfo.participantNum}
                             </div>
                             <button
@@ -525,8 +423,8 @@ export default function New() {
                                 +
                             </button>
                         </section>
-                        <section className="w-full">
-                            <label className="font-bold mr-2">
+                        <section>
+                            <label className="font-bold mr-4">
                                 選擇開始時間:
                             </label>
                             <input
@@ -558,53 +456,47 @@ export default function New() {
                                 onChange={handleEventInfoChange}
                             />
                         </section>
-                        <section className="w-full">
-                            <section className="w-full flex items-center">
-                                <div className="mr-2">
-                                    <b>選擇時長:</b>
-                                </div>
-                                <button
-                                    className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
-                                    onClick={() => {
-                                        incrementLength(-0.5);
-                                    }}
-                                >
-                                    &#8722;
-                                </button>
-                                <div className="w-20 text-center">
-                                    {eventInfo.length} hr
-                                </div>
-                                <button
-                                    className="bg-emerald-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
-                                    onClick={() => {
-                                        incrementLength(0.5);
-                                    }}
-                                >
-                                    +
-                                </button>
-                            </section>
-                        </section>
-                        <section className="flex flex-col gap-8 mt-8">
+                        <section className="w-full flex items-center gap-4">
+                            <h2 className="font-bold">選擇時長:</h2>
                             <button
-                                className="px-8 py-2 bg-emerald-500 font-bold text-white"
+                                className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
-                                    setSport(null);
+                                    incrementLength(-0.5);
                                 }}
                             >
-                                取消
+                                &#8722;
                             </button>
+                            <div className="w-20 text-center">
+                                {eventInfo.length} hr
+                            </div>
                             <button
-                                className="px-8 py-2 bg-sky-500 font-bold text-white mb-20"
+                                className="bg-emerald-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
-                                    createNewEvent();
+                                    incrementLength(0.5);
                                 }}
                             >
-                                確認送出
+                                +
                             </button>
                         </section>
+                        <button
+                            className="px-8 py-2 bg-emerald-500 font-bold text-white"
+                            onClick={() => {
+                                setSport(null);
+                            }}
+                        >
+                            取消
+                        </button>
+                        <button
+                            className="px-8 py-2 bg-sky-500 font-bold text-white mb-24"
+                            onClick={() => {
+                                createNewEvent();
+                            }}
+                        >
+                            確認送出
+                        </button>
                     </section>
-                </>
-            )}
-        </main>
+                )}
+            </main>
+        </>
     );
 }
