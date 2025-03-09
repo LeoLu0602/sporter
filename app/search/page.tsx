@@ -2,14 +2,19 @@
 
 import EventCard from '@/components/EventCard';
 import { useEmail } from '@/context/Context';
-import { datetime2str, getSportEmoji, supabase } from '@/lib/utils';
+import {
+    calculateAge,
+    datetime2str,
+    getSportEmoji,
+    supabase,
+} from '@/lib/utils';
 import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function Search() {
     const email = useEmail();
-    const [startTime, setStartTime] = useState<Date | null>(null);
-    const [chosenSport, setChosenSport] = useState<string | null>(null);
+    const [startTime, setStartTime] = useState<Date>(new Date());
+    const [chosenSport, setChosenSport] = useState<string>('soccer');
     const [events, setEvents] = useState<any[]>([]);
     const [userInfo, setUserInfo] = useState<{
         username: string;
@@ -34,6 +39,17 @@ export default function Search() {
         tableTennisLevel: 0,
         tennisLevel: 0,
     });
+    const [searching, setSearching] = useState<boolean>(false);
+    const level: number =
+        chosenSport === 'soccer'
+            ? userInfo.soccerLevel
+            : chosenSport === 'basketball'
+              ? userInfo.basketballLevel
+              : chosenSport === 'tennis'
+                ? userInfo.tennisLevel
+                : chosenSport === 'table tennis'
+                  ? userInfo.tableTennisLevel
+                  : userInfo.badmintonLevel;
 
     useEffect(() => {
         async function setUp() {
@@ -67,13 +83,13 @@ export default function Search() {
             } = data[0];
 
             const [y, m, d] = birthday
-                ?.split('-')
-                .map((str: string) => parseInt(str)) ?? [null, null, null];
+                .split('-')
+                .map((str: string) => parseInt(str));
 
             setUserInfo({
                 username,
                 gender,
-                birthday: y ? new Date(y, m - 1, d) : null, // Month is zero-based, which is fucking stupid.
+                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
                 distance,
                 intro,
                 badmintonLevel,
@@ -82,24 +98,35 @@ export default function Search() {
                 tableTennisLevel,
                 tennisLevel,
             });
-
-            searchEvents(distance);
         }
 
         setUp();
     }, [email]);
 
-    async function searchEvents(distance: number) {
+    useEffect(() => {
+        searchEvents();
+    }, [chosenSport, startTime]);
+
+    async function searchEvents() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
-                const { data, error } = await supabase.rpc(
-                    'find_nearby_events',
-                    {
-                        user_lat: position.coords.latitude,
-                        user_lng: position.coords.longitude,
-                        d: distance,
-                    }
-                );
+                setEvents([]);
+                setSearching(true);
+
+                const { data, error } = await supabase.rpc('filter_events', {
+                    user_lat: position.coords.latitude,
+                    user_lng: position.coords.longitude,
+                    d: userInfo.distance,
+                    chosen_sport: chosenSport,
+                    user_gender: userInfo.gender,
+                    user_age: userInfo.birthday
+                        ? calculateAge(userInfo.birthday)
+                        : 20,
+                    user_level: level,
+                    user_time: startTime,
+                });
+
+                setSearching(false);
 
                 if (error) {
                     alert('Error!');
@@ -112,12 +139,13 @@ export default function Search() {
                     (a: { time: string }, b: { time: string }) =>
                         new Date(a.time).getTime() - new Date(b.time).getTime()
                 );
-
                 setEvents(data);
             });
         } else {
             alert('Geolocation is not available');
         }
+
+        setSearching(false);
     }
 
     function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
@@ -139,7 +167,7 @@ export default function Search() {
             <header>
                 <h1 className="text-center p-8 text-2xl font-bold">找運動</h1>
             </header>
-            <main className="text-xl px-4">
+            <main className="text-xl px-4 pb-20">
                 <section className="flex justify-center gap-4 mb-8">
                     <input
                         type="datetime-local"
@@ -178,7 +206,7 @@ export default function Search() {
                         ))}
                     </ul>
                 </section>
-                <section className="flex flex-col gap-4 mb-20">
+                <section className="flex flex-col gap-4">
                     {events.map(
                         ({
                             id,
@@ -202,6 +230,7 @@ export default function Search() {
                         )
                     )}
                 </section>
+                {searching && <div className="text-center">Searching...</div>}
             </main>
         </>
     );
