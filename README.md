@@ -46,7 +46,7 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ### Under Development
 
-- "揪運動" - "選擇熱門場地"
+- "揪運動" - "選擇熱門場地" & "備註"
 - "找運動"
 
 ## Credits
