@@ -55,6 +55,8 @@ export default function Search() {
         }
     }
 
+    function openCard(id: string) {}
+
     return (
         <>
             <header>
@@ -100,15 +102,21 @@ export default function Search() {
                     </ul>
                 </section>
                 <section className="flex flex-col gap-4 mb-20">
-                    {events.map(({ id, sport, title, time, location }) => (
-                        <EventCard
-                            key={id}
-                            sport={sport}
-                            title={title}
-                            time={time}
-                            location={location}
-                        />
-                    ))}
+                    {events.map(
+                        ({ id, sport, title, time, length, location }) => (
+                            <EventCard
+                                key={id}
+                                sport={sport}
+                                title={title}
+                                time={time}
+                                length={length}
+                                location={location}
+                                openCard={() => {
+                                    openCard(id);
+                                }}
+                            />
+                        )
+                    )}
                 </section>
             </main>
         </>
