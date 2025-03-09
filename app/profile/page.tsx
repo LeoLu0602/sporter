@@ -202,6 +202,8 @@ export default function Profile() {
 
     function openCalendar() {
         if (dateRef.current) {
+            dateRef.current.focus();
+            dateRef.current.click();
             dateRef.current.showPicker();
         }
     }
