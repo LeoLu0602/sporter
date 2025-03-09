@@ -292,7 +292,7 @@ export default function New() {
             return;
         }
 
-        router.push('/search');
+        alert('Success!');
     }
 
     return (

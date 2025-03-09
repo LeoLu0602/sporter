@@ -14,7 +14,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 export default function Search() {
     const email = useEmail();
     const [startTime, setStartTime] = useState<Date>(new Date());
-    const [chosenSport, setChosenSport] = useState<string>('soccer');
+    const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<any[]>([]);
     const [userInfo, setUserInfo] = useState<{
         username: string;
@@ -39,16 +39,6 @@ export default function Search() {
         tableTennisLevel: 0,
         tennisLevel: 0,
     });
-    const level: number =
-        chosenSport === 'soccer'
-            ? userInfo.soccerLevel
-            : chosenSport === 'basketball'
-              ? userInfo.basketballLevel
-              : chosenSport === 'tennis'
-                ? userInfo.tennisLevel
-                : chosenSport === 'table tennis'
-                  ? userInfo.tableTennisLevel
-                  : userInfo.badmintonLevel;
 
     useEffect(() => {
         async function setUp() {
@@ -102,12 +92,20 @@ export default function Search() {
         setUp();
     }, [email]);
 
-    useEffect(() => {
+    async function searchEvents(chosenSport: string, startTime: Date) {
         setEvents([]);
-        searchEvents();
-    }, [chosenSport, startTime]);
 
-    async function searchEvents() {
+        const level: number =
+            chosenSport === 'soccer'
+                ? userInfo.soccerLevel
+                : chosenSport === 'basketball'
+                  ? userInfo.basketballLevel
+                  : chosenSport === 'tennis'
+                    ? userInfo.tennisLevel
+                    : chosenSport === 'table tennis'
+                      ? userInfo.tableTennisLevel
+                      : userInfo.badmintonLevel;
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { data, error } = await supabase.rpc('filter_events', {
@@ -143,6 +141,10 @@ export default function Search() {
 
     function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
         setStartTime(new Date(e.target.value));
+
+        if (chosenSport) {
+            searchEvents(chosenSport, new Date(e.target.value));
+        }
     }
 
     function setStartTimeNow() {
@@ -151,6 +153,7 @@ export default function Search() {
 
     function clickOnSport(sport: string) {
         setChosenSport(sport);
+        searchEvents(sport, startTime);
     }
 
     function openCard(id: string) {}
