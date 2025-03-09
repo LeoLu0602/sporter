@@ -66,8 +66,6 @@ export default function New() {
     const todayStr: string = datetime2str(now);
     const oneWeekAfterStr: string = datetime2str(oneWeekAfter);
 
-    console.log(todayStr);
-
     useEffect(() => {
         async function setUp() {
             const { data, error } = await supabase
@@ -526,11 +524,11 @@ export default function New() {
                         >
                             取消
                         </button>
-                        {email &&
-                        sport &&
-                        eventInfo.lat &&
-                        eventInfo.lng &&
-                        eventInfo.time ? (
+                        {email !== null &&
+                        sport !== null &&
+                        eventInfo.lat !== null &&
+                        eventInfo.lng !== null &&
+                        eventInfo.time !== null ? (
                             <button
                                 className="px-8 py-2 bg-sky-600 font-bold text-white"
                                 onClick={() => {
