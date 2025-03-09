@@ -4,13 +4,14 @@ import { useEmail } from '@/context/Context';
 import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import LevelBar from '@/components/LevelBar';
 import { explainLevel } from '@/lib/utils';
 
 export default function Profile() {
     const email = useEmail();
     const router = useRouter();
+    const dateRef: { current: HTMLInputElement | null } = useRef(null);
     const [info, setInfo] = useState<{
         username: string;
         gender: number;
@@ -195,6 +196,12 @@ export default function Profile() {
         setOption(option);
     }
 
+    function openCalendar() {
+        if (dateRef.current) {
+            dateRef.current.showPicker();
+        }
+    }
+
     return (
         <>
             <header>
@@ -236,7 +243,9 @@ export default function Profile() {
                         <h2 className="font-bold inline mr-4">Email:</h2>
                         {email && (
                             <>
-                                <span className="no-underline">{email}</span>
+                                <span className="no-underline text-sky-600">
+                                    {email}
+                                </span>
                                 <button
                                     className="ml-4 text-rose-500 font-bold"
                                     onClick={signOut}
@@ -293,7 +302,26 @@ export default function Profile() {
                     </section>
                     <section>
                         <label className="font-bold mr-4">生日: </label>
+                        <button onClick={openCalendar}>
+                            📅
+                            <span className="ml-4">
+                                {info.birthday
+                                    ? info.birthday.getFullYear().toString() +
+                                      '-' +
+                                      (info.birthday.getMonth() + 1)
+                                          .toString()
+                                          .padStart(2, '0') +
+                                      '-' +
+                                      info.birthday
+                                          .getDate()
+                                          .toString()
+                                          .padStart(2, '0')
+                                    : 'YYYY-MM-DD'}
+                            </span>
+                        </button>
                         <input
+                            className="hidden"
+                            ref={dateRef}
                             type="date"
                             name="birthday"
                             value={
