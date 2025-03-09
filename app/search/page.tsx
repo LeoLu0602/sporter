@@ -39,7 +39,6 @@ export default function Search() {
         tableTennisLevel: 0,
         tennisLevel: 0,
     });
-    const [searching, setSearching] = useState<boolean>(false);
     const level: number =
         chosenSport === 'soccer'
             ? userInfo.soccerLevel
@@ -104,15 +103,13 @@ export default function Search() {
     }, [email]);
 
     useEffect(() => {
+        setEvents([]);
         searchEvents();
     }, [chosenSport, startTime]);
 
     async function searchEvents() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
-                setEvents([]);
-                setSearching(true);
-
                 const { data, error } = await supabase.rpc('filter_events', {
                     user_lat: position.coords.latitude,
                     user_lng: position.coords.longitude,
@@ -125,8 +122,6 @@ export default function Search() {
                     user_level: level,
                     user_time: startTime,
                 });
-
-                setSearching(false);
 
                 if (error) {
                     alert('Error!');
@@ -144,8 +139,6 @@ export default function Search() {
         } else {
             alert('Geolocation is not available');
         }
-
-        setSearching(false);
     }
 
     function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
@@ -230,7 +223,6 @@ export default function Search() {
                         )
                     )}
                 </section>
-                {searching && <div className="text-center">Searching...</div>}
             </main>
         </>
     );
