@@ -4,9 +4,11 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { supabase, getSportEmoji } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
+import { useRouter } from 'next/navigation';
 
 export default function New() {
     const email = useEmail();
+    const router = useRouter();
     const [sport, setSport] = useState<string | null>(null);
     const [coordinate, setCoordinate] = useState<string>('');
     const [userInfo, setUserInfo] = useState<{
@@ -186,7 +188,7 @@ export default function New() {
 
         const [lat, lng] = coord
             .replace(/[()]/g, '')
-            .split(', ')
+            .split(',')
             .map(parseFloat);
 
         if (Number.isNaN(lat) || Number.isNaN(lng)) {
@@ -265,7 +267,49 @@ export default function New() {
         }
     }
 
-    async function createNewEvent() {}
+    async function createNewEvent() {
+        const {
+            sport,
+            title,
+            gender,
+            ageMin: age_min,
+            ageMax: age_max,
+            levels,
+            lat,
+            lng,
+            location,
+            participantLimit: participant_limit,
+            time,
+            length,
+        } = eventInfo;
+
+        const { error } = await supabase.from('event').insert([
+            {
+                email,
+                sport,
+                title,
+                gender,
+                age_min,
+                age_max,
+                levels: Array.from(levels),
+                lat,
+                lng,
+                location,
+                participant_limit,
+                time,
+                length,
+            },
+        ]);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return;
+        }
+
+        router.push('/search');
+    }
 
     return (
         <>
@@ -488,6 +532,7 @@ export default function New() {
                         </button>
                         <button
                             className="px-8 py-2 bg-sky-600 font-bold text-white mb-24"
+                            disabled={!sport || !eventInfo.time || !email}
                             onClick={() => {
                                 createNewEvent();
                             }}
