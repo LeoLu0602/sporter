@@ -242,9 +242,7 @@ export default function Profile() {
                         <h2 className="font-bold inline mr-4">Email:</h2>
                         {email && (
                             <>
-                                <span className="no-underline text-sky-600">
-                                    {email}
-                                </span>
+                                <span className="no-underline">{email}</span>
                                 <button
                                     className="ml-4 text-rose-500 font-bold"
                                     onClick={signOut}
@@ -447,7 +445,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="w-full mt-8 mb-24 py-2 bg-emerald-600 text-white font-bold"
+                    className="w-full mt-8 mb-24 py-2 bg-emerald-600 text-white font-bold rounded-xl"
                     onClick={save}
                 >
                     儲存

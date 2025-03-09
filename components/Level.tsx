@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { MouseEventHandler } from 'react';
 
-export default function LevelBar({
+export default function Level({
     index,
     level,
     handleClick,

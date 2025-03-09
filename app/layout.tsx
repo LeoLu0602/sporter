@@ -29,7 +29,7 @@ export default function RootLayout({
             className={geistSans.className}
             suppressHydrationWarning
         >
-            <body className="bg-background text-foreground bg-[#f2f4f7]">
+            <body className="bg-background text-foreground bg-[#f2f4f7] font-sans">
                 <Provider>
                     {children}
                     <Navbar />

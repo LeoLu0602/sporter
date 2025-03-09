@@ -54,7 +54,8 @@ export default function New() {
         lng: number | null;
         location: string;
         participantLimit: number;
-        time: Date | null;
+        startTime: Date | null;
+        endTime: Date | null;
         length: number;
     }>({
         sport: null,
@@ -68,13 +69,10 @@ export default function New() {
         lng: null,
         location: '',
         participantLimit: 1,
-        time: null,
+        startTime: null,
+        endTime: null,
         length: 2,
     });
-    const now: Date = new Date();
-    const oneWeekAfter: Date = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const todayStr: string = datetime2str(now);
-    const oneWeekAfterStr: string = datetime2str(oneWeekAfter);
 
     useEffect(() => {
         async function setUp() {
@@ -151,25 +149,37 @@ export default function New() {
         const age: number = userInfo.birthday
             ? calculateAge(userInfo.birthday)
             : 20;
+        const level: number =
+            sport === 'soccer'
+                ? userInfo.soccerLevel
+                : sport === 'basketball'
+                  ? userInfo.basketballLevel
+                  : sport === 'tennis'
+                    ? userInfo.tennisLevel
+                    : sport === 'table tennis'
+                      ? userInfo.tableTennisLevel
+                      : userInfo.badmintonLevel;
 
         setSport(sport);
-        setCoordinate('');
         setEventInfo({
             sport,
             title: '未命名',
             gender: userInfo.gender,
             ageMin: Math.max(0, age - 5),
             ageMax: Math.min(100, age + 5),
-            levelMin: 1,
-            levelMax: 6,
+            levelMin: level,
+            levelMax: level,
             lat: null,
             lng: null,
             location: '',
             participantLimit: 1,
-            time: null,
+            startTime: null,
+            endTime: null,
             length: 2,
         });
+        setCoordinate('');
         setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
+        setLevels([level, level]);
     }
 
     function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
@@ -226,16 +236,6 @@ export default function New() {
         }
     }
 
-    function incrementLength(amount: number) {
-        const newLength: number = eventInfo.length + amount;
-
-        if (newLength >= 0.5 && newLength <= 24) {
-            setEventInfo((oldVal) => {
-                return { ...oldVal, length: newLength };
-            });
-        }
-    }
-
     function handleEventInfoChange(e: ChangeEvent<HTMLInputElement>) {
         switch (e.target.name) {
             case 'title':
@@ -253,9 +253,14 @@ export default function New() {
                     return { ...oldVal, location: e.target.value };
                 });
                 return;
-            case 'time':
+            case 'startTime':
                 setEventInfo((oldVal) => {
-                    return { ...oldVal, time: new Date(e.target.value) };
+                    return { ...oldVal, startTime: new Date(e.target.value) };
+                });
+                break;
+            case 'endTime':
+                setEventInfo((oldVal) => {
+                    return { ...oldVal, endTime: new Date(e.target.value) };
                 });
                 break;
         }
@@ -274,8 +279,8 @@ export default function New() {
             lng,
             location,
             participantLimit: participant_limit,
-            time,
-            length,
+            startTime: start_time,
+            endTime: end_time,
         } = eventInfo;
 
         const { error } = await supabase.from('event').insert([
@@ -292,8 +297,8 @@ export default function New() {
                 lng,
                 location,
                 participant_limit,
-                time,
-                length,
+                start_time,
+                end_time,
             },
         ]);
 
@@ -305,12 +310,6 @@ export default function New() {
         }
 
         router.push('/search');
-    }
-
-    function setStartTimeNow() {
-        setEventInfo((oldVal) => {
-            return { ...oldVal, time: new Date() };
-        });
     }
 
     return (
@@ -353,9 +352,9 @@ export default function New() {
                                 onChange={handleEventInfoChange}
                             />
                         </section>
-                        <section className="w-full">
+                        <section className="w-full flex flex-col gap-4">
                             <h2>
-                                <b className="mr-4">選擇對手程度:</b>
+                                <b className="mr-4">對手程度:</b>
                                 {explainLevel(eventInfo.levelMin) +
                                     ' 到 ' +
                                     explainLevel(eventInfo.levelMax)}
@@ -371,7 +370,7 @@ export default function New() {
                             </div>
                         </section>
                         <section className="flex gap-4">
-                            <h2 className="font-bold">選擇對手性別:</h2>
+                            <h2 className="font-bold">對手性別:</h2>
                             <section>
                                 <input
                                     type="radio"
@@ -405,7 +404,7 @@ export default function New() {
                         </section>
                         <section>
                             <label className="block mb-4">
-                                <b className="mr-4">選擇對手年紀:</b>
+                                <b className="mr-4">對手年紀:</b>
                                 {ages[0]} - {ages[1]}
                             </label>
                             <div className="px-4">
@@ -420,10 +419,10 @@ export default function New() {
                         </section>
                         <section>
                             <label className="font-bold block">
-                                輸入座標 (經度，緯度) or{' '}
-                                <span className="text-sky-500 cursor-pointer">
+                                <span className="text-emerald-600 cursor-pointer">
                                     選擇熱門場地
-                                </span>
+                                </span>{' '}
+                                or 輸入座標 (經度，緯度)
                             </label>
                             <input
                                 className="border-2 border-black focus:outline-none p-2 mt-4 w-full"
@@ -466,46 +465,29 @@ export default function New() {
                         </section>
                         <section>
                             <label className="font-bold mr-4 mb-4 block">
-                                選擇開始時間:
+                                開始時間:
                             </label>
                             <div className="flex gap-4 items-center">
                                 <input
                                     type="datetime-local"
-                                    min={todayStr}
-                                    max={oneWeekAfterStr}
-                                    name="time"
-                                    value={datetime2str(eventInfo.time)}
+                                    name="startTime"
+                                    value={datetime2str(eventInfo.startTime)}
                                     onChange={handleEventInfoChange}
                                 />
-                                <button
-                                    className="font-bold text-emerald-500"
-                                    onClick={setStartTimeNow}
-                                >
-                                    馬上揪！
-                                </button>
                             </div>
                         </section>
-                        <section className="w-full flex items-center gap-4">
-                            <h2 className="font-bold">選擇時長:</h2>
-                            <button
-                                className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
-                                onClick={() => {
-                                    incrementLength(-0.5);
-                                }}
-                            >
-                                &#8722;
-                            </button>
-                            <div className="w-20 text-center">
-                                {eventInfo.length} hr
+                        <section>
+                            <label className="font-bold mr-4 mb-4 block">
+                                結束時間:
+                            </label>
+                            <div className="flex gap-4 items-center">
+                                <input
+                                    type="datetime-local"
+                                    name="endTime"
+                                    value={datetime2str(eventInfo.endTime)}
+                                    onChange={handleEventInfoChange}
+                                />
                             </div>
-                            <button
-                                className="bg-emerald-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
-                                onClick={() => {
-                                    incrementLength(0.5);
-                                }}
-                            >
-                                +
-                            </button>
                         </section>
                         <button
                             className="px-8 py-2 bg-emerald-600 font-bold text-white"
@@ -519,7 +501,8 @@ export default function New() {
                         sport !== null &&
                         eventInfo.lat !== null &&
                         eventInfo.lng !== null &&
-                        eventInfo.time !== null ? (
+                        eventInfo.startTime !== null &&
+                        eventInfo.endTime !== null ? (
                             <button
                                 className="px-8 py-2 bg-sky-600 font-bold text-white"
                                 onClick={() => {
