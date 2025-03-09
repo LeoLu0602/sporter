@@ -1,7 +1,7 @@
 'use client';
 
 import { useEmail } from '@/context/Context';
-import { supabase } from '@/lib/utils';
+import { datetime2str, supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -298,7 +298,9 @@ export default function Profile() {
                         </section>
                     </section>
                     <section>
-                        <label className="font-bold mr-4 bg-transparent appearance-none">生日: </label>
+                        <label className="font-bold mr-4 bg-transparent appearance-none">
+                            生日:
+                        </label>
                         <input
                             type="date"
                             name="birthday"

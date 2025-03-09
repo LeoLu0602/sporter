@@ -61,6 +61,12 @@ export default function New() {
         time: null,
         length: 2,
     });
+    const now: Date = new Date();
+    const oneWeekAfter: Date = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const todayStr: string = datetime2str(now);
+    const oneWeekAfterStr: string = datetime2str(oneWeekAfter);
+
+    console.log(todayStr);
 
     useEffect(() => {
         async function setUp() {
@@ -476,6 +482,8 @@ export default function New() {
                             <div className="flex gap-4 items-center">
                                 <input
                                     type="datetime-local"
+                                    min={todayStr}
+                                    max={oneWeekAfterStr}
                                     name="time"
                                     value={datetime2str(eventInfo.time)}
                                     onChange={handleEventInfoChange}
