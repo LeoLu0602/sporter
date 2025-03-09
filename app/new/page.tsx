@@ -139,6 +139,7 @@ export default function New() {
             : 20;
 
         setSport(sport);
+        setCoordinate('');
         setEventInfo({
             sport,
             title: '未命名',
@@ -155,8 +156,8 @@ export default function New() {
                         : sport === 'table tennis'
                           ? new Set([userInfo.tableTennisLevel])
                           : new Set([userInfo.badmintonLevel]),
-            lat: 0,
-            lng: 0,
+            lat: null,
+            lng: null,
             location: '',
             participantLimit: 1,
             time: null,

@@ -4,7 +4,7 @@ import { useEmail } from '@/context/Context';
 import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import LevelBar from '@/components/LevelBar';
 import { explainLevel } from '@/lib/utils';
 
