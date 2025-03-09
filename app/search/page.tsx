@@ -2,6 +2,7 @@
 
 import EventCard from '@/components/EventCard';
 import { datetime2str, getSportEmoji, supabase } from '@/lib/utils';
+import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function Search() {
@@ -34,6 +35,26 @@ export default function Search() {
         setStartTime(new Date());
     }
 
+    function clickOnSport(sport: string) {
+        if (sports.has(sport)) {
+            setSports((oldVal) => {
+                const newVal = new Set(oldVal);
+
+                newVal.delete(sport);
+
+                return newVal;
+            });
+        } else {
+            setSports((oldVal) => {
+                const newVal = new Set(oldVal);
+
+                newVal.add(sport);
+
+                return newVal;
+            });
+        }
+    }
+
     return (
         <>
             <header>
@@ -63,7 +84,15 @@ export default function Search() {
                             'badminton',
                         ].map((sport) => (
                             <li className="w-1/6" key={sport}>
-                                <button className="w-full border-2 py-2 border-[#aaa]">
+                                <button
+                                    className={clsx('w-full border-2 py-2', {
+                                        'bg-emerald-500 border-emerald-500':
+                                            sports.has(sport),
+                                    })}
+                                    onClick={() => {
+                                        clickOnSport(sport);
+                                    }}
+                                >
                                     {getSportEmoji(sport)}
                                 </button>
                             </li>
