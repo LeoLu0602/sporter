@@ -1,9 +1,14 @@
 'use client';
 
 import { ChangeEvent, useEffect, useState } from 'react';
-import { supabase, getSportEmoji, datetime2str, parseCoord } from '@/lib/utils';
+import {
+    supabase,
+    getSportEmoji,
+    datetime2str,
+    parseCoord,
+    explainLevel,
+} from '@/lib/utils';
 import { useEmail } from '@/context/Context';
-import LevelBarMulti from '@/components/LevelBarMulti';
 import { useRouter } from 'next/navigation';
 import Slider from '@mui/material/Slider';
 
@@ -13,6 +18,7 @@ export default function New() {
     const [sport, setSport] = useState<string | null>(null);
     const [coordinate, setCoordinate] = useState<string>('');
     const [ages, setAges] = useState<number[]>([0, 100]);
+    const [levels, setLevels] = useState<number[]>([1, 6]);
     const [userInfo, setUserInfo] = useState<{
         username: string;
         gender: number; // 1: male, 2: female, 3: any
@@ -42,7 +48,8 @@ export default function New() {
         gender: number; // 1: male, 2: female, 3: any
         ageMin: number;
         ageMax: number;
-        levels: Set<number>;
+        levelMin: number;
+        levelMax: number;
         lat: number | null;
         lng: number | null;
         location: string;
@@ -55,7 +62,8 @@ export default function New() {
         gender: 3,
         ageMin: 0,
         ageMax: 100,
-        levels: new Set([1]),
+        levelMin: 1,
+        levelMax: 6,
         lat: null,
         lng: null,
         location: '',
@@ -152,16 +160,8 @@ export default function New() {
             gender: userInfo.gender,
             ageMin: Math.max(0, age - 5),
             ageMax: Math.min(100, age + 5),
-            levels:
-                sport === 'soccer'
-                    ? new Set([userInfo.soccerLevel])
-                    : sport === 'basketball'
-                      ? new Set([userInfo.basketballLevel])
-                      : sport === 'tennis'
-                        ? new Set([userInfo.tennisLevel])
-                        : sport === 'table tennis'
-                          ? new Set([userInfo.tableTennisLevel])
-                          : new Set([userInfo.badmintonLevel]),
+            levelMin: 1,
+            levelMax: 6,
             lat: null,
             lng: null,
             location: '',
@@ -170,23 +170,6 @@ export default function New() {
             length: 2,
         });
         setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
-    }
-
-    function chooseLevel(i: number) {
-        setEventInfo((oldVal) => {
-            const newLevels: Set<number> = new Set(oldVal.levels);
-
-            if (newLevels.has(i)) {
-                newLevels.delete(i);
-            } else {
-                newLevels.add(i);
-            }
-
-            return {
-                ...oldVal,
-                levels: newLevels,
-            };
-        });
     }
 
     function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
@@ -216,6 +199,19 @@ export default function New() {
                 ...oldVal,
                 ageMin: newAgeMin,
                 ageMax: newAgeMax,
+            };
+        });
+    }
+
+    function handleLevelsChange(event: Event, newLevels: number | number[]) {
+        const [newLevelMin, newLevelMax]: number[] = newLevels as number[];
+
+        setLevels(newLevels as number[]);
+        setEventInfo((oldVal) => {
+            return {
+                ...oldVal,
+                levelMin: newLevelMin,
+                levelMax: newLevelMax,
             };
         });
     }
@@ -272,7 +268,8 @@ export default function New() {
             gender,
             ageMin: age_min,
             ageMax: age_max,
-            levels,
+            levelMin: level_min,
+            levelMax: level_max,
             lat,
             lng,
             location,
@@ -289,7 +286,8 @@ export default function New() {
                 gender,
                 age_min,
                 age_max,
-                levels: Array.from(levels),
+                level_min,
+                level_max,
                 lat,
                 lng,
                 location,
@@ -356,11 +354,21 @@ export default function New() {
                             />
                         </section>
                         <section className="w-full">
-                            <h2 className="font-bold">選擇對手程度</h2>
-                            <LevelBarMulti
-                                levels={eventInfo.levels}
-                                chooseLevel={chooseLevel}
-                            />
+                            <h2>
+                                <b className="mr-4">選擇對手程度:</b>
+                                {explainLevel(eventInfo.levelMin) +
+                                    ' 到 ' +
+                                    explainLevel(eventInfo.levelMax)}
+                            </h2>
+                            <div className="px-4">
+                                <Slider
+                                    value={levels}
+                                    onChange={handleLevelsChange}
+                                    min={1}
+                                    max={6}
+                                    valueLabelDisplay="auto"
+                                />
+                            </div>
                         </section>
                         <section className="flex gap-4">
                             <h2 className="font-bold">選擇對手性別:</h2>
@@ -397,7 +405,7 @@ export default function New() {
                         </section>
                         <section>
                             <label className="block mb-4">
-                                <b>選擇對手年紀: </b>
+                                <b className="mr-4">選擇對手年紀:</b>
                                 {ages[0]} - {ages[1]}
                             </label>
                             <div className="px-4">
