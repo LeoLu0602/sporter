@@ -16,8 +16,6 @@ export default function EventCard({
     location: string;
     openCard: MouseEventHandler<HTMLDivElement>;
 }) {
-    console.log(new Date(startTime).toLocaleString());
-
     return (
         <div
             className="border-2 border-black cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4"

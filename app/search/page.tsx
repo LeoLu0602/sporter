@@ -9,7 +9,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 export default function Search() {
     const email = useEmail();
     const [startTime, setStartTime] = useState<Date | null>(null);
-    const [sports, setSports] = useState<Set<string>>(new Set());
+    const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<any[]>([]);
     const [userInfo, setUserInfo] = useState<{
         username: string;
@@ -129,23 +129,7 @@ export default function Search() {
     }
 
     function clickOnSport(sport: string) {
-        if (sports.has(sport)) {
-            setSports((oldVal) => {
-                const newVal = new Set(oldVal);
-
-                newVal.delete(sport);
-
-                return newVal;
-            });
-        } else {
-            setSports((oldVal) => {
-                const newVal = new Set(oldVal);
-
-                newVal.add(sport);
-
-                return newVal;
-            });
-        }
+        setChosenSport(sport);
     }
 
     function openCard(id: string) {}
@@ -178,11 +162,11 @@ export default function Search() {
                             'table tennis',
                             'badminton',
                         ].map((sport) => (
-                            <li className="w-1/6" key={sport}>
+                            <li className="w-1/5" key={sport}>
                                 <button
-                                    className={clsx('w-full border-2 py-2', {
-                                        'bg-emerald-500 border-emerald-500':
-                                            sports.has(sport),
+                                    className={clsx('w-full py-2', {
+                                        'border-emerald-600 border-2 box-border':
+                                            chosenSport === sport,
                                     })}
                                     onClick={() => {
                                         clickOnSport(sport);
