@@ -53,8 +53,8 @@ export default function New() {
         sport: null,
         title: '未命名',
         gender: 3,
-        ageMin: 5,
-        ageMax: 95,
+        ageMin: 0,
+        ageMax: 100,
         levels: new Set([1]),
         lat: null,
         lng: null,
@@ -169,6 +169,7 @@ export default function New() {
             time: null,
             length: 2,
         });
+        setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
     }
 
     function chooseLevel(i: number) {
@@ -249,24 +250,6 @@ export default function New() {
             case 'gender':
                 setEventInfo((oldVal) => {
                     return { ...oldVal, gender: parseInt(e.target.value) };
-                });
-                break;
-            case 'ageMin':
-                if (parseInt(e.target.value) > eventInfo.ageMax) {
-                    return;
-                }
-
-                setEventInfo((oldVal) => {
-                    return { ...oldVal, ageMin: parseInt(e.target.value) };
-                });
-                break;
-            case 'ageMax':
-                if (eventInfo.ageMin > parseInt(e.target.value)) {
-                    return;
-                }
-
-                setEventInfo((oldVal) => {
-                    return { ...oldVal, ageMax: parseInt(e.target.value) };
                 });
                 break;
             case 'location':
@@ -413,17 +396,19 @@ export default function New() {
                             </section>
                         </section>
                         <section>
-                            <label className="block">
+                            <label className="block mb-4">
                                 <b>選擇對手年紀: </b>
                                 {ages[0]} - {ages[1]}
                             </label>
-                            <Slider
-                                value={ages}
-                                onChange={handleAgesChange}
-                                min={0}
-                                max={100}
-                                valueLabelDisplay="auto"
-                            />
+                            <div className="px-4">
+                                <Slider
+                                    value={ages}
+                                    onChange={handleAgesChange}
+                                    min={0}
+                                    max={100}
+                                    valueLabelDisplay="auto"
+                                />
+                            </div>
                         </section>
                         <section>
                             <label className="font-bold block">
