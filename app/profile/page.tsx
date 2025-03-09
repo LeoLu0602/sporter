@@ -236,7 +236,7 @@ export default function Profile() {
                         <h2 className="font-bold inline mr-4">Email:</h2>
                         {email && (
                             <>
-                                {email}
+                                <span className="no-underline">{email}</span>
                                 <button
                                     className="ml-4 text-rose-500 font-bold"
                                     onClick={signOut}
