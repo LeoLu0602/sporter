@@ -11,7 +11,6 @@ import { explainLevel } from '@/lib/utils';
 export default function Profile() {
     const email = useEmail();
     const router = useRouter();
-    const dateRef: { current: HTMLInputElement | null } = useRef(null);
     const [info, setInfo] = useState<{
         username: string;
         gender: number;
@@ -69,13 +68,13 @@ export default function Profile() {
             } = data[0];
 
             const [y, m, d] = birthday
-                .split('-')
-                .map((str: string) => parseInt(str));
+                ?.split('-')
+                .map((str: string) => parseInt(str)) ?? [null, null, null];
 
             setInfo({
                 username,
                 gender,
-                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
+                birthday: y ? new Date(y, m - 1, d) : null, // Month is zero-based, which is fucking stupid.
                 distance,
                 intro,
                 badmintonLevel,
@@ -200,14 +199,6 @@ export default function Profile() {
         setOption(option);
     }
 
-    function openCalendar() {
-        if (dateRef.current) {
-            dateRef.current.focus();
-            dateRef.current.click();
-            dateRef.current.showPicker();
-        }
-    }
-
     return (
         <>
             <header>
@@ -308,26 +299,7 @@ export default function Profile() {
                     </section>
                     <section>
                         <label className="font-bold mr-4">生日: </label>
-                        <button onClick={openCalendar}>
-                            📅
-                            <span className="ml-4">
-                                {info.birthday
-                                    ? info.birthday.getFullYear().toString() +
-                                      '-' +
-                                      (info.birthday.getMonth() + 1)
-                                          .toString()
-                                          .padStart(2, '0') +
-                                      '-' +
-                                      info.birthday
-                                          .getDate()
-                                          .toString()
-                                          .padStart(2, '0')
-                                    : 'YYYY-MM-DD'}
-                            </span>
-                        </button>
                         <input
-                            className="hidden"
-                            ref={dateRef}
                             type="date"
                             name="birthday"
                             value={
