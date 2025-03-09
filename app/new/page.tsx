@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, useEffect, useState } from 'react';
-import { supabase, getSportEmoji, datetime2str } from '@/lib/utils';
+import { supabase, getSportEmoji, datetime2str, parseCoord } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
 import { useRouter } from 'next/navigation';
@@ -41,8 +41,8 @@ export default function New() {
         ageMin: number;
         ageMax: number;
         levels: Set<number>;
-        lat: number;
-        lng: number;
+        lat: number | null;
+        lng: number | null;
         location: string;
         participantLimit: number;
         time: Date | null;
@@ -54,8 +54,8 @@ export default function New() {
         ageMin: 5,
         ageMax: 95,
         levels: new Set([1]),
-        lat: 0,
-        lng: 0,
+        lat: null,
+        lng: null,
         location: '',
         participantLimit: 1,
         time: null,
@@ -182,26 +182,21 @@ export default function New() {
     }
 
     function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
-        const coord: string = e.target.value;
+        const parsedCoord = parseCoord(e.target.value);
 
-        setCoordinate(coord);
+        setCoordinate(e.target.value);
 
-        const [lat, lng] = coord
-            .replace(/[()]/g, '')
-            .split(',')
-            .map(parseFloat);
+        if (parsedCoord) {
+            const { lat, lng } = parsedCoord;
 
-        if (Number.isNaN(lat) || Number.isNaN(lng)) {
-            return;
+            setEventInfo((oldVal) => {
+                return {
+                    ...oldVal,
+                    lat,
+                    lng,
+                };
+            });
         }
-
-        setEventInfo((oldVal) => {
-            return {
-                ...oldVal,
-                lat,
-                lng,
-            };
-        });
     }
 
     function incrementParticipantLimit(amount: number) {
@@ -345,7 +340,7 @@ export default function New() {
                     </section>
                 )}
                 {sport !== null && (
-                    <section className="flex flex-col gap-8 text-lg">
+                    <section className="flex flex-col gap-8 text-lg mb-24">
                         <section>
                             <h2 className="text-2xl inline mr-4">
                                 {getSportEmoji(sport)}
@@ -521,15 +516,22 @@ export default function New() {
                         >
                             取消
                         </button>
-                        <button
-                            className="px-8 py-2 bg-sky-600 font-bold text-white mb-24"
-                            disabled={!sport || !eventInfo.time || !email}
-                            onClick={() => {
-                                createNewEvent();
-                            }}
-                        >
-                            確認送出
-                        </button>
+                        {email &&
+                        sport &&
+                        eventInfo.lat &&
+                        eventInfo.lng &&
+                        eventInfo.time ? (
+                            <button
+                                className="px-8 py-2 bg-sky-600 font-bold text-white"
+                                onClick={() => {
+                                    createNewEvent();
+                                }}
+                            >
+                                確認送出
+                            </button>
+                        ) : (
+                            <></>
+                        )}
                     </section>
                 )}
             </main>
