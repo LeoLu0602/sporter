@@ -473,19 +473,20 @@ export default function New() {
                             <label className="font-bold mr-4 mb-4 block">
                                 選擇開始時間:
                             </label>
-                            <input
-                                className="mr-4"
-                                type="datetime-local"
-                                name="time"
-                                value={datetime2str(eventInfo.time)}
-                                onChange={handleEventInfoChange}
-                            />
-                            <button
-                                className="font-bold text-emerald-500"
-                                onClick={setStartTimeNow}
-                            >
-                                馬上揪！
-                            </button>
+                            <div className="flex gap-4 items-center">
+                                <input
+                                    type="datetime-local"
+                                    name="time"
+                                    value={datetime2str(eventInfo.time)}
+                                    onChange={handleEventInfoChange}
+                                />
+                                <button
+                                    className="font-bold text-emerald-500"
+                                    onClick={setStartTimeNow}
+                                >
+                                    馬上揪！
+                                </button>
+                            </div>
                         </section>
                         <section className="w-full flex items-center gap-4">
                             <h2 className="font-bold">選擇時長:</h2>

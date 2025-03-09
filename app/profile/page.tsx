@@ -298,7 +298,7 @@ export default function Profile() {
                         </section>
                     </section>
                     <section>
-                        <label className="font-bold mr-4">生日: </label>
+                        <label className="font-bold mr-4 bg-transparent appearance-none">生日: </label>
                         <input
                             type="date"
                             name="birthday"
