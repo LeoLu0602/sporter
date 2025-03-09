@@ -67,13 +67,13 @@ export default function Search() {
             } = data[0];
 
             const [y, m, d] = birthday
-                .split('-')
-                .map((str: string) => parseInt(str));
+                ?.split('-')
+                .map((str: string) => parseInt(str)) ?? [null, null, null];
 
             setUserInfo({
                 username,
                 gender,
-                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
+                birthday: y ? new Date(y, m - 1, d) : null, // Month is zero-based, which is fucking stupid.
                 distance,
                 intro,
                 badmintonLevel,
@@ -107,6 +107,11 @@ export default function Search() {
 
                     return;
                 }
+
+                data.sort(
+                    (a: { time: string }, b: { time: string }) =>
+                        new Date(a.time).getTime() - new Date(b.time).getTime()
+                );
 
                 setEvents(data);
             });
