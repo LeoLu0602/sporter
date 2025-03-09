@@ -1,18 +1,46 @@
 'use client';
 
 import EventCard from '@/components/EventCard';
+import { useEmail } from '@/context/Context';
 import { datetime2str, getSportEmoji, supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function Search() {
+    const email = useEmail();
     const [startTime, setStartTime] = useState<Date | null>(null);
     const [sports, setSports] = useState<Set<string>>(new Set());
     const [events, setEvents] = useState<any[]>([]);
+    const [userInfo, setUserInfo] = useState<{
+        username: string;
+        gender: number; // 1: male, 2: female, 3: any
+        birthday: Date | null;
+        distance: number;
+        intro: string;
+        badmintonLevel: number;
+        basketballLevel: number;
+        soccerLevel: number;
+        tableTennisLevel: number;
+        tennisLevel: number;
+    }>({
+        username: '',
+        gender: 3,
+        birthday: null,
+        distance: 1000,
+        intro: '',
+        badmintonLevel: 0,
+        basketballLevel: 0,
+        soccerLevel: 0,
+        tableTennisLevel: 0,
+        tennisLevel: 0,
+    });
 
     useEffect(() => {
         async function setUp() {
-            const { data, error } = await supabase.from('event').select('*');
+            const { data, error } = await supabase
+                .from('user')
+                .select('*')
+                .eq('email', email);
 
             if (error) {
                 alert('Error!');
@@ -21,11 +49,71 @@ export default function Search() {
                 return;
             }
 
-            setEvents(data);
+            if (data.length === 0) {
+                return;
+            }
+
+            const {
+                username,
+                gender,
+                birthday,
+                distance,
+                intro,
+                badminton_level: badmintonLevel,
+                basketball_level: basketballLevel,
+                soccer_level: soccerLevel,
+                table_tennis_level: tableTennisLevel,
+                tennis_level: tennisLevel,
+            } = data[0];
+
+            const [y, m, d] = birthday
+                .split('-')
+                .map((str: string) => parseInt(str));
+
+            setUserInfo({
+                username,
+                gender,
+                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
+                distance,
+                intro,
+                badmintonLevel,
+                basketballLevel,
+                soccerLevel,
+                tableTennisLevel,
+                tennisLevel,
+            });
+
+            searchEvents(distance);
         }
 
         setUp();
-    }, []);
+    }, [email]);
+
+    async function searchEvents(distance: number) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const { data, error } = await supabase.rpc(
+                    'find_nearby_events',
+                    {
+                        user_lat: position.coords.latitude,
+                        user_lng: position.coords.longitude,
+                        d: distance,
+                    }
+                );
+
+                if (error) {
+                    alert('Error!');
+                    console.error(error);
+
+                    return;
+                }
+
+                setEvents(data);
+            });
+        } else {
+            alert('Geolocation is not available');
+        }
+    }
 
     function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
         setStartTime(new Date(e.target.value));
