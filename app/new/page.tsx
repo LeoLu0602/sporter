@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, useEffect, useState } from 'react';
-import { supabase, getSportEmoji } from '@/lib/utils';
+import { supabase, getSportEmoji, datetime2str } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
 import { useRouter } from 'next/navigation';
@@ -311,6 +311,12 @@ export default function New() {
         router.push('/search');
     }
 
+    function setStartTimeNow() {
+        setEventInfo((oldVal) => {
+            return { ...oldVal, time: new Date() };
+        });
+    }
+
     return (
         <>
             <header>
@@ -468,37 +474,22 @@ export default function New() {
                             </button>
                         </section>
                         <section>
-                            <label className="font-bold mr-4">
+                            <label className="font-bold mr-4 mb-4 block">
                                 選擇開始時間:
                             </label>
                             <input
+                                className="mr-4"
                                 type="datetime-local"
                                 name="time"
-                                value={
-                                    eventInfo.time
-                                        ? eventInfo.time
-                                              .getFullYear()
-                                              .toString() +
-                                          '-' +
-                                          (eventInfo.time.getMonth() + 1)
-                                              .toString()
-                                              .padStart(2, '0') +
-                                          '-' +
-                                          eventInfo.time.getDate() +
-                                          'T' +
-                                          eventInfo.time
-                                              .getHours()
-                                              .toString()
-                                              .padStart(2, '0') +
-                                          ':' +
-                                          eventInfo.time
-                                              .getMinutes()
-                                              .toString()
-                                              .padStart(2, '0')
-                                        : ''
-                                }
+                                value={datetime2str(eventInfo.time)}
                                 onChange={handleEventInfoChange}
                             />
+                            <button
+                                className="font-bold text-emerald-500"
+                                onClick={setStartTimeNow}
+                            >
+                                馬上揪！
+                            </button>
                         </section>
                         <section className="w-full flex items-center gap-4">
                             <h2 className="font-bold">選擇時長:</h2>
