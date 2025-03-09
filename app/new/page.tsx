@@ -5,12 +5,14 @@ import { supabase, getSportEmoji, datetime2str, parseCoord } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import LevelBarMulti from '@/components/LevelBarMulti';
 import { useRouter } from 'next/navigation';
+import Slider from '@mui/material/Slider';
 
 export default function New() {
     const email = useEmail();
     const router = useRouter();
     const [sport, setSport] = useState<string | null>(null);
     const [coordinate, setCoordinate] = useState<string>('');
+    const [ages, setAges] = useState<number[]>([0, 100]);
     const [userInfo, setUserInfo] = useState<{
         username: string;
         gender: number; // 1: male, 2: female, 3: any
@@ -202,6 +204,19 @@ export default function New() {
                 };
             });
         }
+    }
+
+    function handleAgesChange(event: Event, newAges: number | number[]) {
+        const [newAgeMin, newAgeMax]: number[] = newAges as number[];
+
+        setAges(newAges as number[]);
+        setEventInfo((oldVal) => {
+            return {
+                ...oldVal,
+                ageMin: newAgeMin,
+                ageMax: newAgeMax,
+            };
+        });
     }
 
     function incrementParticipantLimit(amount: number) {
@@ -399,32 +414,15 @@ export default function New() {
                         </section>
                         <section>
                             <label className="block">
-                                <b>選擇最小對手年紀: </b>
-                                {eventInfo.ageMin}
+                                <b>選擇對手年紀: </b>
+                                {ages[0]} - {ages[1]}
                             </label>
-                            <input
-                                className="w-full mt-8"
-                                type="range"
-                                name="ageMin"
+                            <Slider
+                                value={ages}
+                                onChange={handleAgesChange}
                                 min={0}
                                 max={100}
-                                value={eventInfo.ageMin}
-                                onChange={handleEventInfoChange}
-                            />
-                        </section>
-                        <section>
-                            <label className="block">
-                                <b>選擇最大對手年紀: </b>
-                                {eventInfo.ageMax}
-                            </label>
-                            <input
-                                className="w-full mt-8"
-                                type="range"
-                                name="ageMax"
-                                min={0}
-                                max={100}
-                                value={eventInfo.ageMax}
-                                onChange={handleEventInfoChange}
+                                valueLabelDisplay="auto"
                             />
                         </section>
                         <section>
