@@ -122,6 +122,10 @@ export default function Profile() {
                 break;
             case 'birthday':
                 setInfo((oldVal) => {
+                    if (e.target.value === '') {
+                        return { ...oldVal, birthday: null };
+                    }
+
                     const [y, m, d] = e.target.value
                         .split('-')
                         .map((str) => parseInt(str));
