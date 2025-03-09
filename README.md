@@ -51,4 +51,7 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ## Credits
 
+- Design: James Chen
+- Web dev: Leo Lu
+
 ## License
