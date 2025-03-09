@@ -1,17 +1,16 @@
 'use client';
 
 import EventCard from '@/components/EventCard';
-import { datetime2str, supabase } from '@/lib/utils';
+import { datetime2str, getSportEmoji, supabase } from '@/lib/utils';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function Search() {
     const [startTime, setStartTime] = useState<Date | null>(null);
+    const [sports, setSports] = useState<Set<string>>(new Set());
     const [events, setEvents] = useState<any[]>([]);
 
     useEffect(() => {
         async function setUp() {
-            setStartTimeNow();
-
             const { data, error } = await supabase.from('event').select('*');
 
             if (error) {
@@ -54,7 +53,24 @@ export default function Search() {
                         馬上動！
                     </button>
                 </section>
-                <section className="flex flex-col gap-4">
+                <section>
+                    <ul className="flex justify-around my-8">
+                        {[
+                            'soccer',
+                            'basketball',
+                            'tennis',
+                            'table tennis',
+                            'badminton',
+                        ].map((sport) => (
+                            <li className="w-1/6" key={sport}>
+                                <button className="w-full border-2 py-2 border-[#aaa]">
+                                    {getSportEmoji(sport)}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+                <section className="flex flex-col gap-4 mb-20">
                     {events.map(({ id, sport, title, time, location }) => (
                         <EventCard
                             key={id}
