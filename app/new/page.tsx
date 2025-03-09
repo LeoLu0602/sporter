@@ -7,6 +7,7 @@ import {
     datetime2str,
     parseCoord,
     explainLevel,
+    calculateAge,
 } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
 import { useRouter } from 'next/navigation';
@@ -125,25 +126,6 @@ export default function New() {
 
         setUp();
     }, [email]);
-
-    function calculateAge(birthday: Date): number {
-        const [by, bm, bd] = [
-            birthday.getFullYear(),
-            birthday.getMonth() + 1, // Month is zero-based, which is fucking stupid.
-            birthday.getDate(),
-        ];
-
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = now.getMonth() + 1; // Gets the month (0-based, so add 1).
-        const d = now.getDate();
-
-        if (m < bm || (m === bm && d < bd)) {
-            return y - by - 1;
-        }
-
-        return y - by;
-    }
 
     function selectSport(sport: string) {
         const age: number = userInfo.birthday
@@ -299,6 +281,7 @@ export default function New() {
                 participant_limit,
                 start_time,
                 end_time,
+                remaining_spots: participant_limit,
             },
         ]);
 
