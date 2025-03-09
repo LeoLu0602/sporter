@@ -25,6 +25,11 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ## Demo
 
+![demo-profile-1](./demo//demo-profile-1.png)
+![demo-profile-2](./demo//demo-profile-2.png)
+![demo-new-1](./demo//demo-new-1.png)
+![demo-new-2](./demo//demo-new-2.png)
+
 ## Technologies
 
 - Frontend: [Next.js](https://nextjs.org/)
@@ -34,9 +39,15 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ## Status
 
-Developing "揪運動". Check out Sportify Wireframe.pdf for more details.
+### Done
 
-![Profile page](./demo/demo2.png)
+- "個人檔案"
+- "揪運動" (most parts)
+
+### Under Development
+
+- "揪運動" - "選擇熱門場地"
+- "找運動"
 
 ## Credits
 
