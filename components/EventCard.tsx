@@ -4,38 +4,43 @@ import { MouseEventHandler } from 'react';
 export default function EventCard({
     sport,
     title,
-    time,
-    length,
+    startTime,
+    endTime,
     location,
     openCard,
 }: {
     sport: string;
     title: string;
-    length: number;
-    time: Date;
+    startTime: Date;
+    endTime: Date;
     location: string;
     openCard: MouseEventHandler<HTMLDivElement>;
 }) {
+    console.log(new Date(startTime).toLocaleString());
+
     return (
         <div
             className="border-2 border-black cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4"
             onClick={openCard}
         >
-            <div className="text-2xl">{getSportEmoji(sport)}</div>
-            <div>
-                <div>{title}</div>
-                <div>📍 {location}</div>
-                <div>
-                    📅{' '}
-                    {new Date(time).toLocaleString('zh-TW', {
-                        dateStyle: 'full',
-                    })}
+            <div className="flex flex-col gap-4">
+                <div className="text-2xl font-bold">
+                    {getSportEmoji(sport)} {title}
                 </div>
                 <div>
-                    🕙{' '}
-                    {new Date(time).toLocaleString('en-US', {
+                    <span className="mr-4">地點:</span>
+                    {location}
+                </div>
+                <div>
+                    {new Date(startTime).toLocaleString('en-US', {
+                        dateStyle: 'short',
                         timeStyle: 'short',
-                    })} ({length} hr)
+                    })}
+                    {' ~ '}
+                    {new Date(endTime).toLocaleString('en-US', {
+                        dateStyle: 'short',
+                        timeStyle: 'short',
+                    })}
                 </div>
             </div>
         </div>

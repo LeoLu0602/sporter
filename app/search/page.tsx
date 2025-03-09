@@ -196,13 +196,20 @@ export default function Search() {
                 </section>
                 <section className="flex flex-col gap-4 mb-20">
                     {events.map(
-                        ({ id, sport, title, time, length, location }) => (
+                        ({
+                            id,
+                            sport,
+                            title,
+                            start_time: startTime,
+                            end_time: endTime,
+                            location,
+                        }) => (
                             <EventCard
                                 key={id}
                                 sport={sport}
                                 title={title}
-                                time={time}
-                                length={length}
+                                startTime={startTime}
+                                endTime={endTime}
                                 location={location}
                                 openCard={() => {
                                     openCard(id);
