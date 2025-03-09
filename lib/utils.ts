@@ -85,3 +85,22 @@ export function parseCoord(coord: string): { lat: number; lng: number } | null {
 
     return { lat, lng };
 }
+
+export function calculateAge(birthday: Date): number {
+    const [by, bm, bd] = [
+        birthday.getFullYear(),
+        birthday.getMonth() + 1, // Month is zero-based, which is fucking stupid.
+        birthday.getDate(),
+    ];
+
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = now.getMonth() + 1; // Gets the month (0-based, so add 1).
+    const d = now.getDate();
+
+    if (m < bm || (m === bm && d < bd)) {
+        return y - by - 1;
+    }
+
+    return y - by;
+}
