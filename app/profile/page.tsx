@@ -1,7 +1,7 @@
 'use client';
 
 import { useEmail } from '@/context/Context';
-import { datetime2str, supabase } from '@/lib/utils';
+import { date2str, supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -35,6 +35,8 @@ export default function Profile() {
         tennisLevel: 0,
     });
     const [option, setOption] = useState<'info' | 'levels'>('info');
+    const now: Date = new Date();
+    const todayStr: string = date2str(now);
 
     useEffect(() => {
         async function setUp() {
@@ -304,6 +306,7 @@ export default function Profile() {
                         <input
                             type="date"
                             name="birthday"
+                            max={todayStr}
                             value={
                                 info.birthday
                                     ? info.birthday.getFullYear().toString() +
