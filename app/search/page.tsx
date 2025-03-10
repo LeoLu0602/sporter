@@ -178,7 +178,7 @@ export default function Search() {
                     </button>
                 </section>
                 <section>
-                    <ul className="flex justify-around my-8">
+                    <ul className="flex justify-around flex-wrap my-8">
                         {[
                             'soccer',
                             'basketball',
@@ -186,12 +186,15 @@ export default function Search() {
                             'table tennis',
                             'badminton',
                         ].map((sport) => (
-                            <li className="w-1/5" key={sport}>
+                            <li key={sport}>
                                 <button
-                                    className={clsx('w-full py-2', {
-                                        'border-emerald-600 border-2 box-border':
-                                            chosenSport === sport,
-                                    })}
+                                    className={clsx(
+                                        'w-full py-1 px-4 border-2 border-[#aaa] box-border',
+                                        {
+                                            'border-emerald-500 bg-emerald-500':
+                                                chosenSport === sport,
+                                        }
+                                    )}
                                     onClick={() => {
                                         clickOnSport(sport);
                                     }}
