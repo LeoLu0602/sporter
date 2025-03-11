@@ -4,7 +4,6 @@ import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
 import { useEmail } from '@/context/Context';
 import { EventType, supabase } from '@/lib/utils';
-import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 export default function Event() {
@@ -155,6 +154,7 @@ export default function Event() {
                             location,
                         }) => (
                             <EventCard
+                                key={id}
                                 isOwner={eventEmail === email}
                                 sport={sport!}
                                 title={title}

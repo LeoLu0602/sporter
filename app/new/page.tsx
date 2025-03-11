@@ -287,7 +287,7 @@ export default function New() {
             return;
         }
 
-        window.location.replace('/search');
+        window.location.replace('/event');
     }
 
     function openMap() {
