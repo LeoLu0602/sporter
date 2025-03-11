@@ -23,7 +23,7 @@ export default function EventCard({
         <div
             className={clsx(
                 'border-2 border-black cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4',
-                { 'bg-sky-500 border-sky-500': isOwner }
+                { 'bg-sky-300 border-sky-300': isOwner }
             )}
             onClick={openCard}
         >
