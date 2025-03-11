@@ -463,7 +463,7 @@ export default function New() {
                                         value={endTime}
                                         onChange={(newDateVal) => {
                                             if (newDateVal) {
-                                                setStartTime(newDateVal);
+                                                setEndTime(newDateVal);
                                             }
                                         }}
                                     />
