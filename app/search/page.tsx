@@ -138,6 +138,10 @@ export default function Search() {
 
     function setStartTimeNow() {
         setStartTime(new Date());
+
+        if (chosenSport) {
+            searchEvents(chosenSport, new Date());
+        }
     }
 
     function clickOnSport(sport: string) {
