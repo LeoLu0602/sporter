@@ -268,6 +268,7 @@ export default function New() {
             {
                 email,
                 sport,
+                title,
                 gender,
                 age_min,
                 age_max,
