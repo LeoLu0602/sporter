@@ -158,7 +158,7 @@ export default function Profile() {
                 {
                     username,
                     gender,
-                    birthday,
+                    birthday: birthday.format('YYYY-MM-DD'),
                     distance,
                     intro,
                     badminton_level,
@@ -177,7 +177,7 @@ export default function Profile() {
             return;
         }
 
-        alert('Saved!');
+        alert('儲存成功!');
     }
 
     function changeOption(option: 'info' | 'levels') {
