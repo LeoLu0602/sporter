@@ -10,7 +10,7 @@ export default function EventDetails({
     join: () => void;
 }) {
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-[#f2f4f7] p-4">
+        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-4">
             <div className="flex flex-col gap-8">
                 <div className="flex gap-4 text-2xl font-bold">
                     <div>{getSportEmoji(details!.sport!)}</div>
@@ -49,13 +49,13 @@ export default function EventDetails({
             </div>
             <div className="flex gap-8">
                 <button
-                    className="mt-8 border-2 border-black px-4 py-2 rounded-xl bg-[#f2f4f7]"
+                    className="mt-8 px-4 py-2 rounded-xl text-white font-bold bg-emerald-500"
                     onClick={hideDetails}
                 >
                     返回
                 </button>
                 <button
-                    className="mt-8 border-2 border-black px-4 py-2 rounded-xl bg-[#f2f4f7]"
+                    className="mt-8 px-4 py-2 rounded-xl bg-sky-500 font-bold text-white"
                     onClick={join}
                 >
                     +1
