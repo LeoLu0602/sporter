@@ -14,6 +14,7 @@ export default function Event() {
 
     useEffect(() => {
         async function setUp() {
+            // Get user id with email.
             const { data: data1, error: error1 } = await supabase
                 .from('user')
                 .select('*')
@@ -32,6 +33,7 @@ export default function Event() {
 
             setUserId(data1[0].id);
 
+            // Get the events user joined.
             const { data: data2, error: error2 } = await supabase
                 .from('participant')
                 .select('*')
@@ -48,11 +50,11 @@ export default function Event() {
                 return;
             }
 
-            const eventIds = data2.map(({ event_id }) => event_id);
+            // Get events user started.
             const { data: data3, error: error3 } = await supabase
                 .from('event')
                 .select('*')
-                .in('id', eventIds);
+                .eq('email', email);
 
             if (error3) {
                 alert('Error!');
@@ -65,12 +67,34 @@ export default function Event() {
                 return;
             }
 
-            data3.sort(
+            const eventIds = [
+                ...data2.map(({ event_id }) => event_id),
+                ...data3.map(({ id }) => id),
+            ];
+
+            // Get events from event ids.
+            const { data: data4, error: error4 } = await supabase
+                .from('event')
+                .select('*')
+                .in('id', eventIds);
+
+            if (error4) {
+                alert('Error!');
+                console.error(error4);
+
+                return;
+            }
+
+            if (data4.length === 0) {
+                return;
+            }
+
+            data4.sort(
                 (a: { start_time: Date }, b: { start_time: Date }) =>
                     new Date(a.start_time).getTime() -
                     new Date(b.start_time).getTime()
             );
-            setEvents(data3);
+            setEvents(data4);
         }
 
         setUp();
