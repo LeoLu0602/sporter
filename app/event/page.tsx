@@ -13,9 +13,7 @@ export default function Event() {
                     <li>歷史記錄</li>
                 </ul>
             </nav>
-            <main>
-                <Map />
-            </main>
+            <main></main>
         </>
     );
 }
