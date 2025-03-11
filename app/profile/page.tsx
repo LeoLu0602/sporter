@@ -107,7 +107,7 @@ export default function Profile() {
                 setInfo((oldVal) => {
                     return {
                         ...oldVal,
-                        name: e.target.value,
+                        username: e.target.value,
                     };
                 });
                 break;
