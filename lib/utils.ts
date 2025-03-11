@@ -62,20 +62,6 @@ export function datetime2str(datetime: Date | null): string {
     );
 }
 
-export function date2str(date: Date | null): string {
-    if (!date) {
-        return '';
-    }
-
-    return (
-        date.getFullYear().toString() +
-        '-' +
-        (date.getMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        date.getDate().toString().padStart(2, '0')
-    );
-}
-
 export function parseCoord(coord: string): { lat: number; lng: number } | null {
     const [lat, lng] = coord.replace(/[()]/g, '').split(',').map(parseFloat);
 
