@@ -233,7 +233,7 @@ export default function Search() {
                     </DemoContainer>
                 </LocalizationProvider>
                 <section>
-                    <ul className="flex justify-center gap-1 flex-wrap my-8">
+                    <ul className="flex justify-around flex-wrap my-8">
                         {[
                             'soccer',
                             'basketball',
@@ -244,10 +244,12 @@ export default function Search() {
                             <li key={sport}>
                                 <button
                                     className={clsx(
-                                        'w-full py-2 px-4 border-2 border-[#aaa] box-border',
+                                        'w-full py-4 px-4 border-2 box-border',
                                         {
                                             'border-emerald-500 bg-emerald-500':
                                                 chosenSport === sport,
+                                            'border-[#aaa]':
+                                                chosenSport !== sport,
                                         }
                                     )}
                                     onClick={() => {
