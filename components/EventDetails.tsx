@@ -7,7 +7,7 @@ export default function EventDetails({
 }: {
     details: EventType | null;
     hideDetails: () => void;
-    join: () => void;
+    join: (() => void) | null;
 }) {
     return (
         <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-4">
@@ -54,12 +54,14 @@ export default function EventDetails({
                 >
                     返回
                 </button>
-                <button
-                    className="mt-8 px-4 py-2 rounded-xl bg-sky-500 font-bold text-white"
-                    onClick={join}
-                >
-                    +1
-                </button>
+                {join && (
+                    <button
+                        className="mt-8 px-4 py-2 rounded-xl bg-sky-500 font-bold text-white"
+                        onClick={join}
+                    >
+                        +1
+                    </button>
+                )}
             </div>
         </div>
     );
