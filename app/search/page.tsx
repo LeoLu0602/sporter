@@ -223,7 +223,6 @@ export default function Search() {
                         }}
                     />
                 )}
-
                 <section className="flex justify-center gap-4 mb-8">
                     <input
                         type="datetime-local"
@@ -238,7 +237,7 @@ export default function Search() {
                     </button>
                 </section>
                 <section>
-                    <ul className="flex justify-around flex-wrap my-8">
+                    <ul className="flex justify-center gap-1 flex-wrap my-8">
                         {[
                             'soccer',
                             'basketball',
@@ -249,7 +248,7 @@ export default function Search() {
                             <li key={sport}>
                                 <button
                                     className={clsx(
-                                        'w-full py-1 px-4 border-2 border-[#aaa] box-border',
+                                        'w-full py-2 px-4 border-2 border-[#aaa] box-border',
                                         {
                                             'border-emerald-500 bg-emerald-500':
                                                 chosenSport === sport,
