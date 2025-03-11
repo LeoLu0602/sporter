@@ -125,7 +125,12 @@ export default function Search() {
                         new Date(a.start_time).getTime() -
                         new Date(b.start_time).getTime()
                 );
-                setEvents(data);
+                setEvents(
+                    data.filter(
+                        ({ email: eventEmail }: { email: string }) =>
+                            eventEmail !== email
+                    )
+                );
             });
         } else {
             alert('Geolocation is not available');
@@ -244,10 +249,14 @@ export default function Search() {
                         ].map((sport) => (
                             <li key={sport}>
                                 <button
-                                    className={clsx('w-full py-4 px-4 rounded-xl', {
-                                        'bg-emerald-400': chosenSport === sport,
-                                        'bg-[#ddd]': chosenSport !== sport,
-                                    })}
+                                    className={clsx(
+                                        'w-full py-4 px-4 rounded-xl',
+                                        {
+                                            'bg-emerald-400':
+                                                chosenSport === sport,
+                                            'bg-[#ddd]': chosenSport !== sport,
+                                        }
+                                    )}
                                     onClick={() => {
                                         clickOnSport(sport);
                                     }}
@@ -272,6 +281,7 @@ export default function Search() {
                             // That's why ! is used here.
                             <EventCard
                                 key={id}
+                                isOwner={false}
                                 sport={sport!}
                                 title={title}
                                 startTime={start_time!}
