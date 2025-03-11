@@ -4,19 +4,18 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import {
     supabase,
     getSportEmoji,
-    datetime2str,
     parseCoord,
     explainLevel,
     calculateAge,
 } from '@/lib/utils';
 import { useEmail } from '@/context/Context';
-import { useRouter } from 'next/navigation';
 import Slider from '@mui/material/Slider';
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import MapContainer from '@/components/MapContainer';
 
 export default function New() {
     const email = useEmail();
@@ -74,6 +73,7 @@ export default function New() {
     });
     const [startTime, setStartTime] = useState<Dayjs>(dayjs());
     const [endTime, setEndTime] = useState<Dayjs>(dayjs());
+    const [showMap, setShowMap] = useState<boolean>(false);
 
     useEffect(() => {
         async function setUp() {
@@ -290,12 +290,33 @@ export default function New() {
         window.location.replace('/search');
     }
 
+    function openMap() {
+        setShowMap(true);
+    }
+
+    function closeMap() {
+        setShowMap(false);
+    }
+
     return (
         <>
             <header>
                 <h1 className="text-center p-8 text-2xl font-bold">揪運動</h1>
             </header>
             <main className="px-4">
+                {showMap && (
+                    <div className="fixed left-0 top-0 w-full h-screen z-50">
+                        <MapContainer
+                            setLatLng={({ lat, lng }) => {
+                                setCoordinate(`(${lat},${lng})`);
+                                setEventInfo((oldVal) => {
+                                    return { ...oldVal, lat, lng };
+                                });
+                            }}
+                            closeMap={closeMap}
+                        />
+                    </div>
+                )}
                 {sport === null && (
                     <section className="flex flex-wrap justify-between gap-8 mb-24">
                         {[
@@ -397,8 +418,13 @@ export default function New() {
                         </section>
                         <section>
                             <label className="font-bold block">
-                                <span className="text-emerald-600 cursor-pointer">
-                                    選擇熱門場地
+                                <span
+                                    className="text-emerald-600 cursor-pointer"
+                                    onClick={() => {
+                                        openMap();
+                                    }}
+                                >
+                                    開啟地圖
                                 </span>{' '}
                                 or 輸入座標 (經度，緯度)
                             </label>
