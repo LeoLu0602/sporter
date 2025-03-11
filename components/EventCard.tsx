@@ -1,7 +1,9 @@
 import { getSportEmoji } from '@/lib/utils';
+import clsx from 'clsx';
 import { MouseEventHandler } from 'react';
 
 export default function EventCard({
+    isOwner = false,
     sport,
     title,
     startTime,
@@ -9,6 +11,7 @@ export default function EventCard({
     location,
     openCard,
 }: {
+    isOwner: boolean;
     sport: string;
     title: string;
     startTime: Date;
@@ -18,7 +21,10 @@ export default function EventCard({
 }) {
     return (
         <div
-            className="border-2 border-black cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4"
+            className={clsx(
+                'border-2 border-black cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4',
+                { 'bg-orange-500': isOwner }
+            )}
             onClick={openCard}
         >
             <div className="flex flex-col gap-4">
