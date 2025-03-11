@@ -12,10 +12,14 @@ import {
 import { useEmail } from '@/context/Context';
 import { useRouter } from 'next/navigation';
 import Slider from '@mui/material/Slider';
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 export default function New() {
     const email = useEmail();
-    const router = useRouter();
     const [sport, setSport] = useState<string | null>(null);
     const [coordinate, setCoordinate] = useState<string>('');
     const [ages, setAges] = useState<number[]>([0, 100]);
@@ -55,9 +59,6 @@ export default function New() {
         lng: number | null;
         location: string;
         participantLimit: number;
-        startTime: Date | null;
-        endTime: Date | null;
-        length: number;
     }>({
         sport: null,
         title: '未命名',
@@ -70,10 +71,9 @@ export default function New() {
         lng: null,
         location: '',
         participantLimit: 1,
-        startTime: null,
-        endTime: null,
-        length: 2,
     });
+    const [startTime, setStartTime] = useState<Dayjs>(dayjs());
+    const [endTime, setEndTime] = useState<Dayjs>(dayjs());
 
     useEffect(() => {
         async function setUp() {
@@ -155,9 +155,6 @@ export default function New() {
             lng: null,
             location: '',
             participantLimit: 1,
-            startTime: null,
-            endTime: null,
-            length: 2,
         });
         setCoordinate('');
         setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
@@ -261,8 +258,6 @@ export default function New() {
             lng,
             location,
             participantLimit: participant_limit,
-            startTime: start_time,
-            endTime: end_time,
         } = eventInfo;
 
         const { error } = await supabase.from('event').insert([
@@ -279,9 +274,9 @@ export default function New() {
                 lng,
                 location,
                 participant_limit,
-                start_time,
-                end_time,
                 remaining_spots: participant_limit,
+                start_time: startTime,
+                end_time: endTime,
             },
         ]);
 
@@ -446,32 +441,35 @@ export default function New() {
                                 +
                             </button>
                         </section>
-                        <section>
-                            <label className="font-bold mr-4 mb-4 block">
-                                開始時間:
-                            </label>
-                            <div className="flex gap-4 items-center">
-                                <input
-                                    type="datetime-local"
-                                    name="startTime"
-                                    value={datetime2str(eventInfo.startTime)}
-                                    onChange={handleEventInfoChange}
-                                />
-                            </div>
-                        </section>
-                        <section>
-                            <label className="font-bold mr-4 mb-4 block">
-                                結束時間:
-                            </label>
-                            <div className="flex gap-4 items-center">
-                                <input
-                                    type="datetime-local"
-                                    name="endTime"
-                                    value={datetime2str(eventInfo.endTime)}
-                                    onChange={handleEventInfoChange}
-                                />
-                            </div>
-                        </section>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer
+                                components={[
+                                    'MobileDateTimePicker',
+                                    'MobileDateTimePicker',
+                                ]}
+                            >
+                                <DemoItem label="開始時間">
+                                    <MobileDateTimePicker
+                                        value={startTime}
+                                        onChange={(newDateVal) => {
+                                            if (newDateVal) {
+                                                setStartTime(newDateVal);
+                                            }
+                                        }}
+                                    />
+                                </DemoItem>
+                                <DemoItem label="結束時間">
+                                    <MobileDateTimePicker
+                                        value={endTime}
+                                        onChange={(newDateVal) => {
+                                            if (newDateVal) {
+                                                setStartTime(newDateVal);
+                                            }
+                                        }}
+                                    />
+                                </DemoItem>
+                            </DemoContainer>
+                        </LocalizationProvider>
                         <button
                             className="px-8 py-2 bg-emerald-600 font-bold text-white"
                             onClick={() => {
@@ -483,9 +481,7 @@ export default function New() {
                         {email !== null &&
                         sport !== null &&
                         eventInfo.lat !== null &&
-                        eventInfo.lng !== null &&
-                        eventInfo.startTime !== null &&
-                        eventInfo.endTime !== null ? (
+                        eventInfo.lng !== null ? (
                             <button
                                 className="px-8 py-2 bg-sky-600 font-bold text-white"
                                 onClick={() => {
