@@ -47,18 +47,20 @@ export default function EventDetails({
                     {details!.participant_limit}
                 </div>
             </div>
-            <button
-                className="absolute right-4 bottom-4 border-2 border-black px-4 py-2 rounded-xl bg-[#f2f4f7]"
-                onClick={join}
-            >
-                +1
-            </button>
-            <button
-                className="absolute left-4 bottom-4 border-2 border-black px-4 py-2 rounded-xl bg-[#f2f4f7]"
-                onClick={hideDetails}
-            >
-                返回
-            </button>
+            <div className="flex gap-8">
+                <button
+                    className="mt-8 border-2 border-black px-4 py-2 rounded-xl bg-[#f2f4f7]"
+                    onClick={hideDetails}
+                >
+                    返回
+                </button>
+                <button
+                    className="mt-8 border-2 border-black px-4 py-2 rounded-xl bg-[#f2f4f7]"
+                    onClick={join}
+                >
+                    +1
+                </button>
+            </div>
         </div>
     );
 }
