@@ -86,7 +86,8 @@ export default function Event() {
 
     async function leave(userId: string, eventId: string) {
         // User is the one who starts the event.
-        if (eventDetails?.email ?? null === email) {
+        // === has the higher precedence than ??
+        if ((eventDetails?.email ?? '') === email) {
             return;
         }
 
