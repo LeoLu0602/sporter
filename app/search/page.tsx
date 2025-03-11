@@ -5,7 +5,6 @@ import EventDetails from '@/components/EventDetails';
 import { useEmail } from '@/context/Context';
 import {
     calculateAge,
-    datetime2str,
     EventType,
     getSportEmoji,
     supabase,
@@ -13,14 +12,19 @@ import {
 } from '@/lib/utils';
 import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 export default function Search() {
     const email = useEmail();
-    const [startTime, setStartTime] = useState<Date>(new Date());
     const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<EventType[]>([]);
     const [userInfo, setUserInfo] = useState<UserType | null>(null);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
+    const [startTime, setStartTime] = useState<Dayjs>(dayjs());
 
     useEffect(() => {
         async function setUp() {
@@ -128,25 +132,9 @@ export default function Search() {
         }
     }
 
-    function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
-        setStartTime(new Date(e.target.value));
-
-        if (chosenSport) {
-            searchEvents(chosenSport, new Date(e.target.value));
-        }
-    }
-
-    function setStartTimeNow() {
-        setStartTime(new Date());
-
-        if (chosenSport) {
-            searchEvents(chosenSport, new Date());
-        }
-    }
-
     function clickOnSport(sport: string) {
         setChosenSport(sport);
-        searchEvents(sport, startTime);
+        searchEvents(sport, startTime.toDate());
     }
 
     function seeMoreDetails(id: string) {
@@ -223,19 +211,27 @@ export default function Search() {
                         }}
                     />
                 )}
-                <section className="flex justify-center gap-4 mb-8">
-                    <input
-                        type="datetime-local"
-                        value={datetime2str(startTime)}
-                        onChange={handleStartTimeChange}
-                    />
-                    <button
-                        className="text-emerald-600 font-bold"
-                        onClick={setStartTimeNow}
-                    >
-                        現在動！
-                    </button>
-                </section>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['MobileDateTimePicker']}>
+                        <DemoItem label="">
+                            <MobileDateTimePicker
+                                value={startTime}
+                                onChange={(newDateVal) => {
+                                    if (newDateVal) {
+                                        setStartTime(newDateVal);
+
+                                        if (chosenSport) {
+                                            searchEvents(
+                                                chosenSport,
+                                                newDateVal.toDate()
+                                            );
+                                        }
+                                    }
+                                }}
+                            />
+                        </DemoItem>
+                    </DemoContainer>
+                </LocalizationProvider>
                 <section>
                     <ul className="flex justify-center gap-1 flex-wrap my-8">
                         {[

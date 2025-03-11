@@ -1,7 +1,7 @@
 'use client';
 
 import { useEmail } from '@/context/Context';
-import { date2str, supabase } from '@/lib/utils';
+import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
