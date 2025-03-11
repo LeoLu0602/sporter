@@ -4,10 +4,12 @@ export default function EventDetails({
     details,
     hideDetails,
     join,
+    leave,
 }: {
     details: EventType | null;
     hideDetails: () => void;
     join: (() => void) | null;
+    leave: (() => void) | null;
 }) {
     return (
         <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-4">
@@ -60,6 +62,14 @@ export default function EventDetails({
                         onClick={join}
                     >
                         +1
+                    </button>
+                )}
+                {leave && (
+                    <button
+                        className="mt-8 px-4 py-2 rounded-xl bg-rose-500 font-bold text-white"
+                        onClick={leave}
+                    >
+                        -1
                     </button>
                 )}
             </div>

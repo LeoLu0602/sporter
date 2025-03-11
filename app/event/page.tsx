@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 export default function Event() {
     const email = useEmail();
+    const [userId, setUserId] = useState<string | null>(null);
     const [events, setEvents] = useState<EventType[]>([]);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
 
@@ -28,6 +29,8 @@ export default function Event() {
             if (data1.length === 0) {
                 return;
             }
+
+            setUserId(data1[0].id);
 
             const { data: data2, error: error2 } = await supabase
                 .from('participant')
@@ -62,6 +65,11 @@ export default function Event() {
                 return;
             }
 
+            data3.sort(
+                (a: { start_time: Date }, b: { start_time: Date }) =>
+                    new Date(a.start_time).getTime() -
+                    new Date(b.start_time).getTime()
+            );
             setEvents(data3);
         }
 
@@ -76,6 +84,38 @@ export default function Event() {
         setEventDetails(null);
     }
 
+    async function leave(userId: string, eventId: string) {
+        const { error: error1 } = await supabase
+            .from('participant')
+            .delete()
+            .eq('user_id', userId)
+            .eq('event_id', eventId);
+
+        if (error1) {
+            alert('Error!');
+            console.error(error1);
+
+            return;
+        }
+
+        const { error: error2 } = await supabase.rpc(
+            'increment_remaining_spots',
+            {
+                event_id: eventId,
+                x: 1,
+            }
+        );
+
+        if (error2) {
+            alert('Error!');
+            console.error(error2);
+
+            return;
+        }
+
+        window.location.reload();
+    }
+
     return (
         <>
             <header>
@@ -86,6 +126,11 @@ export default function Event() {
                     <EventDetails
                         details={eventDetails}
                         join={null}
+                        leave={() => {
+                            if (userId) {
+                                leave(userId, eventDetails.id);
+                            }
+                        }}
                         hideDetails={() => {
                             hideDetails();
                         }}

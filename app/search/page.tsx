@@ -206,6 +206,7 @@ export default function Search() {
                                 joinEvent(userInfo.id, eventDetails.id);
                             }
                         }}
+                        leave={null}
                         hideDetails={() => {
                             hideDetails();
                         }}
