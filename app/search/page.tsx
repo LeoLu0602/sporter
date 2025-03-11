@@ -244,15 +244,10 @@ export default function Search() {
                         ].map((sport) => (
                             <li key={sport}>
                                 <button
-                                    className={clsx(
-                                        'w-full py-4 px-4 border-2 box-border',
-                                        {
-                                            'border-emerald-500 bg-emerald-500':
-                                                chosenSport === sport,
-                                            'border-[#aaa]':
-                                                chosenSport !== sport,
-                                        }
-                                    )}
+                                    className={clsx('w-full py-4 px-4 rounded-xl', {
+                                        'bg-emerald-400': chosenSport === sport,
+                                        'bg-[#ddd]': chosenSport !== sport,
+                                    })}
                                     onClick={() => {
                                         clickOnSport(sport);
                                     }}
