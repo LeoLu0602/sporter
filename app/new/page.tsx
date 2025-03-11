@@ -246,6 +246,10 @@ export default function New() {
     }
 
     async function createNewEvent() {
+        if (!email || !eventInfo.lat || !eventInfo.lng) {
+            return;
+        }
+
         const {
             sport,
             title,
@@ -264,7 +268,6 @@ export default function New() {
             {
                 email,
                 sport,
-                title,
                 gender,
                 age_min,
                 age_max,
@@ -504,21 +507,14 @@ export default function New() {
                         >
                             取消
                         </button>
-                        {email !== null &&
-                        sport !== null &&
-                        eventInfo.lat !== null &&
-                        eventInfo.lng !== null ? (
-                            <button
-                                className="px-8 py-2 bg-sky-600 font-bold text-white"
-                                onClick={() => {
-                                    createNewEvent();
-                                }}
-                            >
-                                確認送出
-                            </button>
-                        ) : (
-                            <></>
-                        )}
+                        <button
+                            className="px-8 py-2 bg-sky-600 font-bold text-white"
+                            onClick={() => {
+                                createNewEvent();
+                            }}
+                        >
+                            確認送出
+                        </button>
                     </section>
                 )}
             </main>
