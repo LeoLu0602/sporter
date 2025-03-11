@@ -239,7 +239,7 @@ export default function Profile() {
                     })}
                 >
                     <section>
-                        <span className="mr-4 outline-none">Email:</span>
+                        <span className="mr-4 outline-none decoration-transparent">Email:</span>
                         {email && (
                             <>
                                 <span className="no-underline">{email}</span>
