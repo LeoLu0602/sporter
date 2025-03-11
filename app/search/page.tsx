@@ -117,8 +117,9 @@ export default function Search() {
                 }
 
                 data.sort(
-                    (a: { time: string }, b: { time: string }) =>
-                        new Date(a.time).getTime() - new Date(b.time).getTime()
+                    (a: { start_time: Date }, b: { start_time: Date }) =>
+                        new Date(a.start_time).getTime() -
+                        new Date(b.start_time).getTime()
                 );
                 setEvents(data);
             });
@@ -153,13 +154,45 @@ export default function Search() {
     }
 
     async function joinEvent(userId: string, eventId: string) {
-        const { error } = await supabase
+        const { data, error: error1 } = await supabase
+            .from('participant')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('event_id', eventId);
+
+        if (error1) {
+            alert('Error!');
+            console.error(error1);
+
+            return;
+        }
+
+        if (data.length > 0) {
+            return;
+        }
+
+        const { error: error2 } = await supabase
             .from('participant')
             .insert([{ user_id: userId, event_id: eventId }]);
 
-        if (error) {
+        if (error2) {
             alert('Error!');
-            console.error(error);
+            console.error(error2);
+
+            return;
+        }
+
+        const { error: error3 } = await supabase.rpc(
+            'increment_remaining_spots',
+            {
+                event_id: eventId,
+                x: -1,
+            }
+        );
+
+        if (error3) {
+            alert('Error!');
+            console.error(error3);
 
             return;
         }
