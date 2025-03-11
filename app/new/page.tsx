@@ -292,7 +292,7 @@ export default function New() {
             return;
         }
 
-        alert('Success!');
+        window.location.replace('/search');
     }
 
     return (
