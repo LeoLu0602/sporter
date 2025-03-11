@@ -6,7 +6,8 @@ export const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 );
 
-export const GOOGLE_MAPS_API_KEY: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
+export const GOOGLE_MAPS_API_KEY: string =
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
 
 export function explainLevel(level: number): string {
     switch (level) {
@@ -77,6 +78,7 @@ export function calculateAge(birthday: Date): number {
 
 export interface EventType {
     id: string;
+    email: string;
     sport: string | null;
     title: string;
     gender: number; // 1: male, 2: female, 3: any
