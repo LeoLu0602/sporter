@@ -1,12 +1,15 @@
 'use client';
 
 import EventCard from '@/components/EventCard';
+import EventDetails from '@/components/EventDetails';
 import { useEmail } from '@/context/Context';
 import {
     calculateAge,
     datetime2str,
+    EventType,
     getSportEmoji,
     supabase,
+    UserType,
 } from '@/lib/utils';
 import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -15,30 +18,9 @@ export default function Search() {
     const email = useEmail();
     const [startTime, setStartTime] = useState<Date>(new Date());
     const [chosenSport, setChosenSport] = useState<string | null>(null);
-    const [events, setEvents] = useState<any[]>([]);
-    const [userInfo, setUserInfo] = useState<{
-        username: string;
-        gender: number; // 1: male, 2: female, 3: any
-        birthday: Date | null;
-        distance: number;
-        intro: string;
-        badmintonLevel: number;
-        basketballLevel: number;
-        soccerLevel: number;
-        tableTennisLevel: number;
-        tennisLevel: number;
-    }>({
-        username: '',
-        gender: 3,
-        birthday: null,
-        distance: 1000,
-        intro: '',
-        badmintonLevel: 0,
-        basketballLevel: 0,
-        soccerLevel: 0,
-        tableTennisLevel: 0,
-        tennisLevel: 0,
-    });
+    const [events, setEvents] = useState<EventType[]>([]);
+    const [userInfo, setUserInfo] = useState<UserType | null>(null);
+    const [eventDetails, setEventDetails] = useState<EventType | null>(null);
 
     useEffect(() => {
         async function setUp() {
@@ -59,16 +41,17 @@ export default function Search() {
             }
 
             const {
+                id,
                 username,
                 gender,
                 birthday,
                 distance,
                 intro,
-                badminton_level: badmintonLevel,
-                basketball_level: basketballLevel,
-                soccer_level: soccerLevel,
-                table_tennis_level: tableTennisLevel,
-                tennis_level: tennisLevel,
+                badminton_level,
+                basketball_level,
+                soccer_level,
+                table_tennis_level,
+                tennis_level,
             } = data[0];
 
             const [y, m, d] = birthday
@@ -76,16 +59,17 @@ export default function Search() {
                 .map((str: string) => parseInt(str));
 
             setUserInfo({
+                id,
                 username,
                 gender,
                 birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
                 distance,
                 intro,
-                badmintonLevel,
-                basketballLevel,
-                soccerLevel,
-                tableTennisLevel,
-                tennisLevel,
+                badminton_level,
+                basketball_level,
+                soccer_level,
+                table_tennis_level,
+                tennis_level,
             });
         }
 
@@ -93,18 +77,22 @@ export default function Search() {
     }, [email]);
 
     async function searchEvents(chosenSport: string, startTime: Date) {
+        if (!userInfo) {
+            return;
+        }
+
         setEvents([]);
 
         const level: number =
             chosenSport === 'soccer'
-                ? userInfo.soccerLevel
+                ? userInfo.soccer_level
                 : chosenSport === 'basketball'
-                  ? userInfo.basketballLevel
+                  ? userInfo.basketball_level
                   : chosenSport === 'tennis'
-                    ? userInfo.tennisLevel
+                    ? userInfo.tennis_level
                     : chosenSport === 'table tennis'
-                      ? userInfo.tableTennisLevel
-                      : userInfo.badmintonLevel;
+                      ? userInfo.table_tennis_level
+                      : userInfo.badminton_level;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
@@ -156,7 +144,28 @@ export default function Search() {
         searchEvents(sport, startTime);
     }
 
-    function openCard(id: string) {}
+    function seeMoreDetails(id: string) {
+        setEventDetails(events.find((event) => event.id === id) ?? null);
+    }
+
+    function hideDetails() {
+        setEventDetails(null);
+    }
+
+    async function joinEvent(userId: string, eventId: string) {
+        const { error } = await supabase
+            .from('participant')
+            .insert([{ user_id: userId, event_id: eventId }]);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return;
+        }
+
+        window.location.replace('/event');
+    }
 
     return (
         <>
@@ -164,6 +173,20 @@ export default function Search() {
                 <h1 className="text-center p-8 text-2xl font-bold">找運動</h1>
             </header>
             <main className="text-xl px-4 pb-20">
+                {eventDetails && (
+                    <EventDetails
+                        details={eventDetails}
+                        join={() => {
+                            if (userInfo) {
+                                joinEvent(userInfo.id, eventDetails.id);
+                            }
+                        }}
+                        hideDetails={() => {
+                            hideDetails();
+                        }}
+                    />
+                )}
+
                 <section className="flex justify-center gap-4 mb-8">
                     <input
                         type="datetime-local"
@@ -174,7 +197,7 @@ export default function Search() {
                         className="text-emerald-600 font-bold"
                         onClick={setStartTimeNow}
                     >
-                        馬上動！
+                        現在動！
                     </button>
                 </section>
                 <section>
@@ -211,19 +234,21 @@ export default function Search() {
                             id,
                             sport,
                             title,
-                            start_time: startTime,
-                            end_time: endTime,
+                            start_time,
+                            end_time,
                             location,
                         }) => (
+                            // Each column in event table is not nullable.
+                            // That's why ! is used here.
                             <EventCard
                                 key={id}
-                                sport={sport}
+                                sport={sport!}
                                 title={title}
-                                startTime={startTime}
-                                endTime={endTime}
+                                startTime={start_time!}
+                                endTime={end_time!}
                                 location={location}
                                 openCard={() => {
-                                    openCard(id);
+                                    seeMoreDetails(id);
                                 }}
                             />
                         )

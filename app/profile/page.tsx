@@ -239,7 +239,7 @@ export default function Profile() {
                     })}
                 >
                     <section>
-                        <h2 className="font-bold inline mr-4">Email:</h2>
+                        <span className="mr-4">Email:</span>
                         {email && (
                             <>
                                 <span className="no-underline">{email}</span>
@@ -253,7 +253,7 @@ export default function Profile() {
                         )}
                     </section>
                     <section>
-                        <label className="font-bold w-full focus:outline-none mr-4">
+                        <label className="w-full focus:outline-none mr-4">
                             名稱:
                         </label>
                         <input
@@ -265,7 +265,7 @@ export default function Profile() {
                         />
                     </section>
                     <section className="flex gap-4">
-                        <h2 className="font-bold">性別:</h2>
+                        <span>性別:</span>
                         <section>
                             <input
                                 type="radio"
@@ -298,7 +298,7 @@ export default function Profile() {
                         </section>
                     </section>
                     <section>
-                        <label className="font-bold mr-4 bg-transparent appearance-none">
+                        <label className="mr-4 bg-transparent appearance-none">
                             生日:
                         </label>
                         <input
@@ -323,7 +323,7 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <label className="font-bold mr-4">距離偏好:</label>
+                        <label className="mr-4">距離偏好:</label>
                         <span>
                             {info.distance >= 1000
                                 ? Math.floor(info.distance / 1000).toString() +
@@ -364,9 +364,9 @@ export default function Profile() {
                     })}
                 >
                     <section>
-                        <h2 className="text-2xl">
+                        <span className="text-2xl">
                             ⚽ {explainLevel(info.soccerLevel)}
-                        </h2>
+                        </span>
                         <LevelBar
                             level={info.soccerLevel}
                             chooseLevel={(i) => {
@@ -380,9 +380,9 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <h2 className="text-2xl">
+                        <span className="text-2xl">
                             🏀 {explainLevel(info.basketballLevel)}
-                        </h2>
+                        </span>
                         <LevelBar
                             level={info.basketballLevel}
                             chooseLevel={(i) => {
@@ -396,9 +396,9 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <h2 className="text-2xl">
+                        <span className="text-2xl">
                             🎾 {explainLevel(info.tennisLevel)}
-                        </h2>
+                        </span>
                         <LevelBar
                             level={info.tennisLevel}
                             chooseLevel={(i) => {
@@ -412,9 +412,9 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <h2 className="text-2xl">
+                        <span className="text-2xl">
                             🏓 {explainLevel(info.tableTennisLevel)}
-                        </h2>
+                        </span>
                         <LevelBar
                             level={info.tableTennisLevel}
                             chooseLevel={(i) => {
@@ -428,9 +428,9 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <h2 className="text-2xl">
+                        <span className="text-2xl">
                             🏸 {explainLevel(info.badmintonLevel)}
-                        </h2>
+                        </span>
                         <LevelBar
                             level={info.badmintonLevel}
                             chooseLevel={(i) => {
