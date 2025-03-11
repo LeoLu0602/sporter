@@ -327,7 +327,7 @@ export default function New() {
                             'badminton',
                         ].map((sport) => (
                             <button
-                                className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center border-black border-4 bg-white text-6xl"
+                                className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center bg-[#ddd] text-6xl"
                                 key={sport}
                                 onClick={() => {
                                     selectSport(sport);
