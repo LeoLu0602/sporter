@@ -246,10 +246,6 @@ export default function New() {
     }
 
     async function createNewEvent() {
-        if (!email || !eventInfo.lat || !eventInfo.lng) {
-            return;
-        }
-
         const {
             sport,
             title,

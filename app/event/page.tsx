@@ -46,10 +46,6 @@ export default function Event() {
                 return;
             }
 
-            if (data2.length === 0) {
-                return;
-            }
-
             // Get events user started.
             const { data: data3, error: error3 } = await supabase
                 .from('event')
@@ -60,10 +56,6 @@ export default function Event() {
                 alert('Error!');
                 console.error(error3);
 
-                return;
-            }
-
-            if (data3.length === 0) {
                 return;
             }
 
@@ -82,10 +74,6 @@ export default function Event() {
                 alert('Error!');
                 console.error(error4);
 
-                return;
-            }
-
-            if (data4.length === 0) {
                 return;
             }
 
