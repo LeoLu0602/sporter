@@ -7,6 +7,11 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import LevelBar from '@/components/LevelBar';
 import { explainLevel } from '@/lib/utils';
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function Profile() {
     const email = useEmail();
@@ -14,7 +19,6 @@ export default function Profile() {
     const [info, setInfo] = useState<{
         username: string;
         gender: number;
-        birthday: Date | null;
         distance: number;
         intro: string;
         badmintonLevel: number;
@@ -25,7 +29,6 @@ export default function Profile() {
     }>({
         username: '',
         gender: 3,
-        birthday: null,
         distance: 1000,
         intro: '',
         badmintonLevel: 0,
@@ -35,8 +38,7 @@ export default function Profile() {
         tennisLevel: 0,
     });
     const [option, setOption] = useState<'info' | 'levels'>('info');
-    const now: Date = new Date();
-    const todayStr: string = date2str(now);
+    const [birthday, setBirthday] = useState<Dayjs>(dayjs(''));
 
     useEffect(() => {
         async function setUp() {
@@ -69,14 +71,9 @@ export default function Profile() {
                 tennis_level: tennisLevel,
             } = data[0];
 
-            const [y, m, d] = birthday
-                ?.split('-')
-                .map((str: string) => parseInt(str)) ?? [null, null, null];
-
             setInfo({
                 username,
                 gender,
-                birthday: y ? new Date(y, m - 1, d) : null, // Month is zero-based, which is fucking stupid.
                 distance,
                 intro,
                 badmintonLevel,
@@ -85,6 +82,7 @@ export default function Profile() {
                 tableTennisLevel,
                 tennisLevel,
             });
+            setBirthday(dayjs(birthday));
         }
 
         setUp();
@@ -121,20 +119,6 @@ export default function Profile() {
                     };
                 });
                 break;
-            case 'birthday':
-                setInfo((oldVal) => {
-                    if (e.target.value === '') {
-                        return { ...oldVal, birthday: null };
-                    }
-
-                    const [y, m, d] = e.target.value
-                        .split('-')
-                        .map((str) => parseInt(str));
-
-                    // Month is zero-based, which is fucking stupid.
-                    return { ...oldVal, birthday: new Date(y, m - 1, d) };
-                });
-                break;
             case 'distance':
                 setInfo((oldVal) => {
                     return { ...oldVal, distance: Number(e.target.value) };
@@ -159,30 +143,29 @@ export default function Profile() {
         const {
             username,
             gender,
-            birthday,
             distance,
             intro,
-            badmintonLevel,
-            basketballLevel,
-            soccerLevel,
-            tableTennisLevel,
-            tennisLevel,
+            badmintonLevel: badminton_level,
+            basketballLevel: basketball_level,
+            soccerLevel: soccer_level,
+            tableTennisLevel: table_tennis_level,
+            tennisLevel: tennis_level,
         } = info;
 
         const { error } = await supabase
             .from('user')
             .update([
                 {
-                    username: username,
-                    gender: gender,
-                    birthday: birthday,
-                    distance: distance,
-                    intro: intro,
-                    badminton_level: badmintonLevel,
-                    basketball_level: basketballLevel,
-                    soccer_level: soccerLevel,
-                    table_tennis_level: tableTennisLevel,
-                    tennis_level: tennisLevel,
+                    username,
+                    gender,
+                    birthday,
+                    distance,
+                    intro,
+                    badminton_level,
+                    basketball_level,
+                    soccer_level,
+                    table_tennis_level,
+                    tennis_level,
                 },
             ])
             .eq('email', email);
@@ -239,7 +222,9 @@ export default function Profile() {
                     })}
                 >
                     <section>
-                        <span className="mr-4 outline-none decoration-transparent">Email:</span>
+                        <span className="mr-4 outline-none decoration-transparent">
+                            Email:
+                        </span>
                         {email && (
                             <>
                                 <span className="no-underline">{email}</span>
@@ -298,29 +283,19 @@ export default function Profile() {
                         </section>
                     </section>
                     <section>
-                        <label className="mr-4 bg-transparent appearance-none">
-                            生日:
-                        </label>
-                        <input
-                            type="date"
-                            name="birthday"
-                            max={todayStr}
-                            value={
-                                info.birthday
-                                    ? info.birthday.getFullYear().toString() +
-                                      '-' +
-                                      (info.birthday.getMonth() + 1)
-                                          .toString()
-                                          .padStart(2, '0') +
-                                      '-' +
-                                      info.birthday
-                                          .getDate()
-                                          .toString()
-                                          .padStart(2, '0')
-                                    : ''
-                            }
-                            onChange={handleInfoChange}
-                        />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']}>
+                                <DatePicker
+                                    label="生日"
+                                    value={birthday}
+                                    onChange={(newDateVal) => {
+                                        if (newDateVal) {
+                                            setBirthday(newDateVal);
+                                        }
+                                    }}
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
                     </section>
                     <section>
                         <label className="mr-4">距離偏好:</label>
