@@ -12,6 +12,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
 
 export default function Profile() {
     const email = useEmail();
@@ -321,13 +322,12 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <label className="font-bold">
-                            自介 ({info.intro.length}/50){' '}
-                        </label>
+                        <label>自介 ({info.intro.length}/50) </label>
                         <br />
-                        <textarea
-                            className="mt-4 border-2 border-black w-full h-20 p-2 focus:outline-none"
+                        <TextField
+                            className="mt-4 w-full"
                             name="intro"
+                            multiline
                             value={info.intro}
                             onChange={handleInfoChange}
                         />
