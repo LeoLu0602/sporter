@@ -4,7 +4,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import {
     supabase,
     getSportEmoji,
-    parseCoord,
     explainLevel,
     calculateAge,
 } from '@/lib/utils';

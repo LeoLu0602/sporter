@@ -47,16 +47,6 @@ export function getSportEmoji(sport: string): string {
     return '';
 }
 
-export function parseCoord(coord: string): { lat: number; lng: number } | null {
-    const [lat, lng] = coord.replace(/[()]/g, '').split(',').map(parseFloat);
-
-    if (Number.isNaN(lat) || Number.isNaN(lng)) {
-        return null;
-    }
-
-    return { lat, lng };
-}
-
 export function calculateAge(birthday: Date): number {
     const [by, bm, bd] = [
         birthday.getFullYear(),
