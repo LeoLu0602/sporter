@@ -481,6 +481,11 @@ export default function New() {
                                         minutesStep={5}
                                         onChange={(newDateVal) => {
                                             if (newDateVal) {
+                                                // Make sure endTime always >= startTime.
+                                                if (newDateVal > endTime) {
+                                                    setEndTime(newDateVal);
+                                                }
+
                                                 setStartTime(newDateVal);
                                             }
                                         }}
@@ -493,6 +498,11 @@ export default function New() {
                                         minutesStep={5}
                                         onChange={(newDateVal) => {
                                             if (newDateVal) {
+                                                // Make sure endTime always >= startTime.
+                                                if (newDateVal < startTime) {
+                                                    setStartTime(newDateVal);
+                                                }
+
                                                 setEndTime(newDateVal);
                                             }
                                         }}
