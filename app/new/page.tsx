@@ -71,8 +71,8 @@ export default function New() {
         location: '',
         participantLimit: 1,
     });
-    const [startTime, setStartTime] = useState<Dayjs>(dayjs());
-    const [endTime, setEndTime] = useState<Dayjs>(dayjs());
+    const [startTime, setStartTime] = useState<Dayjs>(dayjs().startOf('day'));
+    const [endTime, setEndTime] = useState<Dayjs>(dayjs().startOf('day'));
     const [showMap, setShowMap] = useState<boolean>(false);
 
     useEffect(() => {
@@ -477,6 +477,8 @@ export default function New() {
                                 <DemoItem label="開始時間">
                                     <MobileDateTimePicker
                                         value={startTime}
+                                        ampm={false}
+                                        minutesStep={5}
                                         onChange={(newDateVal) => {
                                             if (newDateVal) {
                                                 setStartTime(newDateVal);
@@ -487,6 +489,8 @@ export default function New() {
                                 <DemoItem label="結束時間">
                                     <MobileDateTimePicker
                                         value={endTime}
+                                        ampm={false}
+                                        minutesStep={5}
                                         onChange={(newDateVal) => {
                                             if (newDateVal) {
                                                 setEndTime(newDateVal);
