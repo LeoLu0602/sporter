@@ -22,8 +22,8 @@ export default function EventCard({
     return (
         <div
             className={clsx(
-                'border-2 border-black cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4',
-                { 'bg-sky-300 border-sky-300': isOwner }
+                'border-2 cursor-pointer p-4 rounded-xl text-lg flex items-center gap-4',
+                { 'border-emerald-500': isOwner, 'border-[#bbb] ': !isOwner }
             )}
             onClick={openCard}
         >
