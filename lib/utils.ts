@@ -86,7 +86,7 @@ export interface UserType {
     email: string;
     username: string;
     gender: number;
-    birthday: string;
+    birthday: string | null;
     distance: number;
     intro: string;
     badminton_level: number;

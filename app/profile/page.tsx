@@ -215,6 +215,15 @@ export default function Profile() {
                                     onChange={(newDateVal) => {
                                         if (newDateVal) {
                                             setBirthday(newDateVal);
+                                            userDispatch({
+                                                user: {
+                                                    ...user,
+                                                    birthday:
+                                                        newDateVal?.format(
+                                                            'YYYY-MM-DD'
+                                                        ) ?? null,
+                                                },
+                                            });
                                         }
                                     }}
                                 />
