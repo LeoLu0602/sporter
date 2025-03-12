@@ -3,29 +3,17 @@
 import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
 import { useUser } from '@/context/Context';
-import {
-    calculateAge,
-    EventType,
-    getSportEmoji,
-    supabase,
-    UserType,
-} from '@/lib/utils';
+import { calculateAge, EventType, getSportEmoji, supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useState } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 export default function Search() {
     const user = useUser();
     const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<EventType[]>([]);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
-    const [startTime, setStartTime] = useState<Dayjs>(dayjs());
 
-    async function searchEvents(chosenSport: string, startTime: Date) {
+    async function searchEvents(chosenSport: string) {
         if (!user) {
             return;
         }
@@ -53,7 +41,7 @@ export default function Search() {
                     user_gender: user.gender,
                     user_age: user.birthday ? calculateAge(user.birthday) : 20,
                     user_level: level,
-                    user_time: startTime,
+                    user_time: new Date().toISOString(),
                 });
 
                 if (error) {
@@ -82,7 +70,7 @@ export default function Search() {
 
     function clickOnSport(sport: string) {
         setChosenSport(sport);
-        searchEvents(sport, startTime.toDate());
+        searchEvents(sport);
     }
 
     function seeMoreDetails(id: string) {
@@ -162,27 +150,6 @@ export default function Search() {
                         }}
                     />
                 )}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['MobileDateTimePicker']}>
-                        <DemoItem label="">
-                            <MobileDateTimePicker
-                                value={startTime}
-                                onChange={(newDateVal) => {
-                                    if (newDateVal) {
-                                        setStartTime(newDateVal);
-
-                                        if (chosenSport) {
-                                            searchEvents(
-                                                chosenSport,
-                                                newDateVal.toDate()
-                                            );
-                                        }
-                                    }
-                                }}
-                            />
-                        </DemoItem>
-                    </DemoContainer>
-                </LocalizationProvider>
                 <section>
                     <ul className="flex justify-around flex-wrap my-8">
                         {[
