@@ -511,7 +511,7 @@ export default function New() {
                             </DemoContainer>
                         </LocalizationProvider>
                         <button
-                            className="px-8 py-2 border-emerald-500 border-2 font-bold text-emerald-500"
+                            className="px-8 py-2 border-emerald-500 border-2 text-emerald-500"
                             onClick={() => {
                                 setSport(null);
                             }}
@@ -519,7 +519,7 @@ export default function New() {
                             取消
                         </button>
                         <button
-                            className="px-8 py-2 border-sky-500 border-2 font-bold text-sky-500"
+                            className="px-8 py-2 border-sky-500 border-2 text-sky-500"
                             onClick={() => {
                                 createNewEvent();
                             }}
