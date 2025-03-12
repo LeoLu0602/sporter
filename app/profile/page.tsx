@@ -322,10 +322,9 @@ export default function Profile() {
                         />
                     </section>
                     <section>
-                        <label>自介 ({info.intro.length}/50) </label>
-                        <br />
+                        <label className='block mb-4'>自介 ({info.intro.length}/50) </label>
                         <TextField
-                            className="mt-4 w-full"
+                            className="w-full"
                             name="intro"
                             multiline
                             value={info.intro}
