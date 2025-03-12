@@ -296,7 +296,7 @@ export default function New() {
                     </div>
                 )}
                 {sport === null && (
-                    <section className="flex flex-wrap justify-between gap-8 px-4 mb-24">
+                    <section className="flex flex-wrap justify-between gap-8 px-2 mb-24">
                         {[
                             'soccer',
                             'basketball',
