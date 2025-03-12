@@ -2,13 +2,14 @@
 
 import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
-import { useUser } from '@/context/Context';
+import { useUser, useUserEvents } from '@/context/Context';
 import { calculateAge, EventType, getSportEmoji, supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useState } from 'react';
 
 export default function Search() {
     const user = useUser();
+    const userEvents = useUserEvents();
     const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<EventType[]>([]);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
@@ -56,10 +57,12 @@ export default function Search() {
                         new Date(a.start_time).getTime() -
                         new Date(b.start_time).getTime()
                 );
+
+                // Hide events the user has already joined.
                 setEvents(
                     data.filter(
-                        ({ email: eventEmail }: { email: string }) =>
-                            eventEmail !== user.email
+                        ({ id }: { id: string }) =>
+                            !new Set(userEvents.map(({ id }) => id)).has(id)
                     )
                 );
             });
