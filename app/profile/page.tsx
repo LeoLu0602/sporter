@@ -230,7 +230,7 @@ export default function Profile() {
                             <>
                                 <span className="no-underline">{email}</span>
                                 <button
-                                    className="ml-4 text-rose-500 font-bold"
+                                    className="ml-4 text-rose-500"
                                     onClick={signOut}
                                 >
                                     登出
@@ -420,7 +420,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="w-full mt-8 mb-24 py-2 bg-emerald-600 text-white font-bold rounded-xl"
+                    className="w-full mt-8 mb-24 py-2 border-2 border-emerald-500 text-emerald-500"
                     onClick={save}
                 >
                     儲存
