@@ -297,7 +297,7 @@ export default function New() {
                     </div>
                 )}
                 {sport === null && (
-                    <section className="flex flex-wrap justify-between gap-8 mb-24">
+                    <section className="flex flex-wrap justify-between gap-8 px-4 mb-24">
                         {[
                             'soccer',
                             'basketball',
@@ -306,7 +306,7 @@ export default function New() {
                             'badminton',
                         ].map((sport) => (
                             <button
-                                className="w-40 h-40 rounded-xl cursor-pointer flex justify-center items-center bg-[#ddd] text-6xl"
+                                className="w-40 h-40 rounded-xl cursor-pointer border-2 border-[#bbb] flex justify-center items-center text-6xl"
                                 key={sport}
                                 onClick={() => {
                                     selectSport(sport);
