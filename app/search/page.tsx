@@ -2,7 +2,7 @@
 
 import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
-import { useEmail } from '@/context/Context';
+import { useUser } from '@/context/Context';
 import {
     calculateAge,
     EventType,
@@ -11,7 +11,7 @@ import {
     UserType,
 } from '@/lib/utils';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -19,69 +19,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 export default function Search() {
-    const email = useEmail();
+    const user = useUser();
     const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<EventType[]>([]);
-    const [userInfo, setUserInfo] = useState<UserType | null>(null);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
     const [startTime, setStartTime] = useState<Dayjs>(dayjs());
 
-    useEffect(() => {
-        async function setUp() {
-            const { data, error } = await supabase
-                .from('user')
-                .select('*')
-                .eq('email', email);
-
-            if (error) {
-                alert('Error!');
-                console.error(error);
-
-                return;
-            }
-
-            if (data.length === 0) {
-                return;
-            }
-
-            const {
-                id,
-                username,
-                gender,
-                birthday,
-                distance,
-                intro,
-                badminton_level,
-                basketball_level,
-                soccer_level,
-                table_tennis_level,
-                tennis_level,
-            } = data[0];
-
-            const [y, m, d] = birthday
-                .split('-')
-                .map((str: string) => parseInt(str));
-
-            setUserInfo({
-                id,
-                username,
-                gender,
-                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
-                distance,
-                intro,
-                badminton_level,
-                basketball_level,
-                soccer_level,
-                table_tennis_level,
-                tennis_level,
-            });
-        }
-
-        setUp();
-    }, [email]);
-
     async function searchEvents(chosenSport: string, startTime: Date) {
-        if (!userInfo) {
+        if (!user) {
             return;
         }
 
@@ -89,26 +34,24 @@ export default function Search() {
 
         const level: number =
             chosenSport === 'soccer'
-                ? userInfo.soccer_level
+                ? user.soccer_level
                 : chosenSport === 'basketball'
-                  ? userInfo.basketball_level
+                  ? user.basketball_level
                   : chosenSport === 'tennis'
-                    ? userInfo.tennis_level
+                    ? user.tennis_level
                     : chosenSport === 'table tennis'
-                      ? userInfo.table_tennis_level
-                      : userInfo.badminton_level;
+                      ? user.table_tennis_level
+                      : user.badminton_level;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { data, error } = await supabase.rpc('filter_events', {
                     user_lat: position.coords.latitude,
                     user_lng: position.coords.longitude,
-                    d: userInfo.distance,
+                    d: user.distance,
                     chosen_sport: chosenSport,
-                    user_gender: userInfo.gender,
-                    user_age: userInfo.birthday
-                        ? calculateAge(userInfo.birthday)
-                        : 20,
+                    user_gender: user.gender,
+                    user_age: user.birthday ? calculateAge(user.birthday) : 20,
                     user_level: level,
                     user_time: startTime,
                 });
@@ -128,7 +71,7 @@ export default function Search() {
                 setEvents(
                     data.filter(
                         ({ email: eventEmail }: { email: string }) =>
-                            eventEmail !== email
+                            eventEmail !== user.email
                     )
                 );
             });
@@ -197,6 +140,10 @@ export default function Search() {
         window.location.replace('/event');
     }
 
+    if (!user) {
+        return <></>;
+    }
+
     return (
         <>
             <header>
@@ -207,9 +154,7 @@ export default function Search() {
                     <EventDetails
                         details={eventDetails}
                         join={() => {
-                            if (userInfo) {
-                                joinEvent(userInfo.id, eventDetails.id);
-                            }
+                            joinEvent(user.id, eventDetails.id);
                         }}
                         leave={null}
                         hideDetails={() => {
@@ -249,11 +194,15 @@ export default function Search() {
                         ].map((sport) => (
                             <li key={sport}>
                                 <button
-                                    className={clsx('w-full border-2 py-4 px-4', {
-                                        'border-emerald-500':
-                                            chosenSport === sport,
-                                        'border-[#bbb]': chosenSport !== sport,
-                                    })}
+                                    className={clsx(
+                                        'w-full border-2 py-4 px-4',
+                                        {
+                                            'border-emerald-500':
+                                                chosenSport === sport,
+                                            'border-[#bbb]':
+                                                chosenSport !== sport,
+                                        }
+                                    )}
                                     onClick={() => {
                                         clickOnSport(sport);
                                     }}
@@ -274,15 +223,13 @@ export default function Search() {
                             end_time,
                             location,
                         }) => (
-                            // Each column in event table is not nullable.
-                            // That's why ! is used here.
                             <EventCard
                                 key={id}
                                 isOwner={false}
-                                sport={sport!}
+                                sport={sport}
                                 title={title}
-                                startTime={start_time!}
-                                endTime={end_time!}
+                                startTime={new Date(start_time)}
+                                endTime={new Date(end_time)}
                                 location={location}
                                 openCard={() => {
                                     seeMoreDetails(id);

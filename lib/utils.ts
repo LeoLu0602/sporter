@@ -47,12 +47,8 @@ export function getSportEmoji(sport: string): string {
     return '';
 }
 
-export function calculateAge(birthday: Date): number {
-    const [by, bm, bd] = [
-        birthday.getFullYear(),
-        birthday.getMonth() + 1, // Month is zero-based, which is fucking stupid.
-        birthday.getDate(),
-    ];
+export function calculateAge(birthday: string): number {
+    const [by, bm, bd] = birthday.split('-').map((x) => parseInt(x));
 
     const now = new Date();
     const y = now.getFullYear();
@@ -69,28 +65,28 @@ export function calculateAge(birthday: Date): number {
 export interface EventType {
     id: string;
     email: string;
-    sport: string | null;
+    sport: string;
     title: string;
-    gender: number; // 1: male, 2: female, 3: any
+    gender: number;
     age_min: number;
     age_max: number;
     level_min: number;
     level_max: number;
-    lat: number | null;
-    lng: number | null;
+    lat: number;
+    lng: number;
     location: string;
     participant_limit: number;
-    start_time: Date | null;
-    end_time: Date | null;
-    length: number;
+    start_time: string;
+    end_time: string;
     remaining_spots: number;
 }
 
 export interface UserType {
     id: string;
+    email: string;
     username: string;
     gender: number;
-    birthday: Date | null;
+    birthday: string;
     distance: number;
     intro: string;
     badminton_level: number;

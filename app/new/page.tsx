@@ -7,7 +7,6 @@ import {
     explainLevel,
     calculateAge,
 } from '@/lib/utils';
-import { useEmail } from '@/context/Context';
 import Slider from '@mui/material/Slider';
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -15,35 +14,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import MapContainer from '@/components/MapContainer';
+import { useUser } from '@/context/Context';
 
 export default function New() {
-    const email = useEmail();
+    const user = useUser();
     const [sport, setSport] = useState<string | null>(null);
     const [ages, setAges] = useState<number[]>([0, 100]);
     const [levels, setLevels] = useState<number[]>([1, 6]);
-    const [userInfo, setUserInfo] = useState<{
-        username: string;
-        gender: number; // 1: male, 2: female, 3: any
-        birthday: Date | null;
-        distance: number;
-        intro: string;
-        badmintonLevel: number;
-        basketballLevel: number;
-        soccerLevel: number;
-        tableTennisLevel: number;
-        tennisLevel: number;
-    }>({
-        username: '',
-        gender: 3,
-        birthday: null,
-        distance: 1000,
-        intro: '',
-        badmintonLevel: 0,
-        basketballLevel: 0,
-        soccerLevel: 0,
-        tableTennisLevel: 0,
-        tennisLevel: 0,
-    });
     const [eventInfo, setEventInfo] = useState<{
         sport: string | null;
         title: string;
@@ -73,78 +50,28 @@ export default function New() {
     const [endTime, setEndTime] = useState<Dayjs>(dayjs().startOf('day'));
     const [showMap, setShowMap] = useState<boolean>(false);
 
-    useEffect(() => {
-        async function setUp() {
-            const { data, error } = await supabase
-                .from('user')
-                .select('*')
-                .eq('email', email);
-
-            if (error) {
-                alert('Error!');
-                console.error(error);
-
-                return;
-            }
-
-            if (data.length === 0) {
-                return;
-            }
-
-            const {
-                username,
-                gender,
-                birthday,
-                distance,
-                intro,
-                badminton_level: badmintonLevel,
-                basketball_level: basketballLevel,
-                soccer_level: soccerLevel,
-                table_tennis_level: tableTennisLevel,
-                tennis_level: tennisLevel,
-            } = data[0];
-
-            const [y, m, d] = birthday
-                .split('-')
-                .map((str: string) => parseInt(str));
-
-            setUserInfo({
-                username,
-                gender,
-                birthday: new Date(y, m - 1, d), // Month is zero-based, which is fucking stupid.
-                distance,
-                intro,
-                badmintonLevel,
-                basketballLevel,
-                soccerLevel,
-                tableTennisLevel,
-                tennisLevel,
-            });
+    function selectSport(sport: string) {
+        if (!user) {
+            return;
         }
 
-        setUp();
-    }, [email]);
-
-    function selectSport(sport: string) {
-        const age: number = userInfo.birthday
-            ? calculateAge(userInfo.birthday)
-            : 20;
+        const age: number = user.birthday ? calculateAge(user.birthday) : 20;
         const level: number =
             sport === 'soccer'
-                ? userInfo.soccerLevel
+                ? user.soccer_level
                 : sport === 'basketball'
-                  ? userInfo.basketballLevel
+                  ? user.basketball_level
                   : sport === 'tennis'
-                    ? userInfo.tennisLevel
+                    ? user.tennis_level
                     : sport === 'table tennis'
-                      ? userInfo.tableTennisLevel
-                      : userInfo.badmintonLevel;
+                      ? user.table_tennis_level
+                      : user.badminton_level;
 
         setSport(sport);
         setEventInfo({
             sport,
             title: '未命名',
-            gender: userInfo.gender,
+            gender: user.gender,
             ageMin: Math.max(0, age - 5),
             ageMax: Math.min(100, age + 5),
             levelMin: Math.max(1, level),
@@ -225,6 +152,10 @@ export default function New() {
     }
 
     async function createNewEvent() {
+        if (!user) {
+            return;
+        }
+
         const {
             sport,
             title,
@@ -241,7 +172,7 @@ export default function New() {
 
         const { error } = await supabase.from('event').insert([
             {
-                email,
+                email: user.email,
                 sport,
                 title,
                 gender,
@@ -275,6 +206,10 @@ export default function New() {
 
     function closeMap() {
         setShowMap(false);
+    }
+
+    if (!user) {
+        return <></>;
     }
 
     return (

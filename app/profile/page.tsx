@@ -1,6 +1,5 @@
 'use client';
 
-import { useEmail } from '@/context/Context';
 import { supabase } from '@/lib/utils';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -13,81 +12,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
+import { useUser, useUserDispatch } from '@/context/Context';
 
 export default function Profile() {
-    const email = useEmail();
+    const user = useUser();
+    const userDispatch = useUserDispatch();
     const router = useRouter();
-    const [info, setInfo] = useState<{
-        username: string;
-        gender: number;
-        distance: number;
-        intro: string;
-        badmintonLevel: number;
-        basketballLevel: number;
-        soccerLevel: number;
-        tableTennisLevel: number;
-        tennisLevel: number;
-    }>({
-        username: '',
-        gender: 3,
-        distance: 1000,
-        intro: '',
-        badmintonLevel: 0,
-        basketballLevel: 0,
-        soccerLevel: 0,
-        tableTennisLevel: 0,
-        tennisLevel: 0,
-    });
     const [option, setOption] = useState<'info' | 'levels'>('info');
-    const [birthday, setBirthday] = useState<Dayjs>(dayjs(''));
+    const [birthday, setBirthday] = useState<Dayjs | null>(null);
 
     useEffect(() => {
-        async function setUp() {
-            const { data, error } = await supabase
-                .from('user')
-                .select('*')
-                .eq('email', email);
-
-            if (error) {
-                alert('Error!');
-                console.error(error);
-
-                return;
-            }
-
-            if (data.length === 0) {
-                return;
-            }
-
-            const {
-                username,
-                gender,
-                birthday,
-                distance,
-                intro,
-                badminton_level: badmintonLevel,
-                basketball_level: basketballLevel,
-                soccer_level: soccerLevel,
-                table_tennis_level: tableTennisLevel,
-                tennis_level: tennisLevel,
-            } = data[0];
-
-            setInfo({
-                username,
-                gender,
-                distance,
-                intro,
-                badmintonLevel,
-                basketballLevel,
-                soccerLevel,
-                tableTennisLevel,
-                tennisLevel,
-            });
-            setBirthday(dayjs(birthday));
+        if (user) {
+            setBirthday(dayjs(user.birthday));
         }
-
-        setUp();
-    }, [email]);
+    }, [user]);
 
     async function signOut() {
         const { error } = await supabase.auth.signOut();
@@ -103,73 +41,62 @@ export default function Profile() {
     function handleInfoChange(
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) {
+        if (!user || !userDispatch) {
+            return;
+        }
+
         switch (e.target.name) {
             case 'name':
-                setInfo((oldVal) => {
-                    return {
-                        ...oldVal,
+                userDispatch({
+                    user: {
+                        ...user,
                         username: e.target.value,
-                    };
+                    },
                 });
                 break;
             case 'gender':
-                setInfo((oldVal) => {
-                    return {
-                        ...oldVal,
+                userDispatch({
+                    user: {
+                        ...user,
                         gender: parseInt(e.target.value),
-                    };
+                    },
                 });
                 break;
             case 'distance':
-                setInfo((oldVal) => {
-                    return { ...oldVal, distance: Number(e.target.value) };
+                userDispatch({
+                    user: {
+                        ...user,
+                        distance: parseInt(e.target.value),
+                    },
                 });
                 break;
             case 'intro':
                 if (e.target.value.length <= 50) {
-                    setInfo((oldVal) => {
-                        return { ...oldVal, intro: e.target.value };
+                    userDispatch({
+                        user: {
+                            ...user,
+                            intro: e.target.value,
+                        },
                     });
                 }
-
                 break;
         }
     }
 
     async function save() {
-        if (!email) {
+        if (!user) {
             return;
         }
-
-        const {
-            username,
-            gender,
-            distance,
-            intro,
-            badmintonLevel: badminton_level,
-            basketballLevel: basketball_level,
-            soccerLevel: soccer_level,
-            tableTennisLevel: table_tennis_level,
-            tennisLevel: tennis_level,
-        } = info;
 
         const { error } = await supabase
             .from('user')
             .update([
                 {
-                    username,
-                    gender,
-                    birthday: birthday.format('YYYY-MM-DD'),
-                    distance,
-                    intro,
-                    badminton_level,
-                    basketball_level,
-                    soccer_level,
-                    table_tennis_level,
-                    tennis_level,
+                    ...user,
+                    birthday: birthday?.format('YYYY-MM-DD') ?? null,
                 },
             ])
-            .eq('email', email);
+            .eq('id', user.id);
 
         if (error) {
             alert('Error!');
@@ -183,6 +110,10 @@ export default function Profile() {
 
     function changeOption(option: 'info' | 'levels') {
         setOption(option);
+    }
+
+    if (!user || !userDispatch) {
+        return <></>;
     }
 
     return (
@@ -226,7 +157,9 @@ export default function Profile() {
                         <span className="mr-4 outline-none decoration-transparent">
                             Email:
                         </span>
-                        {email && <span className="no-underline">{email}</span>}
+                        <span className="no-underline">
+                            {user?.email ?? ''}
+                        </span>
                     </section>
                     <section>
                         <label className="w-full focus:outline-none mr-4">
@@ -236,7 +169,7 @@ export default function Profile() {
                             className="w-40"
                             type="text"
                             name="name"
-                            value={info.username}
+                            value={user.username}
                             onChange={handleInfoChange}
                         />
                     </section>
@@ -247,7 +180,7 @@ export default function Profile() {
                                 type="radio"
                                 name="gender"
                                 value="1"
-                                checked={info.gender === 1}
+                                checked={user.gender === 1}
                                 onChange={handleInfoChange}
                             />
                             <label className="ml-4">男</label>
@@ -257,7 +190,7 @@ export default function Profile() {
                                 type="radio"
                                 name="gender"
                                 value="2"
-                                checked={info.gender === 2}
+                                checked={user.gender === 2}
                                 onChange={handleInfoChange}
                             />
                             <label className="ml-4">女</label>
@@ -267,7 +200,7 @@ export default function Profile() {
                                 type="radio"
                                 name="gender"
                                 value="3"
-                                checked={info.gender === 3}
+                                checked={user.gender === 3}
                                 onChange={handleInfoChange}
                             />
                             <label className="ml-4">不透漏</label>
@@ -291,13 +224,13 @@ export default function Profile() {
                     <section>
                         <label className="mr-4">距離偏好:</label>
                         <span>
-                            {info.distance >= 1000
-                                ? Math.floor(info.distance / 1000).toString() +
+                            {user.distance >= 1000
+                                ? Math.floor(user.distance / 1000).toString() +
                                   ',' +
-                                  (info.distance % 1000)
+                                  (user.distance % 1000)
                                       .toString()
                                       .padStart(3, '0')
-                                : info.distance.toString()}{' '}
+                                : user.distance.toString()}{' '}
                             公尺
                         </span>
                         <div className="flex justify-center">
@@ -308,20 +241,20 @@ export default function Profile() {
                                 min="500"
                                 max="10000"
                                 step="100"
-                                value={info.distance.toString()}
+                                value={user.distance.toString()}
                                 onChange={handleInfoChange}
                             />
                         </div>
                     </section>
                     <section>
                         <label className="block mb-4">
-                            自介 ({info.intro.length}/50){' '}
+                            自介 ({user.intro.length}/50){' '}
                         </label>
                         <TextField
                             className="w-full"
                             name="intro"
                             multiline
-                            value={info.intro}
+                            value={user.intro}
                             onChange={handleInfoChange}
                         />
                     </section>
@@ -333,80 +266,80 @@ export default function Profile() {
                 >
                     <section>
                         <span className="text-2xl">
-                            ⚽ {explainLevel(info.soccerLevel)}
+                            ⚽ {explainLevel(user.soccer_level)}
                         </span>
                         <LevelBar
-                            level={info.soccerLevel}
+                            level={user.soccer_level}
                             chooseLevel={(i) => {
-                                setInfo((oldVal) => {
-                                    return {
-                                        ...oldVal,
-                                        soccerLevel: i,
-                                    };
+                                userDispatch({
+                                    user: {
+                                        ...user,
+                                        soccer_level: i,
+                                    },
                                 });
                             }}
                         />
                     </section>
                     <section>
                         <span className="text-2xl">
-                            🏀 {explainLevel(info.basketballLevel)}
+                            🏀 {explainLevel(user.basketball_level)}
                         </span>
                         <LevelBar
-                            level={info.basketballLevel}
+                            level={user.basketball_level}
                             chooseLevel={(i) => {
-                                setInfo((oldVal) => {
-                                    return {
-                                        ...oldVal,
-                                        basketballLevel: i,
-                                    };
+                                userDispatch({
+                                    user: {
+                                        ...user,
+                                        basketball_level: i,
+                                    },
                                 });
                             }}
                         />
                     </section>
                     <section>
                         <span className="text-2xl">
-                            🎾 {explainLevel(info.tennisLevel)}
+                            🎾 {explainLevel(user.tennis_level)}
                         </span>
                         <LevelBar
-                            level={info.tennisLevel}
+                            level={user.tennis_level}
                             chooseLevel={(i) => {
-                                setInfo((oldVal) => {
-                                    return {
-                                        ...oldVal,
-                                        tennisLevel: i,
-                                    };
+                                userDispatch({
+                                    user: {
+                                        ...user,
+                                        tennis_level: i,
+                                    },
                                 });
                             }}
                         />
                     </section>
                     <section>
                         <span className="text-2xl">
-                            🏓 {explainLevel(info.tableTennisLevel)}
+                            🏓 {explainLevel(user.table_tennis_level)}
                         </span>
                         <LevelBar
-                            level={info.tableTennisLevel}
+                            level={user.table_tennis_level}
                             chooseLevel={(i) => {
-                                setInfo((oldVal) => {
-                                    return {
-                                        ...oldVal,
-                                        tableTennisLevel: i,
-                                    };
+                                userDispatch({
+                                    user: {
+                                        ...user,
+                                        table_tennis_level: i,
+                                    },
                                 });
                             }}
                         />
                     </section>
                     <section>
                         <span className="text-2xl">
-                            🏸 {explainLevel(info.badmintonLevel)}
+                            🏸 {explainLevel(user.badminton_level)}
                         </span>
                         <LevelBar
-                            level={info.badmintonLevel}
+                            level={user.badminton_level}
                             chooseLevel={(i) => {
-                                setInfo((oldVal) => {
-                                    return {
-                                        ...oldVal,
-                                        badmintonLevel: i,
-                                    };
+                                userDispatch({
+                                    user: {
+                                        ...user,
+                                        badminton_level: i,
+                                    },
                                 });
                             }}
                         />
