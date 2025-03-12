@@ -20,7 +20,6 @@ import MapContainer from '@/components/MapContainer';
 export default function New() {
     const email = useEmail();
     const [sport, setSport] = useState<string | null>(null);
-    const [coordinate, setCoordinate] = useState<string>('');
     const [ages, setAges] = useState<number[]>([0, 100]);
     const [levels, setLevels] = useState<number[]>([1, 6]);
     const [userInfo, setUserInfo] = useState<{
@@ -156,27 +155,8 @@ export default function New() {
             location: '',
             participantLimit: 1,
         });
-        setCoordinate('');
         setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
         setLevels([level, level]);
-    }
-
-    function handleCoordinateUpdate(e: ChangeEvent<HTMLInputElement>) {
-        const parsedCoord = parseCoord(e.target.value);
-
-        setCoordinate(e.target.value);
-
-        if (parsedCoord) {
-            const { lat, lng } = parsedCoord;
-
-            setEventInfo((oldVal) => {
-                return {
-                    ...oldVal,
-                    lat,
-                    lng,
-                };
-            });
-        }
     }
 
     function handleAgesChange(event: Event, newAges: number | number[]) {
@@ -308,7 +288,6 @@ export default function New() {
                     <div className="fixed left-0 top-0 w-full h-screen z-50">
                         <MapContainer
                             setLatLng={({ lat, lng }) => {
-                                setCoordinate(`(${lat},${lng})`);
                                 setEventInfo((oldVal) => {
                                     return { ...oldVal, lat, lng };
                                 });
@@ -417,23 +396,26 @@ export default function New() {
                             </div>
                         </section>
                         <section>
-                            <label className="font-bold block">
-                                <span
-                                    className="text-emerald-600 cursor-pointer"
-                                    onClick={() => {
-                                        openMap();
-                                    }}
+                            <button
+                                className="text-emerald-500 border-2 border-emerald-500 px-4 py-2 mr-4"
+                                onClick={() => {
+                                    openMap();
+                                }}
+                            >
+                                開啟地圖
+                            </button>
+
+                            {eventInfo.lat && eventInfo.lng ? (
+                                <a
+                                    className="text-sky-500"
+                                    href={`https://www.google.com/maps?q=${eventInfo.lat},${eventInfo.lng}`}
+                                    target="_blank"
                                 >
-                                    開啟地圖
-                                </span>{' '}
-                                or 輸入座標 (經度，緯度)
-                            </label>
-                            <input
-                                className="border-2 border-black focus:outline-none p-2 mt-4 w-full"
-                                type="text"
-                                value={coordinate}
-                                onChange={handleCoordinateUpdate}
-                            />
+                                    地點
+                                </a>
+                            ) : (
+                                <span>尚未選擇地點</span>
+                            )}
                         </section>
                         <section>
                             <label className="font-bold block">地點名稱:</label>
