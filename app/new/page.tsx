@@ -332,7 +332,7 @@ export default function New() {
                         </section>
                         <section className="w-full flex flex-col gap-4">
                             <h2>
-                                <b className="mr-4">對手程度:</b>
+                                <span className="mr-4">對手程度:</span>
                                 {explainLevel(eventInfo.levelMin) +
                                     ' 到 ' +
                                     explainLevel(eventInfo.levelMax)}
@@ -348,7 +348,7 @@ export default function New() {
                             </div>
                         </section>
                         <section className="flex gap-4">
-                            <h2 className="font-bold">對手性別:</h2>
+                            <h2>對手性別:</h2>
                             <section>
                                 <input
                                     type="radio"
@@ -382,7 +382,7 @@ export default function New() {
                         </section>
                         <section>
                             <label className="block mb-4">
-                                <b className="mr-4">對手年紀:</b>
+                                <span className="mr-4">對手年紀:</span>
                                 {ages[0]} - {ages[1]}
                             </label>
                             <div className="px-4">
@@ -418,9 +418,9 @@ export default function New() {
                             )}
                         </section>
                         <section>
-                            <label className="font-bold block">地點名稱:</label>
+                            <label className="block">地點名稱:</label>
                             <input
-                                className="border-2 border-black focus:outline-none p-2 w-full mt-4"
+                                className="border-2 border-[#bbb] focus:outline-none p-2 w-full mt-4"
                                 type="text"
                                 name="location"
                                 value={eventInfo.location}
@@ -428,7 +428,7 @@ export default function New() {
                             />
                         </section>
                         <section className="flex items-center gap-4">
-                            <h2 className="font-bold mr-4">需求人數:</h2>
+                            <h2 className="mr-4">需求人數:</h2>
                             <button
                                 className="bg-rose-500 w-6 h-6 text-white font-bold flex justify-center items-center rounded-full"
                                 onClick={() => {
