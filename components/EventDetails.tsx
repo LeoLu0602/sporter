@@ -12,9 +12,9 @@ export default function EventDetails({
     leave: (() => void) | null;
 }) {
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-4">
+        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8">
             <div className="flex flex-col gap-8">
-                <div className="flex gap-4 text-2xl font-bold">
+                <div className="flex gap-4 text-2xl">
                     <div>{getSportEmoji(details!.sport!)}</div>
                     <div>{details!.title}</div>
                 </div>
@@ -22,11 +22,11 @@ export default function EventDetails({
                     <span className="mr-4">地點:</span>
                     {details!.location}
                     <a
-                        className="ml-4 text-blue-500 font-bold"
+                        className="ml-4 text-blue-500"
                         href={`https://www.google.com/maps?q=${details!.lat},${details!.lng}`}
                         target="_blank"
                     >
-                        地圖
+                        開啟地圖
                     </a>
                 </div>
                 <div>
@@ -45,20 +45,25 @@ export default function EventDetails({
                 </div>
                 <div>
                     <span className="mr-4">目前人數 (不含發起人):</span>
-                    {details!.participant_limit - details!.remaining_spots}/
-                    {details!.participant_limit}
+                    {details!.participant_limit -
+                        details!.remaining_spots} / {details!.participant_limit}
+                </div>
+                <div>
+                    <button className="border-emerald-500 border-2 text-emerald-500 px-4 py-2">
+                        檢視名單
+                    </button>
                 </div>
             </div>
-            <div className="flex gap-8">
+            <div className="flex gap-4 mt-8">
                 <button
-                    className="mt-8 px-4 py-2 rounded-xl text-white font-bold bg-emerald-500"
+                    className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
                     onClick={hideDetails}
                 >
                     返回
                 </button>
                 {join && (
                     <button
-                        className="mt-8 px-4 py-2 rounded-xl bg-sky-500 font-bold text-white"
+                        className="px-4 py-2 border-sky-500 border-2 text-sky-500"
                         onClick={join}
                     >
                         +1
@@ -66,7 +71,7 @@ export default function EventDetails({
                 )}
                 {leave && (
                     <button
-                        className="mt-8 px-4 py-2 rounded-xl bg-rose-500 font-bold text-white"
+                        className="px-4 py-2 rounded-xl bg-rose-500 font-bold text-white"
                         onClick={leave}
                     >
                         -1
