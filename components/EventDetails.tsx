@@ -71,10 +71,10 @@ export default function EventDetails({
                 )}
                 {leave && (
                     <button
-                        className="px-4 py-2 rounded-xl bg-rose-500 font-bold text-white"
+                        className="px-4 py-2 border-rose-500 border-2 font-bold text-rose-500"
                         onClick={leave}
                     >
-                        -1
+                        &minus; 1
                     </button>
                 )}
             </div>
