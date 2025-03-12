@@ -226,17 +226,7 @@ export default function Profile() {
                         <span className="mr-4 outline-none decoration-transparent">
                             Email:
                         </span>
-                        {email && (
-                            <>
-                                <span className="no-underline">{email}</span>
-                                <button
-                                    className="ml-4 text-rose-500"
-                                    onClick={signOut}
-                                >
-                                    登出
-                                </button>
-                            </>
-                        )}
+                        {email && <span className="no-underline">{email}</span>}
                     </section>
                     <section>
                         <label className="w-full focus:outline-none mr-4">
@@ -310,19 +300,23 @@ export default function Profile() {
                                 : info.distance.toString()}{' '}
                             公尺
                         </span>
-                        <input
-                            className="w-full mt-4"
-                            type="range"
-                            name="distance"
-                            min="500"
-                            max="10000"
-                            step="100"
-                            value={info.distance.toString()}
-                            onChange={handleInfoChange}
-                        />
+                        <div className="flex justify-center">
+                            <input
+                                className="w-11/12 mt-4"
+                                type="range"
+                                name="distance"
+                                min="500"
+                                max="10000"
+                                step="100"
+                                value={info.distance.toString()}
+                                onChange={handleInfoChange}
+                            />
+                        </div>
                     </section>
                     <section>
-                        <label className='block mb-4'>自介 ({info.intro.length}/50) </label>
+                        <label className="block mb-4">
+                            自介 ({info.intro.length}/50){' '}
+                        </label>
                         <TextField
                             className="w-full"
                             name="intro"
@@ -419,10 +413,16 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="w-full mt-8 mb-24 py-2 border-2 border-emerald-500 text-emerald-500"
+                    className="w-full my-8 py-2 border-2 border-emerald-500 text-emerald-500"
                     onClick={save}
                 >
                     儲存
+                </button>
+                <button
+                    className="text-rose-500 border-rose-500 border-2 py-2 w-full mb-24"
+                    onClick={signOut}
+                >
+                    登出
                 </button>
             </main>
         </>
