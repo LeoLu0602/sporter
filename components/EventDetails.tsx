@@ -73,7 +73,7 @@ export default function EventDetails({
             );
         }
 
-        async function getUserName() {
+        async function getOwnerUserName() {
             if (!details) {
                 return;
             }
@@ -94,7 +94,7 @@ export default function EventDetails({
         }
 
         getParticipants();
-        getUserName();
+        getOwnerUserName();
     }, [details]);
 
     async function joinEvent() {

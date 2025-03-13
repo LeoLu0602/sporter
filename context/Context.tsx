@@ -160,8 +160,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
                 userEventsDispatch({ userEvents: data4 });
             }
 
-            if (pathname === '') {
+            if (pathname === '/') {
                 router.push('/profile');
+                window.location.replace('/profile');
             }
         }
 
