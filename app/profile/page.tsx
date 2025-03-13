@@ -159,6 +159,7 @@ export default function Profile() {
                         </span>
                         <span className="no-underline">
                             <input
+                                className="w-60 overflow-hidden text-ellipsis"
                                 type="text"
                                 disabled={true}
                                 value={user?.email ?? ''}
