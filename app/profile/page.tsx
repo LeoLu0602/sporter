@@ -159,7 +159,7 @@ export default function Profile() {
                         </span>
                         <span className="no-underline">
                             <input
-                                className="w-60 overflow-hidden text-ellipsis"
+                                className="w-60 overflow-hidden text-ellipsis text-black"
                                 type="text"
                                 disabled={true}
                                 value={user?.email ?? ''}
@@ -171,7 +171,7 @@ export default function Profile() {
                             名稱:
                         </label>
                         <input
-                            className="w-40"
+                            className="w-60 overflow-hidden text-ellipsis"
                             type="text"
                             name="name"
                             value={user.username}
