@@ -158,7 +158,11 @@ export default function Profile() {
                             Email:
                         </span>
                         <span className="no-underline">
-                            {user?.email ?? ''}
+                            <input
+                                type="text"
+                                disabled={true}
+                                value={user?.email ?? ''}
+                            />
                         </span>
                     </section>
                     <section>
