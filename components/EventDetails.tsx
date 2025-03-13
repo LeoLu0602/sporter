@@ -136,15 +136,17 @@ export default function EventDetails({
         <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl">
             <div className="flex flex-col gap-8">
                 <div className="flex gap-4 text-2xl">
-                    <div>{getSportEmoji(details!.sport!)}</div>
-                    <div>{details!.title}</div>
+                    <div>{getSportEmoji(details.sport)}</div>
+                    <div className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
+                        {details.title}
+                    </div>
                 </div>
                 <div>
                     <span className="mr-4">地點:</span>
-                    {details!.location}
+                    {details.location}
                     <a
                         className="ml-4 text-blue-500"
-                        href={`https://www.google.com/maps?q=${details!.lat},${details!.lng}`}
+                        href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
                         target="_blank"
                     >
                         開啟地圖
@@ -152,22 +154,22 @@ export default function EventDetails({
                 </div>
                 <div>
                     <span className="mr-4">開始時間:</span>
-                    {new Date(details!.start_time!).toLocaleString('en-US', {
+                    {new Date(details.start_time).toLocaleString('en-US', {
                         dateStyle: 'short',
                         timeStyle: 'short',
                     })}
                 </div>
                 <div>
                     <span className="mr-4">結束時間:</span>
-                    {new Date(details!.end_time!).toLocaleString('en-US', {
+                    {new Date(details.end_time).toLocaleString('en-US', {
                         dateStyle: 'short',
                         timeStyle: 'short',
                     })}
                 </div>
                 <div>
                     <span className="mr-4">目前人數 (不含發起人):</span>
-                    {details!.participant_limit -
-                        details!.remaining_spots} / {details!.participant_limit}
+                    {details.participant_limit - details.remaining_spots} /{' '}
+                    {details.participant_limit}
                 </div>
                 <div>
                     <button className="border-emerald-500 border-2 text-emerald-500 px-4 py-2">
