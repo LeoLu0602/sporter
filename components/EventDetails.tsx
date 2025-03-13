@@ -159,6 +159,7 @@ export default function EventDetails({
                     {new Date(details.start_time).toLocaleString('en-US', {
                         dateStyle: 'short',
                         timeStyle: 'short',
+                        hourCycle: 'h23',
                     })}
                 </div>
                 <div>
@@ -166,6 +167,7 @@ export default function EventDetails({
                     {new Date(details.end_time).toLocaleString('en-US', {
                         dateStyle: 'short',
                         timeStyle: 'short',
+                        hourCycle: 'h23',
                     })}
                 </div>
                 <div>
