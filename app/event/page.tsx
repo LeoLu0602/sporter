@@ -12,14 +12,18 @@ export default function Event() {
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
 
     function seeMoreDetails(id: string) {
-        setEventDetails(userEvents.find((event) => event.id === id) ?? null);
+        if (userEvents) {
+            setEventDetails(
+                userEvents.find((event) => event.id === id) ?? null
+            );
+        }
     }
 
     function hideDetails() {
         setEventDetails(null);
     }
 
-    if (!user) {
+    if (!user || !userEvents) {
         return <></>;
     }
 

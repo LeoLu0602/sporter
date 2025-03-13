@@ -12,7 +12,7 @@ export default function EventDetails({
     const user = useUser();
     const userEvents = useUserEvents();
 
-    if (!details || !user) {
+    if (!details || !user || !userEvents) {
         return <></>;
     }
 
