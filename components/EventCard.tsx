@@ -34,20 +34,26 @@ export default function EventCard({
                         {title}
                     </div>
                 </div>
-                <div>
-                    <span className="mr-4">地點:</span>
+                <div className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis text-gray-600 text-base">
                     {location}
                 </div>
-                <div>
-                    {new Date(startTime).toLocaleString('en-US', {
-                        dateStyle: 'short',
-                        timeStyle: 'short',
-                    })}
-                    {' ~ '}
-                    {new Date(endTime).toLocaleString('en-US', {
-                        dateStyle: 'short',
-                        timeStyle: 'short',
-                    })}
+                <div className="text-base text-gray-600">
+                    <div>
+                        <span className="mr-4">開始時間:</span>
+                        {new Date(startTime).toLocaleString('en-US', {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            hourCycle: 'h23',
+                        })}
+                    </div>
+                    <div>
+                        <span className="mr-4">結束時間:</span>
+                        {new Date(endTime).toLocaleString('en-US', {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            hourCycle: 'h23',
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
