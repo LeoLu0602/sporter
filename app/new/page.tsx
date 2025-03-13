@@ -66,10 +66,14 @@ export default function New() {
                     : sport === 'table tennis'
                       ? user.table_tennis_level
                       : user.badminton_level;
+        const initStartTime = new Date(
+            Math.ceil(Date.now() / (1000 * 60 * 5)) * (1000 * 60 * 5)
+        );
+        const initEndTime = new Date(initStartTime.getTime() + 1000 * 60 * 60);
 
         setSport(sport);
-        setStartTime(dayjs().startOf('day'));
-        setEndTime(dayjs().startOf('day'));
+        setStartTime(dayjs(initStartTime));
+        setEndTime(dayjs(initEndTime));
         setEventInfo({
             sport,
             title: '未命名',
