@@ -274,7 +274,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <section
-                    className={clsx('flex flex-col gap-8', {
+                    className={clsx('flex flex-col gap-16', {
                         hidden: option !== 'levels',
                     })}
                 >

@@ -9,8 +9,8 @@ export default function LevelBar({
 }) {
     return (
         <section className="relative">
-            <span className="absolute left-0 top-[38px] w-full h-1 bg-black" />
-            <section className="w-full flex justify-between items-center py-8 relative z-10">
+            <span className="absolute left-0 top-[47px] w-full h-[2px] bg-[#aaa]" />
+            <section className="w-full flex justify-between items-center pt-8 relative z-10">
                 {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                     <Level
                         key={i}

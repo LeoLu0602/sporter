@@ -12,9 +12,9 @@ export default function Level({
 }) {
     return (
         <button
-            className={clsx('border-black border-2 w-4 h-4 rounded-full', {
-                'bg-emerald-500': level === index,
-                'bg-white': level !== index,
+            className={clsx('border-[1px] w-8 h-8 rounded-full', {
+                'bg-emerald-500 border-emerald-500': level === index,
+                'bg-white border-[#aaa]': level !== index,
             })}
             onClick={handleClick}
         />
