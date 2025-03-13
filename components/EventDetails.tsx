@@ -21,7 +21,7 @@ export default function EventDetails({
     const [showParticipantList, setShowParticipantList] =
         useState<boolean>(false);
     const [participants, setParticipants] = useState<
-        { id: string; email: string; username: string }[]
+        { id: string; username: string }[]
     >([]);
     const [owner, setOwner] = useState<{
         id: string;
@@ -250,11 +250,11 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4 items-center">
                     <span className="whitespace-nowrap">發起人:</span>
-                    <span className="flex-grow whitespace-nowrap text-ellipsis overflow-hidden">
+                    <div className="border-2 border-sky-500 text-sky-500 rounded-xl p-2 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis">
                         {owner ? owner.username : '載入中...'}
-                    </span>
+                    </div>
                 </div>
                 <div>
                     <span className="mr-4">目前人數 (不含發起人):</span>
@@ -270,9 +270,7 @@ export default function EventDetails({
                     >
                         {showParticipantList ? '關閉名單' : '檢視名單'}
                     </button>
-                    {showParticipantList && (
-                        <ParticipantList participants={participants} />
-                    )}
+                    <ParticipantList show={showParticipantList} participants={participants} />
                 </div>
             </div>
             <div className="flex gap-4 mt-8">
