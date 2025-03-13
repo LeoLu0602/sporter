@@ -5,12 +5,14 @@ import EventDetails from '@/components/EventDetails';
 import { useUser, useUserEvents } from '@/context/Context';
 import { calculateAge, EventType, supabase } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Search() {
     const user = useUser();
     const userEvents = useUserEvents();
     const [events, setEvents] = useState<EventType[]>([]);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         searchEvents();
@@ -61,6 +63,8 @@ export default function Search() {
         } else {
             alert('Geolocation is not available');
         }
+
+        setIsLoading(false);
     }
 
     function seeMoreDetails(id: string) {
@@ -90,31 +94,38 @@ export default function Search() {
                         }}
                     />
                 )}
-                <section className="flex flex-col gap-4">
-                    {events.map(
-                        ({
-                            id,
-                            sport,
-                            title,
-                            start_time,
-                            end_time,
-                            location,
-                        }) => (
-                            <EventCard
-                                key={id}
-                                isOwner={false}
-                                sport={sport}
-                                title={title}
-                                startTime={new Date(start_time)}
-                                endTime={new Date(end_time)}
-                                location={location}
-                                openCard={() => {
-                                    seeMoreDetails(id);
-                                }}
-                            />
-                        )
-                    )}
-                </section>
+                {isLoading && (
+                    <section className="flex justify-center items-center w-full h-screen absolute left-0 top-0">
+                        <CircularProgress />
+                    </section>
+                )}
+                {!isLoading && (
+                    <section className="flex flex-col gap-4">
+                        {events.map(
+                            ({
+                                id,
+                                sport,
+                                title,
+                                start_time,
+                                end_time,
+                                location,
+                            }) => (
+                                <EventCard
+                                    key={id}
+                                    isOwner={false}
+                                    sport={sport}
+                                    title={title}
+                                    startTime={new Date(start_time)}
+                                    endTime={new Date(end_time)}
+                                    location={location}
+                                    openCard={() => {
+                                        seeMoreDetails(id);
+                                    }}
+                                />
+                            )
+                        )}
+                    </section>
+                )}
             </main>
         </>
     );
