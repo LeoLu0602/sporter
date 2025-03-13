@@ -1,5 +1,7 @@
 import { useUser, useUserEvents } from '@/context/Context';
 import { EventType, getSportEmoji, supabase } from '@/lib/utils';
+import ParticipantList from '@/components/ParticipantList';
+import { useEffect, useState } from 'react';
 
 export default function EventDetails({
     details,
@@ -16,10 +18,58 @@ export default function EventDetails({
         return <></>;
     }
 
+    const [showParticipantList, setShowParticipantList] =
+        useState<boolean>(false);
+    const [participants, setParticipants] = useState<
+        { id: string; email: string; username: string }[]
+    >([]);
     const isOwner = user.email === details.email;
     const isParticipant = new Set(userEvents.map(({ id }) => id)).has(
         details.id
     );
+
+    useEffect(() => {
+        async function setUp() {
+            if (!details) {
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('participant')
+                .select('*')
+                .eq('event_id', details.id);
+
+            if (error) {
+                alert('Error!');
+                console.error(error);
+
+                return;
+            }
+
+            const { data: data2, error: error2 } = await supabase
+                .from('user')
+                .select('*')
+                .in(
+                    'id',
+                    data.map(({ user_id }) => user_id)
+                );
+
+            if (error2) {
+                alert('Error!');
+                console.error(error2);
+
+                return;
+            }
+
+            setParticipants(
+                data2.map(({ id, email, username }) => {
+                    return { id, email, username };
+                })
+            );
+        }
+
+        setUp();
+    }, [details]);
 
     async function joinEvent() {
         if (!user || !details) {
@@ -132,6 +182,10 @@ export default function EventDetails({
         window.location.reload();
     }
 
+    function toggleParticipantList() {
+        setShowParticipantList((oldVal) => !oldVal);
+    }
+
     return (
         <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl">
             <div className="flex flex-col gap-8">
@@ -176,9 +230,15 @@ export default function EventDetails({
                     {details.participant_limit}
                 </div>
                 <div>
-                    <button className="border-emerald-500 border-2 text-emerald-500 px-4 py-2">
-                        檢視名單
+                    <button
+                        className="border-orange-500 border-2 text-orange-500 px-4 py-2"
+                        onClick={() => {
+                            toggleParticipantList();
+                        }}
+                    >
+                        {showParticipantList ? '關閉名單' : '檢視名單'}
                     </button>
+                    {showParticipantList && <ParticipantList participants={participants} />}
                 </div>
             </div>
             <div className="flex gap-4 mt-8">
