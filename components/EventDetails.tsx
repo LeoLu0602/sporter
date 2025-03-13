@@ -12,7 +12,7 @@ export default function EventDetails({
     leave: (() => void) | null;
 }) {
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8">
+        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl">
             <div className="flex flex-col gap-8">
                 <div className="flex gap-4 text-2xl">
                     <div>{getSportEmoji(details!.sport!)}</div>
