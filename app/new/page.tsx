@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
     supabase,
     getSportEmoji,
@@ -152,7 +152,7 @@ export default function New() {
     }
 
     async function createNewEvent() {
-        if (!user) {
+        if (!user || !eventInfo.lat || !eventInfo.lng) {
             return;
         }
 
@@ -253,12 +253,10 @@ export default function New() {
                 )}
                 {sport !== null && (
                     <section className="flex flex-col gap-8 text-lg mb-24">
-                        <section>
-                            <h2 className="text-2xl inline mr-4">
-                                {getSportEmoji(sport)}
-                            </h2>
+                        <section className="flex gap-4">
+                            <h2 className="text-2xl">{getSportEmoji(sport)}</h2>
                             <input
-                                className="text-2xl w-60 focus:outline-none"
+                                className="text-2xl w-60 focus:outline-none flex-grow"
                                 name="title"
                                 value={eventInfo.title}
                                 onChange={handleEventInfoChange}
