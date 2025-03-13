@@ -105,7 +105,7 @@ export default function Profile() {
             return;
         }
 
-        alert('儲存成功!');
+        window.location.reload();
     }
 
     function changeOption(option: 'info' | 'levels') {
