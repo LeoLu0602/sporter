@@ -14,9 +14,9 @@ const UserContext = createContext<UserType | null>(null);
 const UserDispatchContext = createContext<Dispatch<{
     user: UserType | null;
 }> | null>(null);
-const UserEventsContext = createContext<EventType[]>([]);
+const UserEventsContext = createContext<EventType[] | null>(null);
 const UserEventsDispatchContext = createContext<Dispatch<{
-    userEvents: EventType[];
+    userEvents: EventType[] | null;
 }> | null>(null);
 
 function userReducer(user: UserType | null, action: { user: UserType | null }) {
@@ -24,8 +24,8 @@ function userReducer(user: UserType | null, action: { user: UserType | null }) {
 }
 
 function userEventsReducer(
-    userEvents: EventType[],
-    action: { userEvents: EventType[] }
+    userEvents: EventType[] | null,
+    action: { userEvents: EventType[] | null }
 ) {
     return action.userEvents;
 }
@@ -50,7 +50,10 @@ export function Provider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
     const [user, userDispatch] = useReducer(userReducer, null);
-    const [userEvents, userEventsDispatch] = useReducer(userEventsReducer, []);
+    const [userEvents, userEventsDispatch] = useReducer(
+        userEventsReducer,
+        null
+    );
 
     useEffect(() => {
         async function setUp() {

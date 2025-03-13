@@ -14,14 +14,12 @@ export default function Search() {
 
     useEffect(() => {
         searchEvents();
-    }, [user]);
+    }, [user, userEvents]);
 
     async function searchEvents() {
-        if (!user) {
+        if (!user || !userEvents) {
             return;
         }
-
-        setEvents([]);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
@@ -86,7 +84,7 @@ export default function Search() {
                 {eventDetails && (
                     <EventDetails
                         userEmail={user.email}
-                        details={eventDetails}  
+                        details={eventDetails}
                         hideDetails={() => {
                             hideDetails();
                         }}
