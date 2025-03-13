@@ -68,6 +68,8 @@ export default function New() {
                       : user.badminton_level;
 
         setSport(sport);
+        setStartTime(dayjs().startOf('day'));
+        setEndTime(dayjs().startOf('day'));
         setEventInfo({
             sport,
             title: '未命名',
