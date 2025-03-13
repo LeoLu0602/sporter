@@ -73,7 +73,9 @@ export default function EventDetails({
     }
 
     async function leaveEvent() {
-        if (!user || !details) {
+        const areYouSure = confirm('確定退出？');
+
+        if (!areYouSure || !user || !details) {
             return;
         }
 
@@ -109,7 +111,9 @@ export default function EventDetails({
     }
 
     async function deleteEvent() {
-        if (!details) {
+        const areYouSure = confirm('確定刪除？');
+
+        if (!areYouSure || !details) {
             return;
         }
 
