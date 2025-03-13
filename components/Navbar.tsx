@@ -13,7 +13,7 @@ export default function Navbar() {
 
     return (
         <nav>
-            <ul className="fixed z-40 left-0 bottom-0 w-full h-16 flex bg-white">
+            <ul className="fixed z-40 left-0 bottom-0 w-full h-12 flex bg-white opacity-90">
                 <li className="w-1/4">
                     <Link
                         className="h-full w-full flex justify-center items-center cursor-pointe"
