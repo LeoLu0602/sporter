@@ -360,7 +360,7 @@ export default function Profile() {
                     </section>
                 </section>
                 <button
-                    className="w-full my-8 py-2 border-2 border-emerald-500 text-emerald-500"
+                    className="w-full mt-16 mb-8 py-2 border-2 border-emerald-500 text-emerald-500"
                     onClick={save}
                 >
                     儲存
