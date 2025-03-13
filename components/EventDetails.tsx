@@ -213,7 +213,7 @@ export default function EventDetails({
     }
 
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl">
+        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl overflow-auto">
             <div className="flex flex-col gap-8">
                 <div className="flex gap-4 text-2xl">
                     <div>{getSportEmoji(details.sport)}</div>
@@ -253,7 +253,7 @@ export default function EventDetails({
                 <div className="flex gap-4">
                     <span className="whitespace-nowrap">發起人:</span>
                     <span className="flex-grow whitespace-nowrap text-ellipsis overflow-hidden">
-                        {owner ? owner.username : ''}
+                        {owner ? owner.username : '載入中...'}
                     </span>
                 </div>
                 <div>
