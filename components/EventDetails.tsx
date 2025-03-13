@@ -1,16 +1,133 @@
-import { EventType, getSportEmoji } from '@/lib/utils';
+import { useUser, useUserEvents } from '@/context/Context';
+import { EventType, getSportEmoji, supabase } from '@/lib/utils';
 
 export default function EventDetails({
     details,
     hideDetails,
-    join,
-    leave,
 }: {
+    userEmail: string;
     details: EventType | null;
     hideDetails: () => void;
-    join: (() => void) | null;
-    leave: (() => void) | null;
 }) {
+    const user = useUser();
+    const userEvents = useUserEvents();
+
+    if (!details || !user) {
+        return <></>;
+    }
+
+    const isOwner = user.email === details.email;
+    const isParticipant = new Set(userEvents.map(({ id }) => id)).has(
+        details.id
+    );
+
+    async function joinEvent() {
+        if (!user || !details) {
+            return;
+        }
+
+        const { data, error: error1 } = await supabase
+            .from('participant')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('event_id', details.id);
+
+        if (error1) {
+            alert('Error!');
+            console.error(error1);
+
+            return;
+        }
+
+        if (data.length > 0) {
+            return;
+        }
+
+        const { error: error2 } = await supabase
+            .from('participant')
+            .insert([{ user_id: user.id, event_id: details.id }]);
+
+        if (error2) {
+            alert('Error!');
+            console.error(error2);
+
+            return;
+        }
+
+        const { error: error3 } = await supabase.rpc(
+            'increment_remaining_spots',
+            {
+                event_id: details.id,
+                x: -1,
+            }
+        );
+
+        if (error3) {
+            alert('Error!');
+            console.error(error3);
+
+            return;
+        }
+
+        window.location.replace('/event');
+    }
+
+    async function leaveEvent() {
+        if (!user || !details) {
+            return;
+        }
+
+        const { error: error1 } = await supabase
+            .from('participant')
+            .delete()
+            .eq('user_id', user.id)
+            .eq('event_id', details.id);
+
+        if (error1) {
+            alert('Error!');
+            console.error(error1);
+
+            return;
+        }
+
+        const { error: error2 } = await supabase.rpc(
+            'increment_remaining_spots',
+            {
+                event_id: details.id,
+                x: 1,
+            }
+        );
+
+        if (error2) {
+            alert('Error!');
+            console.error(error2);
+
+            return;
+        }
+
+        window.location.reload();
+    }
+
+    async function deleteEvent() {
+        if (!details) {
+            return;
+        }
+
+        const { error } = await supabase
+            .from('event')
+            .delete()
+            .eq('id', details.id);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return;
+        }
+
+        window.location.reload();
+    }
+
     return (
         <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl">
             <div className="flex flex-col gap-8">
@@ -61,20 +178,34 @@ export default function EventDetails({
                 >
                     返回
                 </button>
-                {join && (
+                {!isParticipant && (
                     <button
                         className="px-4 py-2 border-sky-500 border-2 text-sky-500"
-                        onClick={join}
+                        onClick={() => {
+                            joinEvent();
+                        }}
                     >
                         +1
                     </button>
                 )}
-                {leave && (
+                {isParticipant && !isOwner && (
                     <button
-                        className="px-4 py-2 border-rose-500 border-2 font-bold text-rose-500"
-                        onClick={leave}
+                        className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                        onClick={() => {
+                            leaveEvent();
+                        }}
                     >
                         &minus; 1
+                    </button>
+                )}
+                {isOwner && (
+                    <button
+                        className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                        onClick={() => {
+                            deleteEvent();
+                        }}
+                    >
+                        刪除
                     </button>
                 )}
             </div>

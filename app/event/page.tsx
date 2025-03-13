@@ -3,7 +3,7 @@
 import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
 import { useUser, useUserEvents } from '@/context/Context';
-import { EventType, supabase } from '@/lib/utils';
+import { EventType } from '@/lib/utils';
 import { useState } from 'react';
 
 export default function Event() {
@@ -19,43 +19,6 @@ export default function Event() {
         setEventDetails(null);
     }
 
-    async function leave(userId: string, eventId: string) {
-        // User started the event and hence can't leave.
-        if (eventDetails && user && eventDetails.email === user.email) {
-            return;
-        }
-
-        const { error: error1 } = await supabase
-            .from('participant')
-            .delete()
-            .eq('user_id', userId)
-            .eq('event_id', eventId);
-
-        if (error1) {
-            alert('Error!');
-            console.error(error1);
-
-            return;
-        }
-
-        const { error: error2 } = await supabase.rpc(
-            'increment_remaining_spots',
-            {
-                event_id: eventId,
-                x: 1,
-            }
-        );
-
-        if (error2) {
-            alert('Error!');
-            console.error(error2);
-
-            return;
-        }
-
-        window.location.reload();
-    }
-
     if (!user) {
         return <></>;
     }
@@ -68,13 +31,8 @@ export default function Event() {
             <main className="p-4">
                 {eventDetails && (
                     <EventDetails
+                        userEmail={user.email}
                         details={eventDetails}
-                        join={null}
-                        leave={() => {
-                            if (user) {
-                                leave(user.id, eventDetails.id);
-                            }
-                        }}
                         hideDetails={() => {
                             hideDetails();
                         }}

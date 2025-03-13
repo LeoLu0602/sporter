@@ -3,7 +3,7 @@
 import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
 import { useUser, useUserEvents } from '@/context/Context';
-import { calculateAge, EventType, getSportEmoji, supabase } from '@/lib/utils';
+import { calculateAge, EventType, supabase } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 export default function Search() {
@@ -73,53 +73,6 @@ export default function Search() {
         setEventDetails(null);
     }
 
-    async function joinEvent(userId: string, eventId: string) {
-        const { data, error: error1 } = await supabase
-            .from('participant')
-            .select('*')
-            .eq('user_id', userId)
-            .eq('event_id', eventId);
-
-        if (error1) {
-            alert('Error!');
-            console.error(error1);
-
-            return;
-        }
-
-        if (data.length > 0) {
-            return;
-        }
-
-        const { error: error2 } = await supabase
-            .from('participant')
-            .insert([{ user_id: userId, event_id: eventId }]);
-
-        if (error2) {
-            alert('Error!');
-            console.error(error2);
-
-            return;
-        }
-
-        const { error: error3 } = await supabase.rpc(
-            'increment_remaining_spots',
-            {
-                event_id: eventId,
-                x: -1,
-            }
-        );
-
-        if (error3) {
-            alert('Error!');
-            console.error(error3);
-
-            return;
-        }
-
-        window.location.replace('/event');
-    }
-
     if (!user) {
         return <></>;
     }
@@ -132,11 +85,8 @@ export default function Search() {
             <main className="text-xl px-4 pb-20">
                 {eventDetails && (
                     <EventDetails
-                        details={eventDetails}
-                        join={() => {
-                            joinEvent(user.id, eventDetails.id);
-                        }}
-                        leave={null}
+                        userEmail={user.email}
+                        details={eventDetails}  
                         hideDetails={() => {
                             hideDetails();
                         }}
