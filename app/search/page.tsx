@@ -4,33 +4,24 @@ import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
 import { useUser, useUserEvents } from '@/context/Context';
 import { calculateAge, EventType, getSportEmoji, supabase } from '@/lib/utils';
-import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Search() {
     const user = useUser();
     const userEvents = useUserEvents();
-    const [chosenSport, setChosenSport] = useState<string | null>(null);
     const [events, setEvents] = useState<EventType[]>([]);
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
 
-    async function searchEvents(chosenSport: string) {
+    useEffect(() => {
+        searchEvents();
+    }, [user]);
+
+    async function searchEvents() {
         if (!user) {
             return;
         }
 
         setEvents([]);
-
-        const level: number =
-            chosenSport === 'soccer'
-                ? user.soccer_level
-                : chosenSport === 'basketball'
-                  ? user.basketball_level
-                  : chosenSport === 'tennis'
-                    ? user.tennis_level
-                    : chosenSport === 'table tennis'
-                      ? user.table_tennis_level
-                      : user.badminton_level;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
@@ -38,10 +29,13 @@ export default function Search() {
                     user_lat: position.coords.latitude,
                     user_lng: position.coords.longitude,
                     d: user.distance,
-                    chosen_sport: chosenSport,
                     user_gender: user.gender,
                     user_age: user.birthday ? calculateAge(user.birthday) : 20,
-                    user_level: level,
+                    user_soccer_level: user.soccer_level,
+                    user_basketball_level: user.basketball_level,
+                    user_tennis_level: user.tennis_level,
+                    user_table_tennis_level: user.table_tennis_level,
+                    user_badminton_level: user.badminton_level,
                     user_time: new Date().toISOString(),
                 });
 
@@ -69,11 +63,6 @@ export default function Search() {
         } else {
             alert('Geolocation is not available');
         }
-    }
-
-    function clickOnSport(sport: string) {
-        setChosenSport(sport);
-        searchEvents(sport);
     }
 
     function seeMoreDetails(id: string) {
@@ -153,36 +142,6 @@ export default function Search() {
                         }}
                     />
                 )}
-                <section>
-                    <ul className="flex justify-around flex-wrap my-8">
-                        {[
-                            'soccer',
-                            'basketball',
-                            'tennis',
-                            'table tennis',
-                            'badminton',
-                        ].map((sport) => (
-                            <li key={sport}>
-                                <button
-                                    className={clsx(
-                                        'w-full border-2 py-4 px-4',
-                                        {
-                                            'border-emerald-500':
-                                                chosenSport === sport,
-                                            'border-[#bbb]':
-                                                chosenSport !== sport,
-                                        }
-                                    )}
-                                    onClick={() => {
-                                        clickOnSport(sport);
-                                    }}
-                                >
-                                    {getSportEmoji(sport)}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
                 <section className="flex flex-col gap-4">
                     {events.map(
                         ({
