@@ -152,7 +152,12 @@ export default function New() {
     }
 
     async function createNewEvent() {
-        if (!user || !eventInfo.lat || !eventInfo.lng) {
+        if (
+            !user ||
+            !eventInfo.lat ||
+            !eventInfo.lng ||
+            eventInfo.location === ''
+        ) {
             return;
         }
 
