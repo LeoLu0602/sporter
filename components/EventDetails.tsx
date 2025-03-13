@@ -23,13 +23,18 @@ export default function EventDetails({
     const [participants, setParticipants] = useState<
         { id: string; email: string; username: string }[]
     >([]);
+    const [owner, setOwner] = useState<{
+        id: string;
+        email: string;
+        username: string;
+    } | null>(null);
     const isOwner = user.email === details.email;
     const isParticipant = new Set(userEvents.map(({ id }) => id)).has(
         details.id
     );
 
     useEffect(() => {
-        async function setUp() {
+        async function getParticipants() {
             if (!details) {
                 return;
             }
@@ -68,7 +73,28 @@ export default function EventDetails({
             );
         }
 
-        setUp();
+        async function getUserName() {
+            if (!details) {
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('user')
+                .select('*')
+                .eq('email', details.email);
+
+            if (error) {
+                alert('Error!');
+                console.error(error);
+
+                return;
+            }
+
+            setOwner(data[0]);
+        }
+
+        getParticipants();
+        getUserName();
     }, [details]);
 
     async function joinEvent() {
@@ -224,6 +250,12 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
+                <div className="flex gap-4">
+                    <span className="whitespace-nowrap">發起人:</span>
+                    <span className="flex-grow whitespace-nowrap text-ellipsis overflow-hidden">
+                        {owner ? owner.username : ''}
+                    </span>
+                </div>
                 <div>
                     <span className="mr-4">目前人數 (不含發起人):</span>
                     {details.participant_limit - details.remaining_spots} /{' '}
@@ -238,7 +270,9 @@ export default function EventDetails({
                     >
                         {showParticipantList ? '關閉名單' : '檢視名單'}
                     </button>
-                    {showParticipantList && <ParticipantList participants={participants} />}
+                    {showParticipantList && (
+                        <ParticipantList participants={participants} />
+                    )}
                 </div>
             </div>
             <div className="flex gap-4 mt-8">
