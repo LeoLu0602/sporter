@@ -141,17 +141,19 @@ export default function EventDetails({
                         {details.title}
                     </div>
                 </div>
-                <div>
-                    <span className="mr-4">地點:</span>
-                    {details.location}
-                    <a
-                        className="ml-4 text-blue-500"
-                        href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
-                        target="_blank"
-                    >
-                        開啟地圖
-                    </a>
+                <div className="flex gap-4 whitespace-nowrap">
+                    <div>地點:</div>
+                    <div className="flex-grow overflow-hidden text-ellipsis">
+                        {details.location}
+                    </div>
                 </div>
+                <a
+                    className="text-blue-500"
+                    href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
+                    target="_blank"
+                >
+                    開啟地圖
+                </a>
                 <div>
                     <span className="mr-4">開始時間:</span>
                     {new Date(details.start_time).toLocaleString('en-US', {
