@@ -16,7 +16,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import MapContainer from '@/components/MapContainer';
 import { useUser } from '@/context/Context';
-import { FormControl, FormLabel, TextField } from '@mui/material';
+import { Box, FormControl, FormLabel, TextField } from '@mui/material';
 
 export default function New() {
     const user = useUser();
@@ -289,12 +289,20 @@ export default function New() {
                     <section className="flex flex-col gap-8 text-lg mb-24">
                         <section className="flex gap-4 items-center">
                             <h2 className="text-2xl">{getSportEmoji(sport)}</h2>
-                            <input
-                                className="text-2xl focus:outline-none flex-grow border-2 p-2 border-[#bbb]"
-                                name="title"
-                                value={eventInfo.title}
-                                onChange={handleEventInfoChange}
-                            />
+                            <Box
+                                component="form"
+                                sx={{ input: { fontSize: '1.5rem' } }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <TextField
+                                    label=""
+                                    name="title"
+                                    variant="standard"
+                                    value={eventInfo.title}
+                                    onChange={handleEventInfoChange}
+                                />
+                            </Box>
                         </section>
                         <section className="w-full flex flex-col gap-4">
                             <h2>
