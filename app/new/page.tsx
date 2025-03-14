@@ -6,6 +6,7 @@ import {
     getSportEmoji,
     explainLevel,
     calculateAge,
+    getSportChinese,
 } from '@/lib/utils';
 import Slider from '@mui/material/Slider';
 import dayjs, { Dayjs } from 'dayjs';
@@ -37,7 +38,7 @@ export default function New() {
         message: string;
     }>({
         sport: null,
-        title: '未命名',
+        title: '',
         gender: 3,
         ageMin: 0,
         ageMax: 100,
@@ -79,7 +80,7 @@ export default function New() {
         setEndTime(dayjs(initEndTime));
         setEventInfo({
             sport,
-            title: '未命名',
+            title: '',
             gender: user.gender,
             ageMin: Math.max(0, age - 5),
             ageMax: Math.min(100, age + 5),
@@ -287,7 +288,15 @@ export default function New() {
                             <input
                                 className="text-2xl w-60 focus:outline-none flex-grow"
                                 name="title"
-                                value={eventInfo.title}
+                                value={
+                                    eventInfo.title === ''
+                                        ? getSportChinese(sport) +
+                                          ' ' +
+                                          `${Math.floor(Math.random() * 999 + 1)
+                                              .toString()
+                                              .padStart(3, '0')}`
+                                        : ''
+                                }
                                 onChange={handleEventInfoChange}
                             />
                         </section>

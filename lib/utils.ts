@@ -47,6 +47,23 @@ export function getSportEmoji(sport: string): string {
     return '';
 }
 
+export function getSportChinese(sport: string): string {
+    switch (sport) {
+        case 'soccer':
+            return '足球';
+        case 'basketball':
+            return '籃球';
+        case 'tennis':
+            return '網球';
+        case 'table tennis':
+            return '桌球';
+        case 'badminton':
+            return '羽球';
+    }
+
+    return '';
+}
+
 export function calculateAge(birthday: string): number {
     const [by, bm, bd] = birthday.split('-').map((x) => parseInt(x));
 
