@@ -270,46 +270,55 @@ export default function EventDetails({
                     >
                         {showParticipantList ? '關閉名單' : '檢視名單'}
                     </button>
-                    <ParticipantList show={showParticipantList} participants={participants} />
+                    <ParticipantList
+                        show={showParticipantList}
+                        participants={participants}
+                    />
                 </div>
-            </div>
-            <div className="flex gap-4 mt-8">
-                <button
-                    className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
-                    onClick={hideDetails}
-                >
-                    返回
-                </button>
-                {!isParticipant && (
-                    <button
-                        className="px-4 py-2 border-sky-500 border-2 text-sky-500"
-                        onClick={() => {
-                            joinEvent();
-                        }}
-                    >
-                        +1
-                    </button>
+                {details.message.length > 0 && (
+                    <div>
+                        <div>備註:</div>
+                        {details.message}
+                    </div>
                 )}
-                {isParticipant && !isOwner && (
+                <div className="flex gap-4 mt-8">
                     <button
-                        className="px-4 py-2 border-rose-500 border-2 text-rose-500"
-                        onClick={() => {
-                            leaveEvent();
-                        }}
+                        className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
+                        onClick={hideDetails}
                     >
-                        &minus; 1
+                        返回
                     </button>
-                )}
-                {isOwner && (
-                    <button
-                        className="px-4 py-2 border-rose-500 border-2 text-rose-500"
-                        onClick={() => {
-                            deleteEvent();
-                        }}
-                    >
-                        刪除
-                    </button>
-                )}
+                    {!isParticipant && (
+                        <button
+                            className="px-4 py-2 border-sky-500 border-2 text-sky-500"
+                            onClick={() => {
+                                joinEvent();
+                            }}
+                        >
+                            +1
+                        </button>
+                    )}
+                    {isParticipant && !isOwner && (
+                        <button
+                            className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                            onClick={() => {
+                                leaveEvent();
+                            }}
+                        >
+                            &minus; 1
+                        </button>
+                    )}
+                    {isOwner && (
+                        <button
+                            className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                            onClick={() => {
+                                deleteEvent();
+                            }}
+                        >
+                            刪除
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

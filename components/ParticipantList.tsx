@@ -10,7 +10,7 @@ export default function ParticipantList({
     }
 
     return (
-        <div className="py-8 flex flex-wrap">
+        <div className="pt-8 flex flex-wrap">
             {participants.map(({ id, username }) => (
                 <div
                     key={id}
