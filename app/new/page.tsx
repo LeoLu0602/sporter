@@ -53,6 +53,7 @@ export default function New() {
     const [startTime, setStartTime] = useState<Dayjs>(dayjs().startOf('day'));
     const [endTime, setEndTime] = useState<Dayjs>(dayjs().startOf('day'));
     const [showMap, setShowMap] = useState<boolean>(false);
+    const radomNumber = Math.floor(Math.random() * 999 + 1);
 
     function selectSport(sport: string) {
         if (!user) {
@@ -80,7 +81,10 @@ export default function New() {
         setEndTime(dayjs(initEndTime));
         setEventInfo({
             sport,
-            title: '',
+            title:
+                getSportChinese(sport) +
+                ' ' +
+                radomNumber.toString().padStart(3, '0'),
             gender: user.gender,
             ageMin: Math.max(0, age - 5),
             ageMax: Math.min(100, age + 5),
@@ -283,20 +287,12 @@ export default function New() {
                 )}
                 {sport !== null && (
                     <section className="flex flex-col gap-8 text-lg mb-24">
-                        <section className="flex gap-4">
+                        <section className="flex gap-4 items-center">
                             <h2 className="text-2xl">{getSportEmoji(sport)}</h2>
                             <input
-                                className="text-2xl w-60 focus:outline-none flex-grow"
+                                className="text-2xl focus:outline-none flex-grow border-2 p-2 border-[#bbb]"
                                 name="title"
-                                value={
-                                    eventInfo.title === ''
-                                        ? getSportChinese(sport) +
-                                          ' ' +
-                                          `${Math.floor(Math.random() * 999 + 1)
-                                              .toString()
-                                              .padStart(3, '0')}`
-                                        : ''
-                                }
+                                value={eventInfo.title}
                                 onChange={handleEventInfoChange}
                             />
                         </section>
