@@ -53,9 +53,9 @@ export default function Navbar() {
                 <li className="w-1/4 flex justify-center items-center cursor-pointer">
                     <Link
                         className="h-full w-full flex justify-center items-center cursor-pointe"
-                        href="/event"
+                        href="/events"
                     >
-                        {pathname === '/event' ? (
+                        {pathname === '/events' ? (
                             <img
                                 className="h-3/5"
                                 src="/football-fill.png"
