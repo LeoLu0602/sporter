@@ -392,10 +392,9 @@ export default function New() {
                             )}
                         </section>
                         <section>
-                            <label className="block">地點名稱:</label>
-                            <input
-                                className="border-2 border-[#bbb] focus:outline-none p-2 w-full mt-4"
-                                type="text"
+                            <label className="block mb-4">地點名稱:</label>
+                            <TextField
+                                className="border-2 border-[#bbb] focus:outline-none p-2 w-full"
                                 name="location"
                                 value={eventInfo.location}
                                 onChange={handleEventInfoChange}
