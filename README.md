@@ -9,7 +9,6 @@
 - [Setup](#setup)
 - [Status](#status)
 - [Credits](#credits)
-- [License](#license)
 
 ## About
 
@@ -25,33 +24,46 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ## Demo
 
-![demo-profile-1](./demo//demo-profile-1.png)<br/>
-![demo-profile-2](./demo//demo-profile-2.png)<br/>
-![demo-new-1](./demo//demo-new-1.png)<br/>
-![demo-new-2](./demo//demo-new-2.png)
+![demo-welcome.png](/demo/demo-welcome.png)
+![demo-profile-1.png](/demo/demo-profile-1.png)
+![demo-profile-2.png](/demo/demo-profile-2.png)
+![demo-events-1.png](/demo/demo-events-1.png)
+![demo-events-2.png](/demo/demo-events-2.png)
+![demo-new-1.png](/demo/demo-new-1.png)
+![demo-new-2.png](/demo/demo-new-2.png)
+![demo-search-1.png](/demo/demo-search-1.png)
+![demo-search-2.png](/demo/demo-search-2.png)
 
 ## Technologies
 
-- Frontend: [Next.js](https://nextjs.org/)
+- Frontend: [Next.js](https://nextjs.org/) with [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com/)
 - Backend: [Supabase](https://supabase.com/)
 
 ## Setup
 
+Download: [Node.js](https://nodejs.org/en), [Git](https://git-scm.com/downloads)
+
+Open terminal and navigate to /sportify.
+
+```
+npm install
+```
+
+Request .env.local from the maintainer and put it in the root.
+
+Run this in the root and go to [http://localhost:3000](http://localhost:3000).
+
+```
+npm run dev
+```
+
+Use F12 then CTRL+SHIFT+M to simulate a mobile device in the desktop browser.
+
 ## Status
 
-### Done
-
-- "個人檔案"
-- "揪運動" (most parts)
-
-### Under Development
-
-- "揪運動" - "選擇熱門場地" & "備註"
-- "找運動"
+Basically done. Submit issues and label as "enhancement" to request new features.
 
 ## Credits
 
 - Design: James Chen
 - Web dev: Leo Lu
-
-## License
