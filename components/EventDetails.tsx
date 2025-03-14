@@ -213,7 +213,7 @@ export default function EventDetails({
     }
 
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl overflow-y-auto flex flex-col gap-8">
+        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 pb-32 text-xl overflow-y-auto flex flex-col gap-8">
             <div className="flex gap-4 text-2xl">
                 <div>{getSportEmoji(details.sport)}</div>
                 <div className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
@@ -280,7 +280,7 @@ export default function EventDetails({
                     <div className="break-all">{details.message}</div>
                 </div>
             )}
-            <div className="flex gap-4 mt-8 mb-20">
+            <div className="flex gap-4 mt-8">
                 <button
                     className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
                     onClick={hideDetails}
