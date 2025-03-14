@@ -213,7 +213,7 @@ export default function EventDetails({
     }
 
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 text-xl overflow-auto">
+        <div className="fixed left-0 top-0 z-50 h-screen w-full pb-24 bg-white p-8 text-xl overflow-y-auto">
             <div className="flex flex-col gap-8">
                 <div className="flex gap-4 text-2xl">
                     <div>{getSportEmoji(details.sport)}</div>
@@ -278,7 +278,7 @@ export default function EventDetails({
                 {details.message.length > 0 && (
                     <div>
                         <div>備註:</div>
-                        {details.message}
+                        <div className="break-all">{details.message}</div>
                     </div>
                 )}
                 <div className="flex gap-4 mt-8">
