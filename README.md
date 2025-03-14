@@ -59,7 +59,7 @@ npm run dev
 
 Go to [http://localhost:3000](http://localhost:3000).
 
-Use F12 then CTRL+SHIFT+M to simulate a mobile device in the desktop browser.
+Press F12 then CTRL+SHIFT+M to simulate a mobile device in the desktop browser.
 
 ## Status
 
