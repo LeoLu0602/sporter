@@ -26,6 +26,7 @@ export default function RootLayout({
     return (
         <html
             lang="en"
+            translate="no"
             className={geistSans.className}
             suppressHydrationWarning
         >
