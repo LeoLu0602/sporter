@@ -43,19 +43,21 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 Download: [Node.js](https://nodejs.org/en), [Git](https://git-scm.com/downloads)
 
-Open terminal and navigate to /sportify.
+Navigate to /Desktop and run:
 
 ```
+git clone https://github.com/LeoLu0602/sportify.git
+cd ./sportify
 npm install
 ```
 
 Request .env.local from the maintainer and put it in the root.
 
-Run this in the root and go to [http://localhost:3000](http://localhost:3000).
-
 ```
 npm run dev
 ```
+
+Go to [http://localhost:3000](http://localhost:3000).
 
 Use F12 then CTRL+SHIFT+M to simulate a mobile device in the desktop browser.
 
