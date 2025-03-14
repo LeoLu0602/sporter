@@ -24,13 +24,13 @@ Sportify is a social platform designed for sports enthusiasts, making it easy to
 
 ## Demo
 
-![demo-welcome.png](/demo/demo-welcome.png)
+![demo-welcome.png](/demo/demo-welcome.png)<br/>
 ![demo-profile-1.png](/demo/demo-profile-1.png)
-![demo-profile-2.png](/demo/demo-profile-2.png)
+![demo-profile-2.png](/demo/demo-profile-2.png)<br/>
 ![demo-events-1.png](/demo/demo-events-1.png)
-![demo-events-2.png](/demo/demo-events-2.png)
+![demo-events-2.png](/demo/demo-events-2.png)<br/>
 ![demo-new-1.png](/demo/demo-new-1.png)
-![demo-new-2.png](/demo/demo-new-2.png)
+![demo-new-2.png](/demo/demo-new-2.png)<br/>
 ![demo-search-1.png](/demo/demo-search-1.png)
 ![demo-search-2.png](/demo/demo-search-2.png)
 
