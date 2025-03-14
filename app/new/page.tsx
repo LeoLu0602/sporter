@@ -231,7 +231,7 @@ export default function New() {
             return;
         }
 
-        window.location.replace('/event');
+        window.location.replace('/events');
     }
 
     function openMap() {

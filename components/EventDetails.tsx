@@ -145,7 +145,7 @@ export default function EventDetails({
             return;
         }
 
-        window.location.replace('/event');
+        window.location.replace('/events');
     }
 
     async function leaveEvent() {
