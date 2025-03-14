@@ -278,23 +278,6 @@ export default function EventDetails({
                 <div>
                     <div>備註:</div>
                     <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
-                    <div className="break-all">{details.message}</div>
                 </div>
             )}
             <div className="flex gap-4 mt-8 mb-20">
