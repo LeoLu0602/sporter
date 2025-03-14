@@ -46,8 +46,8 @@ Download: [Node.js](https://nodejs.org/en), [Git](https://git-scm.com/downloads)
 Navigate to /Desktop and run:
 
 ```
-git clone https://github.com/LeoLu0602/Sporter.git
-cd ./Sporter
+git clone https://github.com/LeoLu0602/sporter.git
+cd ./sporter
 npm install
 ```
 
