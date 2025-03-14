@@ -79,6 +79,7 @@ export interface EventType {
     start_time: string;
     end_time: string;
     remaining_spots: number;
+    message: string;
 }
 
 export interface UserType {

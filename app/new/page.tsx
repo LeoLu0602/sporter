@@ -15,6 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import MapContainer from '@/components/MapContainer';
 import { useUser } from '@/context/Context';
+import { FormControl, FormLabel, TextField } from '@mui/material';
 
 export default function New() {
     const user = useUser();
@@ -33,6 +34,7 @@ export default function New() {
         lng: number | null;
         location: string;
         participantLimit: number;
+        message: string;
     }>({
         sport: null,
         title: '未命名',
@@ -45,6 +47,7 @@ export default function New() {
         lng: null,
         location: '',
         participantLimit: 1,
+        message: '',
     });
     const [startTime, setStartTime] = useState<Dayjs>(dayjs().startOf('day'));
     const [endTime, setEndTime] = useState<Dayjs>(dayjs().startOf('day'));
@@ -86,6 +89,7 @@ export default function New() {
             lng: null,
             location: '',
             participantLimit: 1,
+            message: '',
         });
         setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
         setLevels([level, level]);
@@ -154,6 +158,18 @@ export default function New() {
                     return { ...oldVal, endTime: new Date(e.target.value) };
                 });
                 break;
+            case 'message':
+                setEventInfo((oldVal) => {
+                    if (
+                        e.target.value.length <= 50 &&
+                        e.target.value.length >= 0
+                    ) {
+                        return { ...oldVal, message: e.target.value };
+                    }
+
+                    return oldVal;
+                });
+                break;
         }
     }
 
@@ -179,6 +195,7 @@ export default function New() {
             lng,
             location,
             participantLimit: participant_limit,
+            message,
         } = eventInfo;
 
         const { error } = await supabase.from('event').insert([
@@ -198,6 +215,7 @@ export default function New() {
                 remaining_spots: participant_limit,
                 start_time: startTime,
                 end_time: endTime,
+                message,
             },
         ]);
 
@@ -435,6 +453,20 @@ export default function New() {
                                 </DemoItem>
                             </DemoContainer>
                         </LocalizationProvider>
+                        <FormControl>
+                            <FormLabel className="mb-4">
+                                備註 ({eventInfo.message.length}
+                                /50)
+                            </FormLabel>
+                            <TextField
+                                name="message"
+                                minRows={3}
+                                multiline
+                                value={eventInfo.message}
+                                onChange={handleEventInfoChange}
+                            />
+                        </FormControl>
+
                         <button
                             className="px-8 py-2 border-emerald-500 border-2 text-emerald-500"
                             onClick={() => {
