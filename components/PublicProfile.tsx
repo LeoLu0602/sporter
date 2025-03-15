@@ -12,7 +12,7 @@ export default function PublicProfile({
     }
 
     return (
-        <div className="fixed left-0 top-0 w-full h-screen z-50 bg-white p-8 flex flex-col gap-4 text-xl">
+        <div className="fixed left-0 top-0 w-full h-screen z-50 bg-white p-8 pb-64 flex flex-col gap-4 text-xl">
             <div className="flex gap-4">
                 <div>名稱:</div>
                 <div>{user.username}</div>

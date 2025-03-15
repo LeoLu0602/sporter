@@ -30,15 +30,12 @@ export default function Event() {
     }
 
     const matchingUserEvents = userEvents.filter(
-        ({ email, participant_limit, remaining_spots, start_time }) =>
-            new Date(start_time).getTime() > Date.now() &&
-            email === user.email &&
-            participant_limit === remaining_spots
+        ({ remaining_spots, start_time }) =>
+            new Date(start_time).getTime() > Date.now() && remaining_spots > 0
     );
     const futureUserEvents = userEvents.filter(
-        ({ email, participant_limit, remaining_spots, start_time }) =>
-            new Date(start_time).getTime() > Date.now() &&
-            !(email === user.email && participant_limit === remaining_spots)
+        ({ remaining_spots, start_time }) =>
+            new Date(start_time).getTime() > Date.now() && remaining_spots === 0
     );
     const pastUserEvents = userEvents.filter(
         ({ start_time }) => new Date(start_time).getTime() <= Date.now()
