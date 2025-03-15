@@ -366,6 +366,7 @@ export default function New() {
                                     min={0}
                                     max={100}
                                     step={5}
+                                    marks
                                     valueLabelDisplay="auto"
                                 />
                             </div>
