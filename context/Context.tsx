@@ -161,8 +161,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
             }
 
             if (pathname === '/') {
-                router.push('/profile');
-                window.location.replace('/profile');
+                window.location.replace('/events');
             }
         }
 

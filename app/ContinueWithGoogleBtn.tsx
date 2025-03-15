@@ -6,11 +6,11 @@ export default function ContinueWithGoogleBtn() {
     async function signIn() {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
-            options: { redirectTo: window.location.origin + '/profile' },
+            options: { redirectTo: window.location.origin + '/events' },
         });
 
         if (error) {
-            alert("Error!");
+            alert('Error!');
             console.error(error);
         }
     }
