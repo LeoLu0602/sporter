@@ -13,11 +13,6 @@ export default function EventDetails({
 }) {
     const user = useUser();
     const userEvents = useUserEvents();
-
-    if (!details || !user || !userEvents) {
-        return <></>;
-    }
-
     const [showParticipantList, setShowParticipantList] =
         useState<boolean>(false);
     const [participants, setParticipants] = useState<
@@ -28,6 +23,11 @@ export default function EventDetails({
         email: string;
         username: string;
     } | null>(null);
+
+    if (!details || !user || !userEvents) {
+        return <></>;
+    }
+
     const isOwner = user.email === details.email;
     const isParticipant = new Set(userEvents.map(({ id }) => id)).has(
         details.id
@@ -210,6 +210,10 @@ export default function EventDetails({
 
     function toggleParticipantList() {
         setShowParticipantList((oldVal) => !oldVal);
+    }
+
+    if (!owner) {
+        return <></>;
     }
 
     return (
