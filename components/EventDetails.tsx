@@ -1,7 +1,8 @@
 import { useUser, useUserEvents } from '@/context/Context';
-import { EventType, getSportEmoji, supabase } from '@/lib/utils';
+import { EventType, getSportEmoji, supabase, UserType } from '@/lib/utils';
 import ParticipantList from '@/components/ParticipantList';
 import { useEffect, useState } from 'react';
+import PublicProfile from '@/components/PublicProfile';
 
 export default function EventDetails({
     details,
@@ -15,14 +16,9 @@ export default function EventDetails({
     const userEvents = useUserEvents();
     const [showParticipantList, setShowParticipantList] =
         useState<boolean>(false);
-    const [participants, setParticipants] = useState<
-        { id: string; username: string }[]
-    >([]);
-    const [owner, setOwner] = useState<{
-        id: string;
-        email: string;
-        username: string;
-    } | null>(null);
+    const [participants, setParticipants] = useState<UserType[]>([]);
+    const [owner, setOwner] = useState<UserType | null>(null);
+    const [userProfile, setUserProfile] = useState<UserType | null>(null);
 
     const isOwner = user && details ? user.email === details.email : false;
     const isParticipant =
@@ -63,11 +59,7 @@ export default function EventDetails({
                 return;
             }
 
-            setParticipants(
-                data2.map(({ id, email, username }) => {
-                    return { id, email, username };
-                })
-            );
+            setParticipants(data2);
         }
 
         async function getOwnerUserName() {
@@ -209,116 +201,136 @@ export default function EventDetails({
         setShowParticipantList((oldVal) => !oldVal);
     }
 
+    function seeUserProfile(user: UserType | null) {
+        setUserProfile(user);
+    }
+
     if (!owner || !details || !user || !userEvents) {
         return <></>;
     }
 
     return (
-        <div className="fixed left-0 top-0 z-50 h-screen w-full bg-white p-8 pb-64 text-xl overflow-y-auto flex flex-col gap-8">
-            <div className="flex gap-4 text-2xl">
-                <div>{getSportEmoji(details.sport)}</div>
-                <div className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
-                    {details.title}
+        <>
+            <PublicProfile
+                user={userProfile}
+                close={() => {
+                    seeUserProfile(null);
+                }}
+            />
+            <div className="fixed left-0 top-0 z-40 h-screen w-full bg-white p-8 pb-64 text-xl overflow-y-auto flex flex-col gap-8">
+                <div className="flex gap-4 text-2xl">
+                    <div>{getSportEmoji(details.sport)}</div>
+                    <div className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
+                        {details.title}
+                    </div>
                 </div>
-            </div>
-            <div className="flex gap-4 whitespace-nowrap">
-                <div>地點:</div>
-                <div className="flex-grow overflow-hidden text-ellipsis">
-                    {details.location}
+                <div className="flex gap-4 whitespace-nowrap">
+                    <div>地點:</div>
+                    <div className="flex-grow overflow-hidden text-ellipsis">
+                        {details.location}
+                    </div>
                 </div>
-            </div>
-            <a
-                className="text-blue-500"
-                href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
-                target="_blank"
-            >
-                開啟地圖
-            </a>
-            <div>
-                <span className="mr-4">開始時間:</span>
-                {new Date(details.start_time).toLocaleString('en-US', {
-                    dateStyle: 'short',
-                    timeStyle: 'short',
-                    hourCycle: 'h23',
-                })}
-            </div>
-            <div>
-                <span className="mr-4">結束時間:</span>
-                {new Date(details.end_time).toLocaleString('en-US', {
-                    dateStyle: 'short',
-                    timeStyle: 'short',
-                    hourCycle: 'h23',
-                })}
-            </div>
-            <div className="flex gap-4 items-center">
-                <span className="whitespace-nowrap">發起人:</span>
-                <div className="border-2 border-sky-500 text-sky-500 rounded-xl p-2 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis">
-                    {owner ? owner.username : '載入中...'}
-                </div>
-            </div>
-            <div>
-                <span className="mr-4">目前人數 (不含發起人):</span>
-                {details.participant_limit - details.remaining_spots} /{' '}
-                {details.participant_limit}
-            </div>
-            <div>
-                <button
-                    className="border-orange-500 border-2 text-orange-500 px-4 py-2"
-                    onClick={() => {
-                        toggleParticipantList();
-                    }}
+                <a
+                    className="text-blue-500"
+                    href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
+                    target="_blank"
                 >
-                    {showParticipantList ? '關閉名單' : '檢視名單'}
-                </button>
-                <ParticipantList
-                    show={showParticipantList}
-                    participants={participants}
-                />
-            </div>
-            {details.message.length > 0 && (
+                    開啟地圖
+                </a>
                 <div>
-                    <div>備註:</div>
-                    <div className="break-all">{details.message}</div>
+                    <span className="mr-4">開始時間:</span>
+                    {new Date(details.start_time).toLocaleString('en-US', {
+                        dateStyle: 'short',
+                        timeStyle: 'short',
+                        hourCycle: 'h23',
+                    })}
                 </div>
-            )}
-            <div className="flex gap-4 mt-8">
-                <button
-                    className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
-                    onClick={hideDetails}
-                >
-                    返回
-                </button>
-                {!isParticipant && (
+                <div>
+                    <span className="mr-4">結束時間:</span>
+                    {new Date(details.end_time).toLocaleString('en-US', {
+                        dateStyle: 'short',
+                        timeStyle: 'short',
+                        hourCycle: 'h23',
+                    })}
+                </div>
+                <div className="flex gap-4 items-center">
+                    <span className="whitespace-nowrap">發起人:</span>
                     <button
-                        className="px-4 py-2 border-sky-500 border-2 text-sky-500"
+                        className="border-2 border-sky-500 text-sky-500 rounded-xl p-2 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
                         onClick={() => {
-                            joinEvent();
+                            setUserProfile(owner);
                         }}
                     >
-                        +1
+                        {owner ? owner.username : '載入中...'}
                     </button>
-                )}
-                {isParticipant && !isOwner && (
+                </div>
+                <div>
+                    <span className="mr-4">目前人數 (不含發起人):</span>
+                    {details.participant_limit - details.remaining_spots} /{' '}
+                    {details.participant_limit}
+                </div>
+                <div>
                     <button
-                        className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                        className="border-orange-500 border-2 text-orange-500 px-4 py-2"
                         onClick={() => {
-                            leaveEvent();
+                            toggleParticipantList();
                         }}
                     >
-                        &minus; 1
+                        {showParticipantList ? '關閉名單' : '檢視名單'}
                     </button>
-                )}
-                {isOwner && (
-                    <button
-                        className="px-4 py-2 border-rose-500 border-2 text-rose-500"
-                        onClick={() => {
-                            deleteEvent();
+                    <ParticipantList
+                        show={showParticipantList}
+                        participants={participants}
+                        seeUserProfile={(user: UserType) => {
+                            seeUserProfile(user);
                         }}
-                    >
-                        刪除
-                    </button>
+                    />
+                </div>
+                {details.message.length > 0 && (
+                    <div>
+                        <div>備註:</div>
+                        <div className="break-all">{details.message}</div>
+                    </div>
                 )}
+                <div className="flex gap-4 mt-8">
+                    <button
+                        className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
+                        onClick={hideDetails}
+                    >
+                        返回
+                    </button>
+                    {!isParticipant && (
+                        <button
+                            className="px-4 py-2 border-sky-500 border-2 text-sky-500"
+                            onClick={() => {
+                                joinEvent();
+                            }}
+                        >
+                            +1
+                        </button>
+                    )}
+                    {isParticipant && !isOwner && (
+                        <button
+                            className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                            onClick={() => {
+                                leaveEvent();
+                            }}
+                        >
+                            &minus; 1
+                        </button>
+                    )}
+                    {isOwner && (
+                        <button
+                            className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                            onClick={() => {
+                                deleteEvent();
+                            }}
+                        >
+                            刪除
+                        </button>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }

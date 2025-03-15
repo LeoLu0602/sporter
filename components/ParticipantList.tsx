@@ -1,9 +1,13 @@
+import { UserType } from '@/lib/utils';
+
 export default function ParticipantList({
     show,
     participants,
+    seeUserProfile,
 }: {
     show: boolean;
-    participants: { id: string; username: string }[];
+    participants: UserType[];
+    seeUserProfile: (user: UserType) => void;
 }) {
     if (!show || participants.length === 0) {
         return <></>;
@@ -11,13 +15,16 @@ export default function ParticipantList({
 
     return (
         <div className="pt-8 flex flex-wrap">
-            {participants.map(({ id, username }) => (
-                <div
-                    key={id}
+            {participants.map((participant) => (
+                <button
+                    key={participant.id}
                     className="p-2 border-2 border-sky-500 text-sky-500 cursor-pointer rounded-xl"
+                    onClick={() => {
+                        seeUserProfile(participant);
+                    }}
                 >
-                    {username}
-                </div>
+                    {participant.username}
+                </button>
             ))}
         </div>
     );
