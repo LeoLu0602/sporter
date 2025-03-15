@@ -24,14 +24,11 @@ export default function EventDetails({
         username: string;
     } | null>(null);
 
-    if (!details || !user || !userEvents) {
-        return <></>;
-    }
-
-    const isOwner = user.email === details.email;
-    const isParticipant = new Set(userEvents.map(({ id }) => id)).has(
-        details.id
-    );
+    const isOwner = user && details ? user.email === details.email : false;
+    const isParticipant =
+        userEvents && details
+            ? new Set(userEvents.map(({ id }) => id)).has(details.id)
+            : false;
 
     useEffect(() => {
         async function getParticipants() {
@@ -212,7 +209,7 @@ export default function EventDetails({
         setShowParticipantList((oldVal) => !oldVal);
     }
 
-    if (!owner) {
+    if (!owner || !details || !user || !userEvents) {
         return <></>;
     }
 
