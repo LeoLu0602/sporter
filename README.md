@@ -16,6 +16,8 @@ Sporter 是一款專為運動愛好者設計的社交平台，讓你輕鬆找到
 
 Sporter is a social platform designed for sports enthusiasts, making it easy to find workout partners, organize sports activities, and take on exciting challenges. With Sporter, you can create a personal sports profile, browse nearby events, or host your own activities to make exercising more fun and engaging. Whether you want to try new workout partners or find opponents at your skill level for a competitive challenge, Sporter helps you connect and enjoy the world of sports.
 
+<img src="./demo/qr-code.png" width="200" height="200" />
+
 ## Contribute
 
 - Read [The Ultimate Github Collaboration Guide](https://medium.com/@jonathanmines/the-ultimate-github-collaboration-guide-df816e98fb67) first
