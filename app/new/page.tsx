@@ -86,8 +86,8 @@ export default function New() {
                 ' ' +
                 radomNumber.toString().padStart(3, '0'),
             gender: user.gender,
-            ageMin: Math.max(0, age - 5),
-            ageMax: Math.min(100, age + 5),
+            ageMin: 0,
+            ageMax: 100,
             levelMin: Math.max(1, level),
             levelMax: Math.max(1, level),
             lat: null,
@@ -96,7 +96,7 @@ export default function New() {
             participantLimit: 1,
             message: '',
         });
-        setAges([Math.max(0, age - 5), Math.min(100, age + 5)]);
+        setAges([0, 100]);
         setLevels([level, level]);
     }
 
@@ -365,7 +365,7 @@ export default function New() {
                                     onChange={handleAgesChange}
                                     min={0}
                                     max={100}
-                                    step={1}
+                                    step={5}
                                     valueLabelDisplay="auto"
                                 />
                             </div>
@@ -379,7 +379,6 @@ export default function New() {
                             >
                                 開啟地圖
                             </button>
-
                             {eventInfo.lat && eventInfo.lng ? (
                                 <a
                                     className="text-sky-500"
