@@ -365,6 +365,7 @@ export default function New() {
                                     onChange={handleAgesChange}
                                     min={0}
                                     max={100}
+                                    step={1}
                                     valueLabelDisplay="auto"
                                 />
                             </div>
