@@ -21,14 +21,12 @@ import { Box, FormControl, FormLabel, TextField } from '@mui/material';
 export default function New() {
     const user = useUser();
     const [sport, setSport] = useState<string | null>(null);
-    const [ages, setAges] = useState<number[]>([0, 100]);
+    const [ages, setAges] = useState<number[]>([10, 80]);
     const [levels, setLevels] = useState<number[]>([1, 6]);
     const [eventInfo, setEventInfo] = useState<{
         sport: string | null;
         title: string;
         gender: number; // 1: male, 2: female, 3: any
-        ageMin: number;
-        ageMax: number;
         levelMin: number;
         levelMax: number;
         lat: number | null;
@@ -40,8 +38,6 @@ export default function New() {
         sport: null,
         title: '',
         gender: 3,
-        ageMin: 0,
-        ageMax: 100,
         levelMin: 1,
         levelMax: 6,
         lat: null,
@@ -86,8 +82,6 @@ export default function New() {
                 ' ' +
                 radomNumber.toString().padStart(3, '0'),
             gender: user.gender,
-            ageMin: 0,
-            ageMax: 100,
             levelMin: Math.max(1, level),
             levelMax: Math.max(1, level),
             lat: null,
@@ -96,21 +90,8 @@ export default function New() {
             participantLimit: 1,
             message: '',
         });
-        setAges([0, 100]);
+        setAges([10, 80]);
         setLevels([level, level]);
-    }
-
-    function handleAgesChange(event: Event, newAges: number | number[]) {
-        const [newAgeMin, newAgeMax]: number[] = newAges as number[];
-
-        setAges(newAges as number[]);
-        setEventInfo((oldVal) => {
-            return {
-                ...oldVal,
-                ageMin: newAgeMin,
-                ageMax: newAgeMax,
-            };
-        });
     }
 
     function handleLevelsChange(event: Event, newLevels: number | number[]) {
@@ -192,8 +173,6 @@ export default function New() {
             sport,
             title,
             gender,
-            ageMin: age_min,
-            ageMax: age_max,
             levelMin: level_min,
             levelMax: level_max,
             lat,
@@ -209,8 +188,8 @@ export default function New() {
                 sport,
                 title,
                 gender,
-                age_min,
-                age_max,
+                age_min: ages[0],
+                age_max: ages[1],
                 level_min,
                 level_max,
                 lat,
@@ -362,10 +341,15 @@ export default function New() {
                             <div className="px-4">
                                 <Slider
                                     value={ages}
-                                    onChange={handleAgesChange}
-                                    min={0}
-                                    max={100}
-                                    step={5}
+                                    onChange={(event, newAges) => {
+                                        setAges(newAges as number[]);
+                                    }}
+                                    onChangeCommitted={(event, newAges) => {
+                                        setAges(newAges as number[]);
+                                    }}
+                                    min={10}
+                                    max={80}
+                                    step={10}
                                     marks
                                     valueLabelDisplay="auto"
                                 />
