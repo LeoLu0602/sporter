@@ -56,7 +56,6 @@ export default function New() {
             return;
         }
 
-        const age: number = user.birthday ? calculateAge(user.birthday) : 20;
         const level: number =
             sport === 'soccer'
                 ? user.soccer_level
@@ -296,6 +295,7 @@ export default function New() {
                                     onChange={handleLevelsChange}
                                     min={1}
                                     max={6}
+                                    marks
                                     valueLabelDisplay="auto"
                                 />
                             </div>
