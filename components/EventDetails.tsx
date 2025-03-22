@@ -225,20 +225,20 @@ export default function EventDetails({
                         {details.title}
                     </div>
                 </div>
-                <div className="flex gap-4 whitespace-nowrap mb-2">
+                <div className="flex gap-4 whitespace-nowrap mb-2 text-gray-500">
                     <div>地點:</div>
                     <div className="flex-grow overflow-hidden text-ellipsis">
                         {details.location}
                     </div>
                 </div>
                 <a
-                    className="text-blue-500 mb-2 block"
+                    className="text-sky-500 mb-2 block"
                     href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
                     target="_blank"
                 >
                     開啟地圖
                 </a>
-                <div className="mb-2">
+                <div className="mb-2 text-gray-500">
                     <span className="mr-4">開始時間:</span>
                     {new Date(details.start_time).toLocaleString('en-US', {
                         dateStyle: 'short',
@@ -246,7 +246,7 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
-                <div className="mb-2">
+                <div className="mb-2 text-gray-500">
                     <span className="mr-4">結束時間:</span>
                     {new Date(details.end_time).toLocaleString('en-US', {
                         dateStyle: 'short',
@@ -255,7 +255,9 @@ export default function EventDetails({
                     })}
                 </div>
                 <div className="flex gap-4 items-center mb-2">
-                    <span className="whitespace-nowrap">發起人:</span>
+                    <span className="whitespace-nowrap text-gray-500">
+                        發起人:
+                    </span>
                     <button
                         className="text-sky-500 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
                         onClick={() => {
@@ -265,8 +267,8 @@ export default function EventDetails({
                         {owner ? owner.username : '載入中...'}
                     </button>
                 </div>
-                <div>
-                    <span className="mr-4">目前人數 (不含發起人):</span>
+                <div className="text-gray-500">
+                    <span className="mr-4 ">目前人數 (不含發起人):</span>
                     {details.participant_limit - details.remaining_spots} /{' '}
                     {details.participant_limit}
                 </div>
@@ -291,7 +293,7 @@ export default function EventDetails({
                 )}
 
                 {details.message.length > 0 && (
-                    <div className="mb-64">
+                    <div className="mb-64 text-gray-500">
                         <div className="mb-4">備註:</div>
                         <div className="break-all">{details.message}</div>
                     </div>
