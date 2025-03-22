@@ -25,7 +25,7 @@ export default function EventCard({
             onClick={openCard}
         >
             <div className="flex flex-col gap-4 overflow-hidden">
-                <div className="text-2xl flex gap-4 w-full">
+                <div className="text-xl flex gap-4 w-full">
                     <div>{getSportEmoji(sport)}</div>
                     <div className="flex-grow text-ellipsis whitespace-nowrap overflow-hidden">
                         {title}
