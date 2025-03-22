@@ -218,7 +218,7 @@ export default function EventDetails({
                     seeUserProfile(null);
                 }}
             />
-            <div className="fixed left-0 top-0 z-40 h-screen w-full bg-white p-8 text-xl overflow-y-auto">
+            <div className="fixed left-0 top-0 z-40 h-screen w-full bg-white p-8 text-xl overflow-y-auto pb-64">
                 <div className="flex gap-4 text-2xl mb-8">
                     <div>{getSportEmoji(details.sport)}</div>
                     <div className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
@@ -293,12 +293,12 @@ export default function EventDetails({
                 )}
 
                 {details.message.length > 0 && (
-                    <div className="mb-64 text-gray-500">
+                    <div className="text-gray-500">
                         <div className="mb-4">備註:</div>
                         <div className="break-all">{details.message}</div>
                     </div>
                 )}
-                <div className="flex gap-4 fixed left-8 bottom-8">
+                <div className="flex gap-4 fixed right-8 bottom-8">
                     <button
                         className="px-4 py-2 text-emerald-500 border-emerald-500 border-2 bg-white"
                         onClick={hideDetails}
