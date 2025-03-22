@@ -27,7 +27,9 @@ export default function Search() {
     return (
         <>
             <header>
-                <h1 className="text-center p-8 text-2xl">找運動</h1>
+                <h1 className="text-center py-4 text-2xl border-b-[1px] border-gray-200">
+                    找運動
+                </h1>
             </header>
             <main className="text-xl pb-12">
                 {user && eventDetails && (
