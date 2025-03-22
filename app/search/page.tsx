@@ -12,18 +12,6 @@ export default function Search() {
     const searchResults = useSearchResults();
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
 
-    function seeMoreDetails(id: string) {
-        if (searchResults) {
-            setEventDetails(
-                searchResults.find((event) => event.id === id) ?? null
-            );
-        }
-    }
-
-    function hideDetails() {
-        setEventDetails(null);
-    }
-
     return (
         <>
             <header>
@@ -37,16 +25,11 @@ export default function Search() {
                         userEmail={user.email}
                         details={eventDetails}
                         hideDetails={() => {
-                            hideDetails();
+                            setEventDetails(null);
                         }}
                     />
                 )}
-                {!searchResults && (
-                    <section className="flex justify-center items-center w-full h-screen absolute left-0 top-0">
-                        <CircularProgress />
-                    </section>
-                )}
-                {searchResults && (
+                {searchResults ? (
                     <section className="flex flex-col gap-4">
                         {searchResults.map(
                             ({
@@ -66,11 +49,19 @@ export default function Search() {
                                     endTime={new Date(end_time)}
                                     location={location}
                                     openCard={() => {
-                                        seeMoreDetails(id);
+                                        setEventDetails(
+                                            searchResults.find(
+                                                (event) => event.id === id
+                                            ) ?? null
+                                        );
                                     }}
                                 />
                             )
                         )}
+                    </section>
+                ) : (
+                    <section className="flex justify-center items-center w-full h-screen absolute left-0 top-0">
+                        <CircularProgress />
                     </section>
                 )}
             </main>
