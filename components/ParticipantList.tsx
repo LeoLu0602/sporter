@@ -14,11 +14,11 @@ export default function ParticipantList({
     }
 
     return (
-        <div className="pt-8 flex flex-wrap">
+        <div>
             {participants.map((participant) => (
                 <button
                     key={participant.id}
-                    className="p-2 border-2 border-sky-500 text-sky-500 cursor-pointer rounded-xl"
+                    className="cursor-pointer text-sky-500 mt-4"
                     onClick={() => {
                         seeUserProfile(participant);
                     }}

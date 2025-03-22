@@ -3,6 +3,7 @@ import { EventType, getSportEmoji, supabase, UserType } from '@/lib/utils';
 import ParticipantList from '@/components/ParticipantList';
 import { useEffect, useState } from 'react';
 import PublicProfile from '@/components/PublicProfile';
+import clsx from 'clsx';
 
 export default function EventDetails({
     details,
@@ -217,27 +218,27 @@ export default function EventDetails({
                     seeUserProfile(null);
                 }}
             />
-            <div className="fixed left-0 top-0 z-40 h-screen w-full bg-white p-8 pb-64 text-xl overflow-y-auto flex flex-col gap-8">
-                <div className="flex gap-4 text-2xl">
+            <div className="fixed left-0 top-0 z-40 h-screen w-full bg-white p-8 text-xl overflow-y-auto">
+                <div className="flex gap-4 text-2xl mb-8">
                     <div>{getSportEmoji(details.sport)}</div>
                     <div className="flex-grow overflow-hidden whitespace-nowrap text-ellipsis">
                         {details.title}
                     </div>
                 </div>
-                <div className="flex gap-4 whitespace-nowrap">
+                <div className="flex gap-4 whitespace-nowrap mb-2">
                     <div>地點:</div>
                     <div className="flex-grow overflow-hidden text-ellipsis">
                         {details.location}
                     </div>
                 </div>
                 <a
-                    className="text-blue-500"
+                    className="text-blue-500 mb-2 block"
                     href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
                     target="_blank"
                 >
                     開啟地圖
                 </a>
-                <div>
+                <div className="mb-2">
                     <span className="mr-4">開始時間:</span>
                     {new Date(details.start_time).toLocaleString('en-US', {
                         dateStyle: 'short',
@@ -245,7 +246,7 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
-                <div>
+                <div className="mb-2">
                     <span className="mr-4">結束時間:</span>
                     {new Date(details.end_time).toLocaleString('en-US', {
                         dateStyle: 'short',
@@ -253,10 +254,10 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4 items-center mb-2">
                     <span className="whitespace-nowrap">發起人:</span>
                     <button
-                        className="border-2 border-sky-500 text-sky-500 rounded-xl p-2 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
+                        className="text-sky-500 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
                         onClick={() => {
                             setUserProfile(owner);
                         }}
@@ -269,32 +270,35 @@ export default function EventDetails({
                     {details.participant_limit - details.remaining_spots} /{' '}
                     {details.participant_limit}
                 </div>
-                <div>
-                    <button
-                        className="border-orange-500 border-2 text-orange-500 px-4 py-2"
-                        onClick={() => {
-                            toggleParticipantList();
-                        }}
-                    >
-                        {showParticipantList ? '關閉名單' : '檢視名單'}
-                    </button>
-                    <ParticipantList
-                        show={showParticipantList}
-                        participants={participants}
-                        seeUserProfile={(user: UserType) => {
-                            seeUserProfile(user);
-                        }}
-                    />
-                </div>
+                {details.remaining_spots < details.participant_limit && (
+                    <div className="my-8">
+                        <button
+                            className="border-emerald-500 border-2 text-emerald-500 px-4 py-2"
+                            onClick={() => {
+                                toggleParticipantList();
+                            }}
+                        >
+                            {showParticipantList ? '關閉名單' : '檢視名單'}
+                        </button>
+                        <ParticipantList
+                            show={showParticipantList}
+                            participants={participants}
+                            seeUserProfile={(user: UserType) => {
+                                seeUserProfile(user);
+                            }}
+                        />
+                    </div>
+                )}
+
                 {details.message.length > 0 && (
-                    <div>
-                        <div>備註:</div>
+                    <div className="mb-64">
+                        <div className="mb-4">備註:</div>
                         <div className="break-all">{details.message}</div>
                     </div>
                 )}
-                <div className="flex gap-4 mt-8">
+                <div className="flex gap-4 fixed left-8 bottom-8">
                     <button
-                        className="px-4 py-2 text-emerald-500 border-emerald-500 border-2"
+                        className="px-4 py-2 text-emerald-500 border-emerald-500 border-2 bg-white"
                         onClick={hideDetails}
                     >
                         返回
@@ -321,7 +325,7 @@ export default function EventDetails({
                     )}
                     {isOwner && (
                         <button
-                            className="px-4 py-2 border-rose-500 border-2 text-rose-500"
+                            className="px-4 py-2 border-rose-500 border-2 text-rose-500 bg-white"
                             onClick={() => {
                                 deleteEvent();
                             }}
