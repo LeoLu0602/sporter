@@ -1,6 +1,6 @@
 'use client';
 
-import { EventType, supabase, UserType } from '@/lib/utils';
+import { calculateAge, EventType, supabase, UserType } from '@/lib/utils';
 import { User } from '@supabase/supabase-js';
 import {
     createContext,
@@ -15,9 +15,7 @@ const UserDispatchContext = createContext<Dispatch<{
     user: UserType | null;
 }> | null>(null);
 const UserEventsContext = createContext<EventType[] | null>(null);
-const UserEventsDispatchContext = createContext<Dispatch<{
-    userEvents: EventType[] | null;
-}> | null>(null);
+const SearchResultsContext = createContext<EventType[] | null>(null);
 
 function userReducer(user: UserType | null, action: { user: UserType | null }) {
     return action.user;
@@ -30,20 +28,27 @@ function userEventsReducer(
     return action.userEvents;
 }
 
-export function useUser() {
-    return useContext(UserContext);
+function searchResultsReducer(
+    searchResults: EventType[] | null,
+    action: { searchResults: EventType[] | null }
+) {
+    return action.searchResults;
 }
 
-export function useUserEvents() {
-    return useContext(UserEventsContext);
+export function useUser() {
+    return useContext(UserContext);
 }
 
 export function useUserDispatch() {
     return useContext(UserDispatchContext);
 }
 
-export function useUserEventsDispatch() {
-    return useContext(UserEventsDispatchContext);
+export function useUserEvents() {
+    return useContext(UserEventsContext);
+}
+
+export function useSearchResults() {
+    return useContext(SearchResultsContext);
 }
 
 export function Provider({ children }: { children: React.ReactNode }) {
@@ -52,29 +57,10 @@ export function Provider({ children }: { children: React.ReactNode }) {
         userEventsReducer,
         null
     );
-
-    async function setUpNewUser(user: User) {
-        const { data, error } = await supabase
-            .from('user')
-            .insert([
-                {
-                    email: user.email,
-                    username: user.user_metadata.full_name,
-                },
-            ])
-            .select();
-
-        if (error) {
-            alert('Error!');
-            console.error(error);
-
-            return;
-        }
-
-        userDispatch({
-            user: data[0],
-        });
-    }
+    const [searchResults, searchResultsDispatch] = useReducer(
+        searchResultsReducer,
+        null
+    );
 
     // Return event ids.
     async function getEventsUserJoined(userId: string): Promise<string[]> {
@@ -131,17 +117,86 @@ export function Provider({ children }: { children: React.ReactNode }) {
         );
     }
 
-    async function setUpReturnUser(user: UserType) {
-        userDispatch({ user });
+    async function setUpSearchResults(user: UserType, userEvents: EventType[]) {
+        if (!('geolocation' in navigator)) {
+            alert('Geolocation is not available');
 
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { data, error } = await supabase.rpc('filter_events', {
+                user_lat: position.coords.latitude,
+                user_lng: position.coords.longitude,
+                d: user.distance,
+                user_gender: user.gender,
+                user_age: user.birthday ? calculateAge(user.birthday) : 20,
+                user_soccer_level: user.soccer_level,
+                user_basketball_level: user.basketball_level,
+                user_tennis_level: user.tennis_level,
+                user_table_tennis_level: user.table_tennis_level,
+                user_badminton_level: user.badminton_level,
+                user_time: new Date().toISOString(),
+            });
+
+            if (error) {
+                alert('Error!');
+                console.error(error);
+
+                return;
+            }
+
+            // Old events first.
+            // Filter out events that the user has already joined.
+            searchResultsDispatch({
+                searchResults: data
+                    .sort(
+                        (a: { start_time: Date }, b: { start_time: Date }) =>
+                            new Date(a.start_time).getTime() -
+                            new Date(b.start_time).getTime()
+                    )
+                    .filter(
+                        ({ id }: { id: string }) =>
+                            !new Set(userEvents.map(({ id }) => id)).has(id)
+                    ),
+            });
+        });
+    }
+
+    async function setUpNewUser(user: User) {
+        const { data, error } = await supabase
+            .from('user')
+            .insert([
+                {
+                    email: user.email,
+                    username: user.user_metadata.full_name,
+                },
+            ])
+            .select();
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return;
+        }
+
+        userDispatch({ user: data[0] });
+        userEventsDispatch({ userEvents: [] });
+        setUpSearchResults(data[0], []);
+    }
+
+    async function setUpReturnUser(user: UserType) {
         const eventsUserJoined = await getEventsUserJoined(user.id);
         const eventsUserStarted = await getEventsUserStarted(user.email);
-        const events = await getEventsFromIds([
+        const userEvents = await getEventsFromIds([
             ...eventsUserJoined,
             ...eventsUserStarted,
         ]);
 
-        userEventsDispatch({ userEvents: events });
+        userDispatch({ user });
+        userEventsDispatch({ userEvents });
+        setUpSearchResults(user, userEvents);
     }
 
     async function setUp() {
@@ -180,11 +235,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
         <UserContext.Provider value={user}>
             <UserDispatchContext.Provider value={userDispatch}>
                 <UserEventsContext.Provider value={userEvents}>
-                    <UserEventsDispatchContext.Provider
-                        value={userEventsDispatch}
-                    >
+                    <SearchResultsContext.Provider value={searchResults}>
                         {children}
-                    </UserEventsDispatchContext.Provider>
+                    </SearchResultsContext.Provider>
                 </UserEventsContext.Provider>
             </UserDispatchContext.Provider>
         </UserContext.Provider>
