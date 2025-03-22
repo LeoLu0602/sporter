@@ -11,7 +11,7 @@ export default function Event() {
     const user = useUser();
     const userEvents = useUserEvents();
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
-    const [option, setOption] = useState<string>('future');
+    const [option, setOption] = useState<number>(2);
 
     if (!user || !userEvents) {
         return <></>;
@@ -41,24 +41,24 @@ export default function Event() {
         ({ start_time }) => new Date(start_time).getTime() <= Date.now()
     );
     const shownUserEvents =
-        option === 'future'
+        option === 3
             ? futureUserEvents
-            : option === 'past'
+            : option === 1
               ? pastUserEvents
               : matchingUserEvents;
 
     return (
         <>
-            <nav className="py-4 text-xl sticky left-0 top-0 bg-white">
+            <nav className="py-4 text-xl sticky left-0 top-0 bg-white border-b-[1px] border-gray-200">
                 <ul className="flex w-full justify-around">
                     <li
                         className={clsx('cursor-pointer', {
                             'border-b-2 border-b-black text-black':
-                                option === 'matching',
-                            'text-gray-500': option !== 'matching',
+                                option === 2,
+                            'text-gray-500': option !== 2,
                         })}
                         onClick={() => {
-                            setOption('matching');
+                            setOption(2);
                         }}
                     >
                         未滿
@@ -66,11 +66,11 @@ export default function Event() {
                     <li
                         className={clsx('cursor-pointer', {
                             'border-b-2 border-b-black text-black':
-                                option === 'future',
-                            'text-gray-500': option !== 'future',
+                                option === 3,
+                            'text-gray-500': option !== 3,
                         })}
                         onClick={() => {
-                            setOption('future');
+                            setOption(3);
                         }}
                     >
                         已滿
@@ -78,11 +78,11 @@ export default function Event() {
                     <li
                         className={clsx('cursor-pointer', {
                             'border-b-2 border-b-black text-black':
-                                option === 'past',
-                            'text-gray-500': option !== 'past',
+                                option === 1,
+                            'text-gray-500': option !== 1,
                         })}
                         onClick={() => {
-                            setOption('past');
+                            setOption(1);
                         }}
                     >
                         歷史
