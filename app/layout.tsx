@@ -31,7 +31,7 @@ export default function RootLayout({
             className={notoSansTC.className}
             suppressHydrationWarning
         >
-            <body className={`bg-background text-foreground bg-[#fafafa]`}>
+            <body className="bg-background text-foreground bg-white">
                 <Provider>
                     {children}
                     <Navbar />

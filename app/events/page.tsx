@@ -49,43 +49,43 @@ export default function Event() {
 
     return (
         <>
-            <header>
-                <h1 className="text-center p-8 text-2xl font-bold">我的運動</h1>
-            </header>
-            <nav className="mb-8 text-xl">
+            <nav className="py-4 text-xl sticky left-0 top-0 bg-white">
                 <ul className="flex w-full justify-around">
                     <li
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black font-bold':
+                            'border-b-2 border-b-black text-black':
                                 option === 'matching',
+                            'text-gray-500': option !== 'matching',
                         })}
                         onClick={() => {
                             setOption('matching');
                         }}
                     >
-                        配對中
+                        未滿
                     </li>
                     <li
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black font-bold':
+                            'border-b-2 border-b-black text-black':
                                 option === 'future',
+                            'text-gray-500': option !== 'future',
                         })}
                         onClick={() => {
                             setOption('future');
                         }}
                     >
-                        已配對
+                        已滿
                     </li>
                     <li
                         className={clsx('cursor-pointer', {
-                            'border-b-2 border-b-black font-bold':
+                            'border-b-2 border-b-black text-black':
                                 option === 'past',
+                            'text-gray-500': option !== 'past',
                         })}
                         onClick={() => {
                             setOption('past');
                         }}
                     >
-                        歷史記錄
+                        歷史
                     </li>
                 </ul>
             </nav>
@@ -99,55 +99,7 @@ export default function Event() {
                         }}
                     />
                 )}
-                <section className="flex flex-col gap-4 pb-12 bg-white">
-                    {shownUserEvents.map(
-                        ({
-                            id,
-                            email,
-                            sport,
-                            title,
-                            start_time,
-                            end_time,
-                            location,
-                        }) => (
-                            <EventCard
-                                key={id}
-                                isOwner={user.email === email}
-                                sport={sport}
-                                title={title}
-                                startTime={new Date(start_time)}
-                                endTime={new Date(end_time)}
-                                location={location}
-                                openCard={() => {
-                                    seeMoreDetails(id);
-                                }}
-                            />
-                        )
-                    )}
-                    {shownUserEvents.map(
-                        ({
-                            id,
-                            email,
-                            sport,
-                            title,
-                            start_time,
-                            end_time,
-                            location,
-                        }) => (
-                            <EventCard
-                                key={id}
-                                isOwner={user.email === email}
-                                sport={sport}
-                                title={title}
-                                startTime={new Date(start_time)}
-                                endTime={new Date(end_time)}
-                                location={location}
-                                openCard={() => {
-                                    seeMoreDetails(id);
-                                }}
-                            />
-                        )
-                    )}
+                <section className="pb-12">
                     {shownUserEvents.map(
                         ({
                             id,

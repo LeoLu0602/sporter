@@ -21,7 +21,7 @@ export default function EventCard({
 }) {
     return (
         <div
-            className='cursor-pointer p-4 text-lg border-t-[1px] border-gray-300'
+            className="cursor-pointer p-4 text-lg border-t-[1px] border-gray-200"
             onClick={openCard}
         >
             <div className="flex flex-col gap-4 overflow-hidden">
@@ -31,10 +31,10 @@ export default function EventCard({
                         {title}
                     </div>
                 </div>
-                <div className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis text-gray-600 text-base">
+                <div className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis text-gray-500 text-base">
                     {location}
                 </div>
-                <div className="text-base text-gray-600">
+                <div className="text-base text-gray-500">
                     <div>
                         <span className="mr-4">開始時間:</span>
                         {new Date(startTime).toLocaleString('en-US', {
