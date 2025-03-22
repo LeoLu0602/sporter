@@ -11,7 +11,7 @@ export default function Event() {
     const user = useUser();
     const userEvents = useUserEvents();
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
-    const [option, setOption] = useState<number>(2);
+    const [option, setOption] = useState<number>(1);
 
     if (!user || !userEvents) {
         return <></>;
