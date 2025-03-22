@@ -89,7 +89,7 @@ export default function Event() {
                     </li>
                 </ul>
             </nav>
-            <main className="p-4">
+            <main>
                 {eventDetails && (
                     <EventDetails
                         userEmail={user.email}
@@ -99,7 +99,55 @@ export default function Event() {
                         }}
                     />
                 )}
-                <section className="flex flex-col gap-4 mb-20">
+                <section className="flex flex-col gap-4 pb-12 bg-white">
+                    {shownUserEvents.map(
+                        ({
+                            id,
+                            email,
+                            sport,
+                            title,
+                            start_time,
+                            end_time,
+                            location,
+                        }) => (
+                            <EventCard
+                                key={id}
+                                isOwner={user.email === email}
+                                sport={sport}
+                                title={title}
+                                startTime={new Date(start_time)}
+                                endTime={new Date(end_time)}
+                                location={location}
+                                openCard={() => {
+                                    seeMoreDetails(id);
+                                }}
+                            />
+                        )
+                    )}
+                    {shownUserEvents.map(
+                        ({
+                            id,
+                            email,
+                            sport,
+                            title,
+                            start_time,
+                            end_time,
+                            location,
+                        }) => (
+                            <EventCard
+                                key={id}
+                                isOwner={user.email === email}
+                                sport={sport}
+                                title={title}
+                                startTime={new Date(start_time)}
+                                endTime={new Date(end_time)}
+                                location={location}
+                                openCard={() => {
+                                    seeMoreDetails(id);
+                                }}
+                            />
+                        )
+                    )}
                     {shownUserEvents.map(
                         ({
                             id,

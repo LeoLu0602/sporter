@@ -1,7 +1,7 @@
-import { Geist } from 'next/font/google';
 import './globals.css';
 import { Provider } from '@/context/Context';
 import Navbar from '@/components/Navbar';
+import { Noto_Sans_TC } from 'next/font/google';
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -13,9 +13,10 @@ export const metadata = {
     description: '',
 };
 
-const geistSans = Geist({
-    display: 'swap',
+const notoSansTC = Noto_Sans_TC({
     subsets: ['latin'],
+    weight: ['400', '700'], // Adjust weights as needed
+    display: 'swap',
 });
 
 export default function RootLayout({
@@ -27,10 +28,10 @@ export default function RootLayout({
         <html
             lang="en"
             translate="no"
-            className={geistSans.className}
+            className={notoSansTC.className}
             suppressHydrationWarning
         >
-            <body className="bg-background text-foreground bg-[#f2f4f7] font-sans">
+            <body className={`bg-background text-foreground bg-[#fafafa]`}>
                 <Provider>
                     {children}
                     <Navbar />
