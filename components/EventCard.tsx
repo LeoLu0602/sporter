@@ -21,7 +21,7 @@ export default function EventCard({
 }) {
     return (
         <div
-            className="cursor-pointer p-4 text-lg border-t-[1px] border-gray-200"
+            className="cursor-pointer p-4 text-lg border-b-[1px] border-gray-200"
             onClick={openCard}
         >
             <div className="flex flex-col gap-4 overflow-hidden">
