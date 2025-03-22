@@ -5,7 +5,6 @@ import {
     supabase,
     getSportEmoji,
     explainLevel,
-    calculateAge,
     getSportChinese,
 } from '@/lib/utils';
 import Slider from '@mui/material/Slider';

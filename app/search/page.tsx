@@ -86,7 +86,7 @@ export default function Search() {
             <header>
                 <h1 className="text-center p-8 text-2xl font-bold">找運動</h1>
             </header>
-            <main className="text-xl px-4 pb-20">
+            <main className="text-xl pb-12">
                 {eventDetails && (
                     <EventDetails
                         userEmail={user.email}

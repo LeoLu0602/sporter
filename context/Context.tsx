@@ -1,7 +1,7 @@
 'use client';
 
 import { EventType, supabase, UserType } from '@/lib/utils';
-import { usePathname, useRouter } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
 import {
     createContext,
     Dispatch,
@@ -47,124 +47,132 @@ export function useUserEventsDispatch() {
 }
 
 export function Provider({ children }: { children: React.ReactNode }) {
-    const router = useRouter();
-    const pathname = usePathname();
     const [user, userDispatch] = useReducer(userReducer, null);
     const [userEvents, userEventsDispatch] = useReducer(
         userEventsReducer,
         null
     );
 
-    useEffect(() => {
-        async function setUp() {
-            const {
-                data: { user },
-            } = await supabase.auth.getUser();
+    async function setUpNewUser(user: User) {
+        const { data, error } = await supabase
+            .from('user')
+            .insert([
+                {
+                    email: user.email,
+                    username: user.user_metadata.full_name,
+                },
+            ])
+            .select();
 
-            if (!user) {
-                router.push('/');
+        if (error) {
+            alert('Error!');
+            console.error(error);
 
-                return;
-            }
-
-            const { data, error } = await supabase
-                .from('user')
-                .select('*')
-                .eq('email', user.email);
-
-            if (error) {
-                alert('Error!');
-                console.error(error);
-
-                return;
-            }
-
-            if (data.length === 0) {
-                // User hasn't registered.
-                const { data, error } = await supabase
-                    .from('user')
-                    .insert([
-                        {
-                            email: user.email,
-                            username: user.user_metadata.full_name,
-                        },
-                    ])
-                    .select();
-
-                if (error) {
-                    alert('Error!');
-                    console.error(error);
-
-                    return;
-                }
-
-                userDispatch({
-                    user: data[0],
-                });
-            } else {
-                // User has registered.
-                userDispatch({
-                    user: data[0],
-                });
-
-                // Get the events user joined.
-                const { data: data2, error: error2 } = await supabase
-                    .from('participant')
-                    .select('*')
-                    .eq('user_id', data[0].id);
-
-                if (error2) {
-                    alert('Error!');
-                    console.error(error2);
-
-                    return;
-                }
-
-                // Get events user started.
-                const { data: data3, error: error3 } = await supabase
-                    .from('event')
-                    .select('*')
-                    .eq('email', data[0].email);
-
-                if (error3) {
-                    alert('Error!');
-                    console.error(error3);
-
-                    return;
-                }
-
-                const eventIds = [
-                    ...data2.map(({ event_id }) => event_id),
-                    ...data3.map(({ id }) => id),
-                ];
-
-                // Get events from event ids.
-                const { data: data4, error: error4 } = await supabase
-                    .from('event')
-                    .select('*')
-                    .in('id', eventIds);
-
-                if (error4) {
-                    alert('Error!');
-                    console.error(error4);
-
-                    return;
-                }
-
-                data4.sort(
-                    (a: { start_time: Date }, b: { start_time: Date }) =>
-                        new Date(a.start_time).getTime() -
-                        new Date(b.start_time).getTime()
-                );
-
-                userEventsDispatch({ userEvents: data4 });
-            }
-
-            if (pathname === '/') {
-                window.location.replace('/events');
-            }
+            return;
         }
 
+        userDispatch({
+            user: data[0],
+        });
+    }
+
+    // Return event ids.
+    async function getEventsUserJoined(userId: string): Promise<string[]> {
+        const { data, error } = await supabase
+            .from('participant')
+            .select('*')
+            .eq('user_id', userId);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return [];
+        }
+
+        return data.map(({ event_id }) => event_id);
+    }
+
+    // Return event ids.
+    async function getEventsUserStarted(email: string): Promise<string[]> {
+        const { data, error } = await supabase
+            .from('event')
+            .select('*')
+            .eq('email', email);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return [];
+        }
+
+        return data.map(({ id }) => id);
+    }
+
+    async function getEventsFromIds(ids: string[]): Promise<EventType[]> {
+        const { data, error } = await supabase
+            .from('event')
+            .select('*')
+            .in('id', ids);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return [];
+        }
+
+        // Old events first.
+        return data.sort(
+            (a: { start_time: Date }, b: { start_time: Date }) =>
+                new Date(a.start_time).getTime() -
+                new Date(b.start_time).getTime()
+        );
+    }
+
+    async function setUpReturnUser(user: UserType) {
+        userDispatch({ user });
+
+        const eventsUserJoined = await getEventsUserJoined(user.id);
+        const eventsUserStarted = await getEventsUserStarted(user.email);
+        const events = await getEventsFromIds([
+            ...eventsUserJoined,
+            ...eventsUserStarted,
+        ]);
+
+        userEventsDispatch({ userEvents: events });
+    }
+
+    async function setUp() {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+            return;
+        }
+
+        const { data, error } = await supabase
+            .from('user')
+            .select('*')
+            .eq('email', user.email);
+
+        if (error) {
+            alert('Error!');
+            console.error(error);
+
+            return;
+        }
+
+        if (data.length === 0) {
+            setUpNewUser(user);
+        } else {
+            setUpReturnUser(data[0]);
+        }
+    }
+
+    useEffect(() => {
         setUp();
     }, []);
 
