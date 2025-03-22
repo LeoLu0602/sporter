@@ -123,7 +123,7 @@ export default function Event() {
                         )
                     ) : (
                         <div className="text-center py-8 text-xl text-gray-500">
-                            Empty
+                            空空如也~
                         </div>
                     )}
                 </section>
