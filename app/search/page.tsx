@@ -23,6 +23,8 @@ export default function Search() {
             return;
         }
 
+        setIsLoading(true);
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { data, error } = await supabase.rpc('filter_events', {

@@ -267,13 +267,13 @@ export default function EventDetails({
                         {owner ? owner.username : '載入中...'}
                     </button>
                 </div>
-                <div className="text-gray-500">
+                <div className="text-gray-500 mb-8">
                     <span className="mr-4 ">目前人數 (不含發起人):</span>
                     {details.participant_limit - details.remaining_spots} /{' '}
                     {details.participant_limit}
                 </div>
                 {details.remaining_spots < details.participant_limit && (
-                    <div className="my-8">
+                    <div className="mb-8">
                         <button
                             className="border-emerald-500 border-2 text-emerald-500 px-4 py-2"
                             onClick={() => {
