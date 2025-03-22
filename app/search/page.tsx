@@ -2,22 +2,15 @@
 
 import EventCard from '@/components/EventCard';
 import EventDetails from '@/components/EventDetails';
-import { useSearchResults, useUser, useUserEvents } from '@/context/Context';
+import { useSearchResults, useUser } from '@/context/Context';
 import { EventType } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Search() {
     const user = useUser();
     const searchResults = useSearchResults();
     const [eventDetails, setEventDetails] = useState<EventType | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        if (searchResults) {
-            setIsLoading(false);
-        }
-    }, [searchResults]);
 
     function seeMoreDetails(id: string) {
         if (searchResults) {
@@ -34,7 +27,7 @@ export default function Search() {
     return (
         <>
             <header>
-                <h1 className="text-center p-8 text-2xl font-bold">找運動</h1>
+                <h1 className="text-center p-8 text-2xl">找運動</h1>
             </header>
             <main className="text-xl pb-12">
                 {user && eventDetails && (
@@ -46,12 +39,12 @@ export default function Search() {
                         }}
                     />
                 )}
-                {isLoading && (
+                {!searchResults && (
                     <section className="flex justify-center items-center w-full h-screen absolute left-0 top-0">
                         <CircularProgress />
                     </section>
                 )}
-                {!isLoading && searchResults && (
+                {searchResults && (
                     <section className="flex flex-col gap-4">
                         {searchResults.map(
                             ({

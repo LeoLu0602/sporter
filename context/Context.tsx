@@ -10,6 +10,7 @@ import {
     useReducer,
 } from 'react';
 
+// null: state is not yet determined.
 const UserContext = createContext<UserType | null>(null);
 const UserDispatchContext = createContext<Dispatch<{
     user: UserType | null;
