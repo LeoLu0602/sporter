@@ -6,8 +6,9 @@ import {
     getSportEmoji,
     explainLevel,
     getSportChinese,
+    calculateAge,
 } from '@/lib/utils';
-import Slider from '@mui/material/Slider';
+import { Slider } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -26,8 +27,6 @@ export default function New() {
         sport: string | null;
         title: string;
         gender: number; // 1: male, 2: female, 3: any
-        levelMin: number;
-        levelMax: number;
         lat: number | null;
         lng: number | null;
         location: string;
@@ -37,8 +36,6 @@ export default function New() {
         sport: null,
         title: '',
         gender: 3,
-        levelMin: 1,
-        levelMax: 6,
         lat: null,
         lng: null,
         location: '',
@@ -69,6 +66,7 @@ export default function New() {
             Math.ceil(Date.now() / (1000 * 60 * 5)) * (1000 * 60 * 5)
         );
         const initEndTime = new Date(initStartTime.getTime() + 1000 * 60 * 60);
+        const userAge = user.birthday ? calculateAge(user.birthday) : 20;
 
         setSport(sport);
         setStartTime(dayjs(initStartTime));
@@ -80,29 +78,14 @@ export default function New() {
                 ' ' +
                 radomNumber.toString().padStart(3, '0'),
             gender: user.gender,
-            levelMin: Math.max(1, level),
-            levelMax: Math.max(1, level),
             lat: null,
             lng: null,
             location: '',
             participantLimit: 1,
             message: '',
         });
-        setAges([10, 80]);
-        setLevels([level, level]);
-    }
-
-    function handleLevelsChange(event: Event, newLevels: number | number[]) {
-        const [newLevelMin, newLevelMax]: number[] = newLevels as number[];
-
-        setLevels(newLevels as number[]);
-        setEventInfo((oldVal) => {
-            return {
-                ...oldVal,
-                levelMin: newLevelMin,
-                levelMax: newLevelMax,
-            };
-        });
+        setAges([Math.max(0, userAge - 5), Math.min(100, userAge + 5)]);
+        setLevels([Math.max(1, level - 1), Math.min(6, level + 1)]);
     }
 
     function incrementParticipantLimit(amount: number) {
@@ -171,8 +154,6 @@ export default function New() {
             sport,
             title,
             gender,
-            levelMin: level_min,
-            levelMax: level_max,
             lat,
             lng,
             location,
@@ -188,8 +169,8 @@ export default function New() {
                 gender,
                 age_min: ages[0],
                 age_max: ages[1],
-                level_min,
-                level_max,
+                level_min: levels[0],
+                level_max: levels[1],
                 lat,
                 lng,
                 location,
@@ -284,18 +265,19 @@ export default function New() {
                         <section className="w-full flex flex-col gap-4">
                             <h2>
                                 <span className="mr-4">對手程度:</span>
-                                {explainLevel(eventInfo.levelMin) +
+                                {explainLevel(levels[0]) +
                                     ' 到 ' +
-                                    explainLevel(eventInfo.levelMax)}
+                                    explainLevel(levels[1])}
                             </h2>
                             <div className="px-4">
                                 <Slider
+                                    range
                                     value={levels}
-                                    onChange={handleLevelsChange}
                                     min={1}
                                     max={6}
-                                    marks
-                                    valueLabelDisplay="auto"
+                                    onChange={(newVal) => {
+                                        setLevels(newVal);
+                                    }}
                                 />
                             </div>
                         </section>
@@ -339,18 +321,13 @@ export default function New() {
                             </label>
                             <div className="px-4">
                                 <Slider
+                                    range
                                     value={ages}
-                                    onChange={(event, newAges) => {
-                                        setAges(newAges as number[]);
+                                    min={0}
+                                    max={100}
+                                    onChange={(newVal) => {
+                                        setAges(newVal);
                                     }}
-                                    onChangeCommitted={(event, newAges) => {
-                                        setAges(newAges as number[]);
-                                    }}
-                                    min={10}
-                                    max={80}
-                                    step={10}
-                                    marks
-                                    valueLabelDisplay="auto"
                                 />
                             </div>
                         </section>
