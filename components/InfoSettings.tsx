@@ -174,6 +174,8 @@ export default function InfoSettings() {
                             className="w-full"
                             name="intro"
                             multiline
+                            minRows={3}
+                            maxRows={3}
                             value={user.intro}
                             onChange={handleInfoChange}
                         />
