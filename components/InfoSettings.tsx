@@ -154,7 +154,7 @@ export default function InfoSettings() {
                             </span>
                         </div>
                         <input
-                            className="range range-success range-sm w-full"
+                            className="range range-success range-md w-full"
                             type="range"
                             min={0}
                             max={10000}
