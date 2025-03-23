@@ -158,7 +158,7 @@ export default function InfoSettings() {
                             type="range"
                             min={500}
                             max={10000}
-                            step={100}
+                            step={500}
                             value={user.distance}
                             onChange={(e) => {
                                 userDispatch({
