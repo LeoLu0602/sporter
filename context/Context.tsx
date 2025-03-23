@@ -2,6 +2,7 @@
 
 import { calculateAge, EventType, supabase, UserType } from '@/lib/utils';
 import { User } from '@supabase/supabase-js';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     createContext,
     Dispatch,
@@ -53,6 +54,8 @@ export function useSearchResults() {
 }
 
 export function Provider({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    const router = useRouter();
     const [user, userDispatch] = useReducer(userReducer, null);
     const [userEvents, userEventsDispatch] = useReducer(
         userEventsReducer,
@@ -205,7 +208,12 @@ export function Provider({ children }: { children: React.ReactNode }) {
             data: { user },
         } = await supabase.auth.getUser();
 
+        // Not signed in & not in the welcome page -> redirect to the welcome page
         if (!user) {
+            if (pathname !== '/') {
+                router.push('/');
+            }
+
             return;
         }
 
@@ -225,6 +233,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
             setUpNewUser(user);
         } else {
             setUpReturnUser(data[0]);
+        }
+
+        // Signed in -> redirect to the event page
+        if (pathname === '/') {
+            router.push('/events');
         }
     }
 

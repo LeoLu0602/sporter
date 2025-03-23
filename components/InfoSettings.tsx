@@ -57,14 +57,12 @@ export default function InfoSettings() {
                         <span className="mr-4 outline-none decoration-transparent">
                             Email:
                         </span>
-                        <span className="no-underline">
-                            <input
-                                className="w-60 overflow-hidden text-ellipsis text-black"
-                                type="text"
-                                disabled={true}
-                                value={user.email}
-                            />
-                        </span>
+                        <input
+                            className="w-60 overflow-hidden text-ellipsis text-black"
+                            type="text"
+                            disabled={true}
+                            value={user.email}
+                        />
                     </section>
 
                     <section className="mb-8 flex gap-4">
