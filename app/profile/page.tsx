@@ -52,7 +52,7 @@ export default function Profile() {
 
     return (
         <>
-            <nav className="py-4 text-xl border-b-[1px] border-gray-200">
+            <nav className="py-4 text-xl border-b-[1px] border-gray-200 sticky left-0 top-0 bg-white">
                 <ul className="flex w-full justify-around">
                     {[
                         { i: 1, txt: '基本資料' },
@@ -74,25 +74,27 @@ export default function Profile() {
                     ))}
                 </ul>
             </nav>
-            <main className="px-4 py-8 text-lg">
+            <main className="px-4 pt-8 pb-20 text-lg">
                 {user && userDispatch ? (
                     <>
                         {option === 1 ? <InfoSettings /> : <Levels />}
-                        <button
-                            className="w-full my-8 py-2 border-2 border-emerald-500 text-emerald-500"
-                            onClick={save}
-                        >
-                            儲存
-                        </button>
-                        <button
-                            className="text-rose-500 border-rose-500 border-2 py-2 w-full"
-                            onClick={signOut}
-                        >
-                            登出
-                        </button>
+                        <div className="flex flex-col items-center">
+                            <button
+                                className="mb-8 py-2 w-80 border-2 border-emerald-500 text-emerald-500"
+                                onClick={save}
+                            >
+                                儲存
+                            </button>
+                            <button
+                                className="text-rose-500 border-rose-500 border-2 py-2 w-80"
+                                onClick={signOut}
+                            >
+                                登出
+                            </button>
+                        </div>
                     </>
                 ) : (
-                    <div className="mt-4 flex justify-center">
+                    <div className="mt-8 flex justify-center">
                         <CircularProgress />
                     </div>
                 )}

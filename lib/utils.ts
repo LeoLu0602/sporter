@@ -1,5 +1,40 @@
 import { createClient } from '@supabase/supabase-js';
 
+export interface EventType {
+    id: string;
+    email: string;
+    sport: string;
+    title: string;
+    gender: number;
+    age_min: number;
+    age_max: number;
+    level_min: number;
+    level_max: number;
+    lat: number;
+    lng: number;
+    location: string;
+    participant_limit: number;
+    start_time: string;
+    end_time: string;
+    remaining_spots: number;
+    message: string;
+}
+
+export interface UserType {
+    id: string;
+    email: string;
+    username: string;
+    gender: number;
+    birthday: string | null;
+    distance: number;
+    intro: string;
+    badminton_level: number;
+    basketball_level: number;
+    soccer_level: number;
+    table_tennis_level: number;
+    tennis_level: number;
+}
+
 // Create a single supabase client for interacting with your database.
 export const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
@@ -77,39 +112,4 @@ export function calculateAge(birthday: string): number {
     }
 
     return y - by;
-}
-
-export interface EventType {
-    id: string;
-    email: string;
-    sport: string;
-    title: string;
-    gender: number;
-    age_min: number;
-    age_max: number;
-    level_min: number;
-    level_max: number;
-    lat: number;
-    lng: number;
-    location: string;
-    participant_limit: number;
-    start_time: string;
-    end_time: string;
-    remaining_spots: number;
-    message: string;
-}
-
-export interface UserType {
-    id: string;
-    email: string;
-    username: string;
-    gender: number;
-    birthday: string | null;
-    distance: number;
-    intro: string;
-    badminton_level: number;
-    basketball_level: number;
-    soccer_level: number;
-    table_tennis_level: number;
-    tennis_level: number;
 }

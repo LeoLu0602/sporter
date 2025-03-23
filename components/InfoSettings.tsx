@@ -1,5 +1,5 @@
 import { useUser, useUserDispatch } from '@/context/Context';
-import { TextField } from '@mui/material';
+import { Slider, TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -35,14 +35,6 @@ export default function InfoSettings() {
                     },
                 });
                 break;
-            case 'distance':
-                userDispatch({
-                    user: {
-                        ...user,
-                        distance: parseInt(e.target.value),
-                    },
-                });
-                break;
             case 'intro':
                 if (e.target.value.length <= 50) {
                     userDispatch({
@@ -59,8 +51,8 @@ export default function InfoSettings() {
     return (
         <>
             {user && userDispatch && (
-                <section className="flex flex-col gap-8">
-                    <section>
+                <>
+                    <section className="mb-8">
                         <span className="mr-4 outline-none decoration-transparent">
                             Email:
                         </span>
@@ -73,7 +65,8 @@ export default function InfoSettings() {
                             />
                         </span>
                     </section>
-                    <section>
+
+                    <section className="mb-8">
                         <label className="w-full focus:outline-none mr-4">
                             名稱:
                         </label>
@@ -85,7 +78,8 @@ export default function InfoSettings() {
                             onChange={handleInfoChange}
                         />
                     </section>
-                    <section className="flex gap-4">
+
+                    <section className="flex gap-4 mb-8">
                         <span>性別:</span>
                         <section>
                             <input
@@ -118,7 +112,8 @@ export default function InfoSettings() {
                             <label className="ml-4">不透漏</label>
                         </section>
                     </section>
-                    <section>
+
+                    <section className="mb-8">
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>
                                 <DatePicker
@@ -141,7 +136,8 @@ export default function InfoSettings() {
                             </DemoContainer>
                         </LocalizationProvider>
                     </section>
-                    <section>
+
+                    <section className="mb-8">
                         <label className="mr-4">距離偏好:</label>
                         <span>
                             {user.distance >= 1000
@@ -153,20 +149,29 @@ export default function InfoSettings() {
                                 : user.distance.toString()}{' '}
                             公尺
                         </span>
+                        <br />
                         <div className="flex justify-center">
-                            <input
-                                className="w-11/12 mt-4"
-                                type="range"
-                                name="distance"
-                                min="500"
-                                max="10000"
-                                step="100"
-                                value={user.distance.toString()}
-                                onChange={handleInfoChange}
+                            <Slider
+                                value={user.distance}
+                                min={500}
+                                max={10000}
+                                step={100}
+                                onChange={(
+                                    event: Event,
+                                    newValue: number | number[]
+                                ) => {
+                                    userDispatch({
+                                        user: {
+                                            ...user,
+                                            distance: newValue as number,
+                                        },
+                                    });
+                                }}
                             />
                         </div>
                     </section>
-                    <section>
+
+                    <section className="mb-8">
                         <label className="block mb-4">
                             自介 ({user.intro.length}/50){' '}
                         </label>
@@ -180,7 +185,7 @@ export default function InfoSettings() {
                             onChange={handleInfoChange}
                         />
                     </section>
-                </section>
+                </>
             )}
         </>
     );
