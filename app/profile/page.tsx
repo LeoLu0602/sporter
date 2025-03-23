@@ -6,6 +6,7 @@ import { useUser, useUserDispatch } from '@/context/Context';
 import Levels from '@/components/Levels';
 import InfoSettings from '@/components/InfoSettings';
 import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 export default function Profile() {
     const user = useUser();
@@ -74,7 +75,7 @@ export default function Profile() {
                 </ul>
             </nav>
             <main className="px-4 py-8 text-lg">
-                {user && userDispatch && (
+                {user && userDispatch ? (
                     <>
                         {option === 1 ? <InfoSettings /> : <Levels />}
                         <button
@@ -90,6 +91,10 @@ export default function Profile() {
                             登出
                         </button>
                     </>
+                ) : (
+                    <div className="mt-4 flex justify-center">
+                        <CircularProgress />
+                    </div>
                 )}
             </main>
         </>
