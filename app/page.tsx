@@ -1,4 +1,4 @@
-import ContinueWithGoogleBtn from '@/app/ContinueWithGoogleBtn';
+import ContinueWithGoogleBtn from '@/components/ContinueWithGoogleBtn';
 
 export default function Welcome() {
     return (
