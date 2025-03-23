@@ -6,11 +6,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef } from 'react';
 
 export default function InfoSettings() {
     const user = useUser();
     const userDispatch = useUserDispatch();
+    const fileRef = useRef<HTMLInputElement>(null);
 
     function handleInfoChange(
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -55,9 +56,33 @@ export default function InfoSettings() {
                 <>
                     <section className="mb-8 flex justify-center">
                         <img
-                            className="w-32 h-32 rounded-full cursor-pointer"
-                            src="/person-circle.svg"
+                            className="w-40 h-40 rounded-full cursor-pointer object-cover"
+                            src={user.img ? user.img : '/person-circle.svg'}
                             alt=""
+                            onClick={(e) => {
+                                if (fileRef.current) {
+                                    fileRef.current.click();
+                                }
+                            }}
+                        />
+                        <input
+                            ref={fileRef}
+                            className="hidden"
+                            type="file"
+                            onChange={(e) => {
+                                if (e.target.files) {
+                                    const file = e.target.files[0];
+
+                                    if (file) {
+                                        userDispatch({
+                                            user: {
+                                                ...user,
+                                                img: URL.createObjectURL(file),
+                                            },
+                                        });
+                                    }
+                                }
+                            }}
                         />
                     </section>
 

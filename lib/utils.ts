@@ -22,6 +22,7 @@ export interface EventType {
 
 export interface UserType {
     id: string;
+    img: string;
     email: string;
     username: string;
     gender: number;
