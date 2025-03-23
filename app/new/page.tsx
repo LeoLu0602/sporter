@@ -71,6 +71,8 @@ export default function New() {
         setSport(sport);
         setStartTime(dayjs(initStartTime));
         setEndTime(dayjs(initEndTime));
+        setAges([Math.max(0, userAge - 5), Math.min(100, userAge + 5)]);
+        setLevels([Math.max(1, level - 1), Math.min(6, level + 1)]);
         setEventInfo({
             sport,
             title:
@@ -84,8 +86,6 @@ export default function New() {
             participantLimit: 1,
             message: '',
         });
-        setAges([Math.max(0, userAge - 5), Math.min(100, userAge + 5)]);
-        setLevels([Math.max(1, level - 1), Math.min(6, level + 1)]);
     }
 
     function incrementParticipantLimit(amount: number) {
@@ -192,22 +192,12 @@ export default function New() {
         window.location.replace('/events');
     }
 
-    function openMap() {
-        setShowMap(true);
-    }
-
-    function closeMap() {
-        setShowMap(false);
-    }
-
-    if (!user) {
-        return <></>;
-    }
-
     return (
         <>
             <header>
-                <h1 className="text-center p-8 text-2xl font-bold">揪運動</h1>
+                <h1 className="text-center py-4 text-2xl border-b-[1px] border-gray-200">
+                    揪運動
+                </h1>
             </header>
             <main className="px-4">
                 {showMap && (
@@ -218,12 +208,15 @@ export default function New() {
                                     return { ...oldVal, lat, lng };
                                 });
                             }}
-                            closeMap={closeMap}
+                            closeMap={() => {
+                                setShowMap(false);
+                            }}
                         />
                     </div>
                 )}
-                {sport === null && (
-                    <section className="flex flex-wrap justify-between gap-8 px-2 mb-24">
+
+                {sport === null ? (
+                    <section className="pb-12">
                         {[
                             'soccer',
                             'basketball',
@@ -232,19 +225,18 @@ export default function New() {
                             'badminton',
                         ].map((sport) => (
                             <button
-                                className="w-40 h-40 rounded-xl cursor-pointer border-2 border-[#bbb] flex justify-center items-center text-6xl"
+                                className="py-8 w-full cursor-pointer border-b-[1px] border-gray-200 text-4xl"
                                 key={sport}
                                 onClick={() => {
                                     selectSport(sport);
                                 }}
                             >
-                                {getSportEmoji(sport)}
+                                {getSportEmoji(sport)} {getSportChinese(sport)}
                             </button>
                         ))}
                     </section>
-                )}
-                {sport !== null && (
-                    <section className="flex flex-col gap-8 text-lg mb-24">
+                ) : (
+                    <section className="flex flex-col gap-8 text-lg pt-8 pb-20">
                         <section className="flex gap-4 items-center">
                             <h2 className="text-2xl">{getSportEmoji(sport)}</h2>
                             <Box
@@ -262,6 +254,7 @@ export default function New() {
                                 />
                             </Box>
                         </section>
+
                         <section className="w-full flex flex-col gap-4">
                             <h2>
                                 <span className="mr-4">對手程度:</span>
@@ -281,6 +274,7 @@ export default function New() {
                                 />
                             </div>
                         </section>
+
                         <section className="flex gap-4">
                             <h2>對手性別:</h2>
                             <section>
@@ -314,6 +308,7 @@ export default function New() {
                                 <label className="ml-2">不限</label>
                             </section>
                         </section>
+
                         <section>
                             <label className="block mb-4">
                                 <span className="mr-4">對手年紀:</span>
@@ -331,11 +326,12 @@ export default function New() {
                                 />
                             </div>
                         </section>
+
                         <section>
                             <button
                                 className="text-emerald-500 border-2 border-emerald-500 px-4 py-2 mr-4"
                                 onClick={() => {
-                                    openMap();
+                                    setShowMap(true);
                                 }}
                             >
                                 開啟地圖
@@ -352,6 +348,7 @@ export default function New() {
                                 <span>尚未選擇地點</span>
                             )}
                         </section>
+
                         <section>
                             <label className="block mb-4">地點名稱:</label>
                             <TextField
@@ -361,6 +358,7 @@ export default function New() {
                                 onChange={handleEventInfoChange}
                             />
                         </section>
+
                         <section className="flex items-center gap-4">
                             <h2 className="mr-4">需求人數:</h2>
                             <button
@@ -383,6 +381,7 @@ export default function New() {
                                 +
                             </button>
                         </section>
+
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer
                                 components={[
@@ -426,6 +425,7 @@ export default function New() {
                                 </DemoItem>
                             </DemoContainer>
                         </LocalizationProvider>
+
                         <FormControl>
                             <FormLabel className="mb-4">
                                 備註 ({eventInfo.message.length}
@@ -433,29 +433,32 @@ export default function New() {
                             </FormLabel>
                             <TextField
                                 name="message"
-                                minRows={3}
                                 multiline
+                                minRows={3}
+                                maxRows={3}
                                 value={eventInfo.message}
                                 onChange={handleEventInfoChange}
                             />
                         </FormControl>
 
-                        <button
-                            className="px-8 py-2 border-emerald-500 border-2 text-emerald-500"
-                            onClick={() => {
-                                setSport(null);
-                            }}
-                        >
-                            取消
-                        </button>
-                        <button
-                            className="px-8 py-2 border-sky-500 border-2 text-sky-500"
-                            onClick={() => {
-                                createNewEvent();
-                            }}
-                        >
-                            確認送出
-                        </button>
+                        <div className="flex flex-col items-center">
+                            <button
+                                className="text-emerald-500 border-emerald-500 border-2 py-2 w-80 mb-8"
+                                onClick={() => {
+                                    setSport(null);
+                                }}
+                            >
+                                取消
+                            </button>
+                            <button
+                                className="px-8 py-2 w-80 border-sky-500 border-2 text-sky-500"
+                                onClick={() => {
+                                    createNewEvent();
+                                }}
+                            >
+                                確認送出
+                            </button>
+                        </div>
                     </section>
                 )}
             </main>
