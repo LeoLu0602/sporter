@@ -1,6 +1,6 @@
 import { useUser, useUserDispatch } from '@/context/Context';
 import { Slider } from 'antd';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -67,17 +67,22 @@ export default function InfoSettings() {
                         </span>
                     </section>
 
-                    <section className="mb-8">
-                        <label className="w-full focus:outline-none mr-4">
-                            名稱:
-                        </label>
-                        <input
-                            className="w-60 overflow-hidden text-ellipsis"
-                            type="text"
-                            name="name"
-                            value={user.username}
-                            onChange={handleInfoChange}
-                        />
+                    <section className="mb-8 flex gap-4">
+                        <label className="focus:outline-none">名稱:</label>
+                        <Box
+                            component="form"
+                            sx={{ input: { fontSize: '1.125em' } }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <TextField
+                                className="w-60"
+                                name="name"
+                                variant="standard"
+                                value={user.username}
+                                onChange={handleInfoChange}
+                            />
+                        </Box>
                     </section>
 
                     <section className="flex gap-4 mb-8">
