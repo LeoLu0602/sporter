@@ -156,7 +156,7 @@ export default function InfoSettings() {
                         <input
                             className="range range-success range-sm w-full"
                             type="range"
-                            min={500}
+                            min={0}
                             max={10000}
                             step={500}
                             value={user.distance}
