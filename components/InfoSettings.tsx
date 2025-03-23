@@ -138,37 +138,37 @@ export default function InfoSettings() {
                     </section>
 
                     <section className="mb-8">
-                        <label className="mr-4">距離偏好:</label>
-                        <span>
-                            {user.distance >= 1000
-                                ? Math.floor(user.distance / 1000).toString() +
-                                  ',' +
-                                  (user.distance % 1000)
-                                      .toString()
-                                      .padStart(3, '0')
-                                : user.distance.toString()}{' '}
-                            公尺
-                        </span>
-                        <br />
-                        <div className="flex justify-center">
-                            <Slider
-                                value={user.distance}
-                                min={500}
-                                max={10000}
-                                step={100}
-                                onChange={(
-                                    event: Event,
-                                    newValue: number | number[]
-                                ) => {
-                                    userDispatch({
-                                        user: {
-                                            ...user,
-                                            distance: newValue as number,
-                                        },
-                                    });
-                                }}
-                            />
+                        <div className="mb-8">
+                            <span className="mr-4">距離偏好:</span>
+                            <span>
+                                {user.distance >= 1000
+                                    ? Math.floor(
+                                          user.distance / 1000
+                                      ).toString() +
+                                      ',' +
+                                      (user.distance % 1000)
+                                          .toString()
+                                          .padStart(3, '0')
+                                    : user.distance.toString()}{' '}
+                                公尺
+                            </span>
                         </div>
+                        <input
+                            className="range range-primary range-xs w-full"
+                            type="range"
+                            min={500}
+                            max={10000}
+                            step={100}
+                            value={user.distance}
+                            onChange={(e) => {
+                                userDispatch({
+                                    user: {
+                                        ...user,
+                                        distance: parseInt(e.target.value),
+                                    },
+                                });
+                            }}
+                        />
                     </section>
 
                     <section className="mb-8">
