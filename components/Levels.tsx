@@ -1,6 +1,6 @@
 import { explainLevel, getSportEmoji } from '@/lib/utils';
 import { useUser, useUserDispatch } from '@/context/Context';
-import { Slider } from '@mui/material';
+import { ConfigProvider, Slider } from 'antd';
 
 export default function Levels() {
     const user = useUser();
@@ -53,24 +53,28 @@ export default function Levels() {
                             <span className="text-2xl mb-8 block">
                                 {`${getSportEmoji(sport)} ${explainLevel(level)}`}
                             </span>
-                            <Slider
-                                size="medium"
-                                value={user[prop]}
-                                min={0}
-                                max={6}
-                                marks
-                                onChange={(
-                                    event: Event,
-                                    newValue: number | number[]
-                                ) => {
-                                    userDispatch({
-                                        user: {
-                                            ...user,
-                                            [prop]: newValue as number,
-                                        },
-                                    });
+                            <ConfigProvider
+                                theme={{
+                                    token: {
+                                        colorPrimary: '#00aa00',
+                                        controlHeight: 48,
+                                    },
                                 }}
-                            />
+                            >
+                                <Slider
+                                    value={user[prop]}
+                                    min={0}
+                                    max={6}
+                                    onChange={(newVal) => {
+                                        userDispatch({
+                                            user: {
+                                                ...user,
+                                                [prop]: newVal,
+                                            },
+                                        });
+                                    }}
+                                />
+                            </ConfigProvider>
                         </div>
                     ))}
                 </section>

@@ -1,5 +1,5 @@
 import { useUser, useUserDispatch } from '@/context/Context';
-import { Slider } from 'antd';
+import { ConfigProvider, Slider } from 'antd';
 import { Box, TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -157,21 +157,30 @@ export default function InfoSettings() {
                                 公尺
                             </span>
                         </div>
-                        <Slider
-                            range={false}
-                            min={0}
-                            max={10000}
-                            step={100}
-                            value={user.distance}
-                            onChange={(newVal) => {
-                                userDispatch({
-                                    user: {
-                                        ...user,
-                                        distance: newVal,
-                                    },
-                                });
+                        <ConfigProvider
+                            theme={{
+                                token: {
+                                    colorPrimary: '#00aa00',
+                                    controlHeight: 48,
+                                },
                             }}
-                        />
+                        >
+                            <Slider
+                                range={false}
+                                min={0}
+                                max={10000}
+                                step={100}
+                                value={user.distance}
+                                onChange={(newVal) => {
+                                    userDispatch({
+                                        user: {
+                                            ...user,
+                                            distance: newVal,
+                                        },
+                                    });
+                                }}
+                            />
+                        </ConfigProvider>
                     </section>
 
                     <section className="mb-8">

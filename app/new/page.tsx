@@ -8,7 +8,7 @@ import {
     getSportChinese,
     calculateAge,
 } from '@/lib/utils';
-import { Slider } from 'antd';
+import { ConfigProvider, Slider } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -263,15 +263,24 @@ export default function New() {
                                     explainLevel(levels[1])}
                             </h2>
                             <div className="px-4">
-                                <Slider
-                                    range
-                                    value={levels}
-                                    min={1}
-                                    max={6}
-                                    onChange={(newVal) => {
-                                        setLevels(newVal);
+                                <ConfigProvider
+                                    theme={{
+                                        token: {
+                                            colorPrimary: '#00aa00',
+                                            controlHeight: 48,
+                                        },
                                     }}
-                                />
+                                >
+                                    <Slider
+                                        range
+                                        value={levels}
+                                        min={1}
+                                        max={6}
+                                        onChange={(newVal) => {
+                                            setLevels(newVal);
+                                        }}
+                                    />
+                                </ConfigProvider>
                             </div>
                         </section>
 
@@ -315,15 +324,24 @@ export default function New() {
                                 {ages[0]} - {ages[1]}
                             </label>
                             <div className="px-4">
-                                <Slider
-                                    range
-                                    value={ages}
-                                    min={0}
-                                    max={100}
-                                    onChange={(newVal) => {
-                                        setAges(newVal);
+                                <ConfigProvider
+                                    theme={{
+                                        token: {
+                                            colorPrimary: '#00aa00',
+                                            controlHeight: 48,
+                                        },
                                     }}
-                                />
+                                >
+                                    <Slider
+                                        range
+                                        value={ages}
+                                        min={0}
+                                        max={100}
+                                        onChange={(newVal) => {
+                                            setAges(newVal);
+                                        }}
+                                    />
+                                </ConfigProvider>
                             </div>
                         </section>
 
