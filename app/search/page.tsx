@@ -60,7 +60,7 @@ export default function Search() {
                         )}
                     </section>
                 ) : (
-                    <section className="flex justify-center items-center w-full h-screen absolute left-0 top-0">
+                    <section className="flex justify-center mt-8">
                         <CircularProgress />
                     </section>
                 )}
