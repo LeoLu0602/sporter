@@ -225,20 +225,23 @@ export default function EventDetails({
                         {details.title}
                     </div>
                 </div>
-                <div className="flex gap-4 whitespace-nowrap mb-2 text-gray-500">
+
+                <div className="flex gap-4 whitespace-nowrap mb-8 text-gray-500">
                     <div>地點:</div>
                     <div className="flex-grow overflow-hidden text-ellipsis">
                         {details.location}
                     </div>
                 </div>
+
                 <a
-                    className="text-sky-500 mb-2 block"
+                    className="text-sky-500 mb-8 block"
                     href={`https://www.google.com/maps?q=${details.lat},${details.lng}`}
                     target="_blank"
                 >
                     開啟地圖
                 </a>
-                <div className="mb-2 text-gray-500">
+
+                <div className="mb-8 text-gray-500">
                     <span className="mr-4">開始時間:</span>
                     {new Date(details.start_time).toLocaleString('en-US', {
                         dateStyle: 'short',
@@ -246,7 +249,8 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
-                <div className="mb-2 text-gray-500">
+
+                <div className="mb-8 text-gray-500">
                     <span className="mr-4">結束時間:</span>
                     {new Date(details.end_time).toLocaleString('en-US', {
                         dateStyle: 'short',
@@ -254,7 +258,8 @@ export default function EventDetails({
                         hourCycle: 'h23',
                     })}
                 </div>
-                <div className="flex gap-4 items-center mb-2">
+
+                <div className="flex gap-4 items-center mb-8">
                     <span className="whitespace-nowrap text-gray-500">
                         發起人:
                     </span>
@@ -267,11 +272,13 @@ export default function EventDetails({
                         {owner ? owner.username : '載入中...'}
                     </button>
                 </div>
+
                 <div className="text-gray-500 mb-8">
                     <span className="mr-4 ">目前人數 (不含發起人):</span>
                     {details.participant_limit - details.remaining_spots} /{' '}
                     {details.participant_limit}
                 </div>
+
                 {details.remaining_spots < details.participant_limit && (
                     <div className="mb-8">
                         <button
@@ -293,11 +300,12 @@ export default function EventDetails({
                 )}
 
                 {details.message.length > 0 && (
-                    <div className="text-gray-500">
+                    <div className="text-gray-500 mb-8">
                         <div className="mb-4">備註:</div>
                         <div className="break-all">{details.message}</div>
                     </div>
                 )}
+
                 <div className="flex gap-4 fixed right-8 bottom-8">
                     <button
                         className="px-4 py-2 text-emerald-500 border-emerald-500 border-2 bg-white"

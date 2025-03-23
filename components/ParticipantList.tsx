@@ -18,7 +18,7 @@ export default function ParticipantList({
             {participants.map((participant) => (
                 <button
                     key={participant.id}
-                    className="cursor-pointer text-sky-500 mt-4"
+                    className="cursor-pointer text-sky-500 mt-8"
                     onClick={() => {
                         seeUserProfile(participant);
                     }}
