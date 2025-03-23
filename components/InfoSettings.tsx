@@ -1,5 +1,6 @@
 import { useUser, useUserDispatch } from '@/context/Context';
-import { Slider, TextField } from '@mui/material';
+import { Slider } from 'antd';
+import { TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -153,18 +154,17 @@ export default function InfoSettings() {
                                 公尺
                             </span>
                         </div>
-                        <input
-                            className="range range-success range-md w-full"
-                            type="range"
+                        <Slider
+                            range={false}
                             min={0}
                             max={10000}
-                            step={500}
+                            step={100}
                             value={user.distance}
-                            onChange={(e) => {
+                            onChange={(newVal) => {
                                 userDispatch({
                                     user: {
                                         ...user,
-                                        distance: parseInt(e.target.value),
+                                        distance: newVal,
                                     },
                                 });
                             }}
