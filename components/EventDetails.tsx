@@ -264,7 +264,7 @@ export default function EventDetails({
                         發起人:
                     </span>
                     <button
-                        className="text-sky-500 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
+                        className="text-orange-500 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
                         onClick={() => {
                             setUserProfile(owner);
                         }}
