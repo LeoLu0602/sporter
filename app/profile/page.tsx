@@ -52,7 +52,7 @@ export default function Profile() {
 
     return (
         <>
-            <nav className="py-4 text-xl border-b-[1px] border-gray-200 sticky left-0 top-0 bg-white">
+            <nav className="py-4 text-xl border-b-[1px] border-gray-200 sticky left-0 top-0 bg-white z-30">
                 <ul className="flex w-full justify-around">
                     {[
                         { i: 1, txt: '基本資料' },
