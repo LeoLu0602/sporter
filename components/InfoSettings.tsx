@@ -53,6 +53,14 @@ export default function InfoSettings() {
         <>
             {user && userDispatch && (
                 <>
+                    <section className="mb-8 flex justify-center">
+                        <img
+                            className="w-32 h-32 rounded-full cursor-pointer"
+                            src="/person-circle.svg"
+                            alt=""
+                        />
+                    </section>
+
                     <section className="mb-8">
                         <span className="mr-4 outline-none decoration-transparent">
                             Email:
