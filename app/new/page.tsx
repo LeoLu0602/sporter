@@ -225,7 +225,7 @@ export default function New() {
                             'badminton',
                         ].map((sport) => (
                             <button
-                                className="py-8 w-full cursor-pointer border-b-[1px] border-gray-200 text-4xl"
+                                className="py-8 w-full cursor-pointer border-b-[1px] border-gray-200 text-3xl"
                                 key={sport}
                                 onClick={() => {
                                     selectSport(sport);
