@@ -49,7 +49,7 @@ export default function Levels() {
             {user && userDispatch && (
                 <section>
                     {levels.map(({ sport, prop, level }) => (
-                        <div className="mb-8">
+                        <div key={sport} className="mb-8">
                             <span className="text-2xl mb-8 block">
                                 {`${getSportEmoji(sport)} ${explainLevel(level)}`}
                             </span>
