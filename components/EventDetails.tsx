@@ -213,6 +213,7 @@ export default function EventDetails({
     return (
         <>
             <PublicProfile
+                isYou={userProfile ? userProfile.id === user.id : false}
                 user={userProfile}
                 close={() => {
                     seeUserProfile(null);

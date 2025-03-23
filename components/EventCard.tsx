@@ -23,7 +23,7 @@ export default function EventCard({
         <div
             className={clsx(
                 'cursor-pointer p-4 text-lg border-b-[1px] border-gray-200',
-                { 'bg-gray-200': isOwner }
+                { 'bg-gray-100': isOwner }
             )}
             onClick={openCard}
         >

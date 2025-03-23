@@ -1,9 +1,11 @@
 import { explainLevel, UserType } from '@/lib/utils';
 
 export default function PublicProfile({
+    isYou,
     user,
     close,
 }: {
+    isYou: boolean;
     user: UserType | null;
     close: () => void;
 }) {
@@ -68,9 +70,11 @@ export default function PublicProfile({
                 >
                     返回
                 </button>
-                <button className="px-4 py-2 text-rose-500 border-rose-500 border-2 bg-white">
-                    封鎖
-                </button>
+                {!isYou && (
+                    <button className="px-4 py-2 text-rose-500 border-rose-500 border-2 bg-white">
+                        封鎖
+                    </button>
+                )}
             </div>
         </div>
     );
