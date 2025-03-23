@@ -21,7 +21,10 @@ export default function EventCard({
 }) {
     return (
         <div
-            className="cursor-pointer p-4 text-lg border-b-[1px] border-gray-200"
+            className={clsx(
+                'cursor-pointer p-4 text-lg border-b-[1px] border-gray-200',
+                { 'bg-gray-200': isOwner }
+            )}
             onClick={openCard}
         >
             <div className="flex flex-col gap-4 overflow-hidden">

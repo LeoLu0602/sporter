@@ -69,7 +69,6 @@ export default function Event() {
             <main>
                 {user ? (
                     <>
-                        {' '}
                         {eventDetails && (
                             <EventDetails
                                 userEmail={user.email}
