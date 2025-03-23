@@ -7,11 +7,13 @@ import Levels from '@/components/Levels';
 import InfoSettings from '@/components/InfoSettings';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Profile() {
     const user = useUser();
     const userDispatch = useUserDispatch();
     const [option, setOption] = useState<number>(1);
+    const [file, setFile] = useState<File | null>(null);
 
     async function signOut() {
         const { error } = await supabase.auth.signOut();
@@ -26,9 +28,37 @@ export default function Profile() {
         window.location.replace('/');
     }
 
+    async function uploadImg(
+        userId: string,
+        file: File
+    ): Promise<string | null> {
+        const { error } = await supabase.storage
+            .from('profile-pics')
+            .upload(`${userId}.jpg`, file, { upsert: true });
+
+        if (error) {
+            alert('Error');
+            console.error(error);
+
+            return null;
+        }
+
+        const { data } = supabase.storage
+            .from('profile-pics')
+            .getPublicUrl(`${userId}.jpg`);
+
+        return data.publicUrl;
+    }
+
     async function save() {
-        if (!user) {
+        if (!user || !userDispatch) {
             return;
+        }
+
+        let publicUrl = null;
+
+        if (file) {
+            publicUrl = await uploadImg(user.id, file);
         }
 
         const { error } = await supabase
@@ -36,6 +66,7 @@ export default function Profile() {
             .update([
                 {
                     ...user,
+                    img: publicUrl ?? user.img,
                 },
             ])
             .eq('id', user.id);
@@ -77,7 +108,11 @@ export default function Profile() {
             <main className="px-4 pt-8 pb-20 text-lg">
                 {user && userDispatch ? (
                     <>
-                        {option === 1 ? <InfoSettings /> : <Levels />}
+                        {option === 1 ? (
+                            <InfoSettings setFile={setFile} />
+                        ) : (
+                            <Levels />
+                        )}
                         <div className="flex flex-col items-center">
                             <button
                                 className="mb-8 py-2 w-80 border-2 border-emerald-500 text-emerald-500"

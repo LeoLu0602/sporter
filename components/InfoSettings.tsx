@@ -6,9 +6,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useRef } from 'react';
 
-export default function InfoSettings() {
+export default function InfoSettings({
+    setFile,
+}: {
+    setFile: Dispatch<SetStateAction<File | null>>;
+}) {
     const user = useUser();
     const userDispatch = useUserDispatch();
     const fileRef = useRef<HTMLInputElement>(null);
@@ -69,6 +73,7 @@ export default function InfoSettings() {
                             ref={fileRef}
                             className="hidden"
                             type="file"
+                            accept="image/png, image/jpeg"
                             onChange={(e) => {
                                 if (e.target.files) {
                                     const file = e.target.files[0];
@@ -80,6 +85,7 @@ export default function InfoSettings() {
                                                 img: URL.createObjectURL(file),
                                             },
                                         });
+                                        setFile(file);
                                     }
                                 }
                             }}
