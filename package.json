@@ -17,6 +17,7 @@
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "@vis.gl/react-google-maps": "^1.5.1",
+    "antd": "^5.24.4",
     "autoprefixer": "10.4.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
