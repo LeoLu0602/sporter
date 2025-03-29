@@ -7,7 +7,6 @@ import Levels from '@/components/Levels';
 import InfoSettings from '@/components/InfoSettings';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function Profile() {
     const user = useUser();
@@ -28,13 +27,13 @@ export default function Profile() {
         window.location.replace('/');
     }
 
-    async function uploadImg(
+    async function updateProfilePic(
         userId: string,
         file: File
     ): Promise<string | null> {
         const { error } = await supabase.storage
             .from('profile-pics')
-            .upload(`${userId}.jpg`, file, { upsert: true });
+            .update(`/${userId}`, file, { upsert: true });
 
         if (error) {
             alert('Error');
@@ -45,7 +44,7 @@ export default function Profile() {
 
         const { data } = supabase.storage
             .from('profile-pics')
-            .getPublicUrl(`${userId}.jpg`);
+            .getPublicUrl(`/${userId}`);
 
         return data.publicUrl;
     }
@@ -55,12 +54,7 @@ export default function Profile() {
             return;
         }
 
-        let publicUrl = null;
-
-        if (file) {
-            publicUrl = await uploadImg(user.id, file);
-        }
-
+        const publicUrl = file ? await updateProfilePic(user.id, file) : null;
         const { error } = await supabase
             .from('user')
             .update([
@@ -109,7 +103,7 @@ export default function Profile() {
                 {user && userDispatch ? (
                     <>
                         {option === 1 ? (
-                            <InfoSettings setFile={setFile} />
+                            <InfoSettings file={file} setFile={setFile} />
                         ) : (
                             <Levels />
                         )}

@@ -9,8 +9,10 @@ import dayjs from 'dayjs';
 import { ChangeEvent, Dispatch, SetStateAction, useRef } from 'react';
 
 export default function InfoSettings({
+    file,
     setFile,
 }: {
+    file: File | null;
     setFile: Dispatch<SetStateAction<File | null>>;
 }) {
     const user = useUser();
@@ -61,7 +63,13 @@ export default function InfoSettings({
                     <section className="mb-8 flex justify-center">
                         <img
                             className="w-40 h-40 rounded-full cursor-pointer object-cover"
-                            src={user.img ? user.img : '/person-circle.svg'}
+                            src={
+                                file
+                                    ? URL.createObjectURL(file)
+                                    : user.img === ''
+                                      ? '/person-circle.svg'
+                                      : user.img
+                            }
                             alt=""
                             onClick={(e) => {
                                 if (fileRef.current) {
@@ -79,12 +87,6 @@ export default function InfoSettings({
                                     const file = e.target.files[0];
 
                                     if (file) {
-                                        userDispatch({
-                                            user: {
-                                                ...user,
-                                                img: URL.createObjectURL(file),
-                                            },
-                                        });
                                         setFile(file);
                                     }
                                 }
