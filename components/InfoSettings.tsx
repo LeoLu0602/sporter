@@ -68,7 +68,7 @@ export default function InfoSettings({
                                     ? URL.createObjectURL(file)
                                     : user.img === ''
                                       ? '/person-circle.svg'
-                                      : user.img
+                                      : `${user.img}?t=${Date.now()}`
                             }
                             alt=""
                             onClick={(e) => {
