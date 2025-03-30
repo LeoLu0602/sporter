@@ -27,17 +27,17 @@ Sporter is a social platform designed for sports enthusiasts, making it easy to 
 
 ## Demo
 
-![](./demo/demo-welcome-1.png)<br/>
-![](./demo/demo-profile-1.png)
-![](./demo/demo-profile-2.png)<br/>
-![](./demo/demo-events-1.png)
-![](./demo/demo-events-2.png)
-![](./demo/demo-events-3.png)<br/>
-![](./demo/demo-new-1.png)
-![](./demo/demo-new-2.png)
-![](./demo/demo-new-3.png)<br/>
-![](./demo/demo-search-1.png)
-![](./demo/demo-search-1.png)
+![](./demo/demo-welcome-1.png)<br/><br/>
+![](./demo/demo-profile-1.png)<br/><br/>
+![](./demo/demo-profile-2.png)<br/><br/>
+![](./demo/demo-events-1.png)<br/><br/>
+![](./demo/demo-events-2.png)<br/><br/>
+![](./demo/demo-events-3.png)<br/><br/>
+![](./demo/demo-new-1.png)<br/><br/>
+![](./demo/demo-new-2.png)<br/><br/>
+![](./demo/demo-new-3.png)<br/><br/>
+![](./demo/demo-search-1.png)<br/><br/>
+![](./demo/demo-search-1.png)<br/><br/>
 
 ## Technologies
 
