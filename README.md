@@ -7,10 +7,11 @@
 - [Demo](#demo)
 - [Technologies](#technologies)
 - [Setup](#setup)
-- [Status](#status)
 - [Credits](#credits)
 
 ## About
+
+[Landing Page](https://sporter-landing-page.vercel.app/)
 
 Sporter 是一款專為運動愛好者設計的社交平台，讓你輕鬆找到運動夥伴、組織運動活動，並參與各種運動挑戰。透過 Sporter，你可以建立個人運動檔案，尋找附近的運動活動，或發起自己的運動邀約，讓運動變得更有趣、更有動力。不論是想嘗試新的運動夥伴，還是尋找程度相符的對手切磋較量，Sporter 都能幫助你建立聯繫，享受運動的樂趣。
 
@@ -26,15 +27,17 @@ Sporter is a social platform designed for sports enthusiasts, making it easy to 
 
 ## Demo
 
-![demo-welcome.png](/demo/demo-welcome.png)<br/>
-![demo-profile-1.png](/demo/demo-profile-1.png)
-![demo-profile-2.png](/demo/demo-profile-2.png)<br/>
-![demo-events-1.png](/demo/demo-events-1.png)
-![demo-events-2.png](/demo/demo-events-2.png)<br/>
-![demo-new-1.png](/demo/demo-new-1.png)
-![demo-new-2.png](/demo/demo-new-2.png)<br/>
-![demo-search-1.png](/demo/demo-search-1.png)
-![demo-search-2.png](/demo/demo-search-2.png)
+<img src="./demo/demo-welcome-1.png" width="214" height="463"><br/>
+<img src="./demo/demo-profile-1.png" width="214" height="463">
+<img src="./demo/demo-profile-2.png" width="214" height="463"><br/>
+<img src="./demo/demo-events-1.png" width="214" height="463">
+<img src="./demo/demo-events-2.png" width="214" height="463">
+<img src="./demo/demo-events-3.png" width="214" height="463"><br/>
+<img src="./demo/demo-new-1.png" width="214" height="463">
+<img src="./demo/demo-new-2.png" width="214" height="463">
+<img src="./demo/demo-new-3.png" width="214" height="463"><br/>
+<img src="./demo/demo-search-1.png" width="214" height="463">
+<img src="./demo/demo-search-2.png" width="214" height="463">
 
 ## Technologies
 
@@ -43,31 +46,18 @@ Sporter is a social platform designed for sports enthusiasts, making it easy to 
 
 ## Setup
 
-Download: [Node.js](https://nodejs.org/en), [Git](https://git-scm.com/downloads)
-
-Navigate to /Desktop and run:
+To connect to Supabase, request .env.local from the maintainer (Leo Lu) and put it in the root.
 
 ```
 git clone https://github.com/LeoLu0602/sporter.git
 cd ./sporter
 npm install
-```
-
-Request .env.local from the maintainer and put it in the root.
-
-```
 npm run dev
 ```
 
-Go to [http://localhost:3000](http://localhost:3000).
-
-Press F12 then CTRL+SHIFT+M to simulate a mobile device in the desktop browser.
-
-## Status
-
-Basically done. Submit issues and label as "enhancement" to request new features.
+Go to [http://localhost:3000](http://localhost:3000). Press F12 then CTRL+SHIFT+M to simulate a mobile device in the desktop browser.
 
 ## Credits
 
 - Design: James Chen
-- Web dev: Leo Lu
+- Web development: Leo Lu
