@@ -37,7 +37,7 @@ Sporter is a social platform designed for sports enthusiasts, making it easy to 
 ![](./demo/demo-new-2.png)<br/><br/>
 ![](./demo/demo-new-3.png)<br/><br/>
 ![](./demo/demo-search-1.png)<br/><br/>
-![](./demo/demo-search-1.png)<br/><br/>
+![](./demo/demo-search-2.png)<br/><br/>
 
 ## Technologies
 
