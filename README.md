@@ -27,17 +27,17 @@ Sporter is a social platform designed for sports enthusiasts, making it easy to 
 
 ## Demo
 
-<img src="./demo/demo-welcome-1.png" width="214" height="463"><br/>
-<img src="./demo/demo-profile-1.png" width="214" height="463">
-<img src="./demo/demo-profile-2.png" width="214" height="463"><br/>
-<img src="./demo/demo-events-1.png" width="214" height="463">
-<img src="./demo/demo-events-2.png" width="214" height="463">
-<img src="./demo/demo-events-3.png" width="214" height="463"><br/>
-<img src="./demo/demo-new-1.png" width="214" height="463">
-<img src="./demo/demo-new-2.png" width="214" height="463">
-<img src="./demo/demo-new-3.png" width="214" height="463"><br/>
-<img src="./demo/demo-search-1.png" width="214" height="463">
-<img src="./demo/demo-search-2.png" width="214" height="463">
+![](./demo/demo-welcome-1.png)<br/>
+![](./demo/demo-profile-1.png)
+![](./demo/demo-profile-2.png)<br/>
+![](./demo/demo-events-1.png)
+![](./demo/demo-events-2.png)
+![](./demo/demo-events-3.png)<br/>
+![](./demo/demo-new-1.png)
+![](./demo/demo-new-2.png)
+![](./demo/demo-new-3.png)<br/>
+![](./demo/demo-search-1.png)
+![](./demo/demo-search-1.png)
 
 ## Technologies
 
