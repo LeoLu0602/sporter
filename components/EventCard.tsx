@@ -30,7 +30,7 @@ export default function EventCard({
             <div className="flex flex-col gap-4 overflow-hidden">
                 <div className="text-xl flex gap-4 w-full">
                     <div>{getSportEmoji(sport)}</div>
-                    <div className="flex-grow text-ellipsis whitespace-nowrap overflow-hidden">
+                    <div data-testid="title" className="flex-grow text-ellipsis whitespace-nowrap overflow-hidden">
                         {title}
                     </div>
                 </div>
