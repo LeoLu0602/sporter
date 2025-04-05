@@ -30,7 +30,7 @@ export default function EventCard({
             <div className="flex flex-col gap-4 overflow-hidden">
                 <div className="text-xl flex gap-4 w-full">
                     <div>{getSportEmoji(sport)}</div>
-                    <div data-testid="title" className="flex-grow text-ellipsis whitespace-nowrap overflow-hidden">
+                    <div className="flex-grow text-ellipsis whitespace-nowrap overflow-hidden">
                         {title}
                     </div>
                 </div>
@@ -40,19 +40,23 @@ export default function EventCard({
                 <div className="text-base text-gray-500">
                     <div>
                         <span className="mr-4">開始時間:</span>
-                        {new Date(startTime).toLocaleString('en-US', {
-                            dateStyle: 'short',
-                            timeStyle: 'short',
-                            hourCycle: 'h23',
-                        })}
+                        <span data-testid="start-time">
+                            {new Date(startTime).toLocaleString('en-US', {
+                                dateStyle: 'short',
+                                timeStyle: 'short',
+                                hourCycle: 'h23',
+                            })}
+                        </span>
                     </div>
                     <div>
                         <span className="mr-4">結束時間:</span>
-                        {new Date(endTime).toLocaleString('en-US', {
-                            dateStyle: 'short',
-                            timeStyle: 'short',
-                            hourCycle: 'h23',
-                        })}
+                        <span data-testid="end-time">
+                            {new Date(endTime).toLocaleString('en-US', {
+                                dateStyle: 'short',
+                                timeStyle: 'short',
+                                hourCycle: 'h23',
+                            })}
+                        </span>
                     </div>
                 </div>
             </div>
