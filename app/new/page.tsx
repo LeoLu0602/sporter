@@ -251,6 +251,9 @@ export default function New() {
                                     variant="standard"
                                     value={eventInfo.title}
                                     onChange={handleEventInfoChange}
+                                    onKeyDown={(e) => {
+                                        e.preventDefault();
+                                    }}
                                 />
                             </Box>
                         </section>
@@ -374,6 +377,9 @@ export default function New() {
                                 name="location"
                                 value={eventInfo.location}
                                 onChange={handleEventInfoChange}
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                }}
                             />
                         </section>
 
@@ -456,6 +462,9 @@ export default function New() {
                                 maxRows={3}
                                 value={eventInfo.message}
                                 onChange={handleEventInfoChange}
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                }}
                             />
                         </FormControl>
 

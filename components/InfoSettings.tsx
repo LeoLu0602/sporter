@@ -120,6 +120,9 @@ export default function InfoSettings({
                                 variant="standard"
                                 value={user.username}
                                 onChange={handleInfoChange}
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                }}
                             />
                         </Box>
                     </section>
@@ -236,6 +239,9 @@ export default function InfoSettings({
                             maxRows={3}
                             value={user.intro}
                             onChange={handleInfoChange}
+                            onKeyDown={(e) => {
+                                e.preventDefault();
+                            }}
                         />
                     </section>
                 </>
