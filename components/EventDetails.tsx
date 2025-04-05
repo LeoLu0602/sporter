@@ -1,5 +1,11 @@
 import { useUser, useUserEvents } from '@/context/Context';
-import { EventType, getSportEmoji, supabase, UserType } from '@/lib/utils';
+import {
+    EventType,
+    explainLevel,
+    getSportEmoji,
+    supabase,
+    UserType,
+} from '@/lib/utils';
 import ParticipantList from '@/components/ParticipantList';
 import { useEffect, useState } from 'react';
 import PublicProfile from '@/components/PublicProfile';
@@ -299,6 +305,26 @@ export default function EventDetails({
                         />
                     </div>
                 )}
+
+                <div className="text-gray-500 mb-8">
+                    <span className="mr-4 ">性別:</span>
+                    {details.gender === 1
+                        ? '男'
+                        : details.gender === 2
+                          ? '女'
+                          : '不限'}
+                </div>
+
+                <div className="text-gray-500 mb-8">
+                    <span className="mr-4 ">程度:</span>
+                    {explainLevel(details.level_min)} ~{' '}
+                    {explainLevel(details.level_max)}
+                </div>
+
+                <div className="text-gray-500 mb-8">
+                    <span className="mr-4 ">年紀:</span>
+                    {details.age_min} ~ {details.age_max}
+                </div>
 
                 {details.message.length > 0 && (
                     <div className="text-gray-500 mb-8">
