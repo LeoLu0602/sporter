@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
     const pathname = usePathname();
 
-    // Navbar shouldn't show on welcome page.
-    if (pathname === '/') {
+    // Navbar shouldn't show on welcome/setup page.
+    if (pathname === '/' || pathname === '/setup') {
         return <></>;
     }
 
