@@ -7,7 +7,7 @@ export default function Welcome() {
                 <img
                     className="w-40 h-40 mb-12"
                     src="/logo.png"
-                    alt="Sporter Logo"
+                    alt=""
                 />
                 <h1 className="text-5xl mb-12 text-[#499c2c]">Sporter</h1>
                 <ContinueWithGoogleBtn />

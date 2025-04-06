@@ -231,13 +231,25 @@ export function Provider({ children }: { children: React.ReactNode }) {
 
         if (data.length === 0) {
             setUpNewUser(user);
-        } else {
-            setUpReturnUser(data[0]);
+            router.push('/setup');
+
+            return;
         }
 
-        // Signed in -> redirect to the event page
+        setUpReturnUser(data[0]);
+
         if (pathname === '/') {
-            router.push('/events');
+            if (
+                data[0].badminton_level === 0 &&
+                data[0].basketball_level === 0 &&
+                data[0].soccer_level === 0 &&
+                data[0].table_tennis_level === 0 &&
+                data[0].tennis_level === 0
+            ) {
+                router.push('/setup');
+            } else {
+                router.push('/events');
+            }
         }
     }
 
