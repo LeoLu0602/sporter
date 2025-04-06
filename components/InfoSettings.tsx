@@ -121,7 +121,9 @@ export default function InfoSettings({
                                 value={user.username}
                                 onChange={handleInfoChange}
                                 onKeyDown={(e) => {
-                                    e.preventDefault();
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                    }
                                 }}
                             />
                         </Box>
@@ -240,7 +242,9 @@ export default function InfoSettings({
                             value={user.intro}
                             onChange={handleInfoChange}
                             onKeyDown={(e) => {
-                                e.preventDefault();
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                }
                             }}
                         />
                     </section>

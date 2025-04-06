@@ -252,7 +252,9 @@ export default function New() {
                                     value={eventInfo.title}
                                     onChange={handleEventInfoChange}
                                     onKeyDown={(e) => {
-                                        e.preventDefault();
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                        }
                                     }}
                                 />
                             </Box>
@@ -378,7 +380,9 @@ export default function New() {
                                 value={eventInfo.location}
                                 onChange={handleEventInfoChange}
                                 onKeyDown={(e) => {
-                                    e.preventDefault();
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                    }
                                 }}
                             />
                         </section>
@@ -463,7 +467,9 @@ export default function New() {
                                 value={eventInfo.message}
                                 onChange={handleEventInfoChange}
                                 onKeyDown={(e) => {
-                                    e.preventDefault();
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                    }
                                 }}
                             />
                         </FormControl>
