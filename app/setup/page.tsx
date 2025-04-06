@@ -7,7 +7,7 @@ export default function SetUp() {
                 <h1 className="font-bold mb-8">設定提醒</h1>
                 <p className="mb-8 px-8">
                     Sporter 使用您的設定配對運動，設定
-                    <b>運動程度</b>以獲得最佳使用者體驗
+                    <b>運動程度</b>、<b>生日</b>以獲得最佳使用者體驗
                 </p>
                 <Link className="text-sky-500" href="/profile">
                     前往設定
